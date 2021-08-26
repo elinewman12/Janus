@@ -6,86 +6,89 @@
 # ------------------------------------------------------------------
 
 from ..api.exceptions import *
-from . note_table import NOTE_TABLE
+from .note_table import NOTE_TABLE
 from warpseq.utils import utils
 
 DEFAULT_VELOCITY = 120
 
-NOTES          = [ 'C',  'Db', 'D', 'Eb', 'E',  'F',  'Gb', 'G',  'Ab', 'A', 'Bb', 'B' ]
-EQUIVALENCE    = [ 'C',  'C#', 'D', 'D#', 'E',  'F',  'F#', 'G',  'G#', 'A', 'A#', 'B' ]
+NOTES = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
+EQUIVALENCE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 EQUIVALENCE_SET = set(EQUIVALENCE)
 
 SCALE_DEGREES_TO_STEPS = {
-   '0'  : 0, # just to ignore extraneous input
-   '1'  : 0, # C (if C major)
-   'b2' : 0.5,
-   '2'  : 1, # D
-   'b3' : 1.5,
-   '3'  : 2, # E
-   '4'  : 2.5, # F
-   'b5' : 3,
-   '5'  : 3.5, # G
-   'b6' : 4,
-   '6'  : 4.5, # A
-   'b7' : 5,
-   '7'  : 5.5, # B
-   '8'  : 6
+    '0': 0,  # just to ignore extraneous input
+    '1': 0,  # C (if C major)
+    'b2': 0.5,
+    '2': 1,  # D
+    'b3': 1.5,
+    '3': 2,  # E
+    '4': 2.5,  # F
+    'b5': 3,
+    '5': 3.5,  # G
+    'b6': 4,
+    '6': 4.5,  # A
+    'b7': 5,
+    '7': 5.5,  # B
+    '8': 6
 }
 
-SCALE_DEGREES_FOR_UI = [x for x in  SCALE_DEGREES_TO_STEPS.keys() if x != '0' ]
+SCALE_DEGREES_FOR_UI = [x for x in SCALE_DEGREES_TO_STEPS.keys() if x != '0']
+
 
 class Note(object):
-
-    __slots__ = ( 'name', 'octave', 'tie', 'length', 'start_time', 'end_time', 'velocity', 'from_scale',
-                  'from_parser', 'repeat', 'length_mod', 'tied', 'delay', 'no_shift', 'muted', 'track_copy',
-                  'ccs', 'deferred_expressions', '_from_context', 'octave_set_recorded', 'octave_shifts_recorded', 'degree_shifts_recorded',
-                  '_transforms_recorded')
+    __slots__ = ('name', 'octave', 'tie', 'length', 'start_time', 'end_time', 'velocity', 'from_scale',
+                 'from_parser', 'repeat', 'length_mod', 'tied', 'delay', 'no_shift', 'muted', 'track_copy',
+                 'ccs', 'deferred_expressions', '_from_context', 'octave_set_recorded', 'octave_shifts_recorded',
+                 'degree_shifts_recorded',
+                 '_transforms_recorded')
 
     SAVE_AS_REFERENCES = []
 
     def __init__(self, name=None, octave=0, tie=False, length=None, start_time=None, end_time=None,
-                 velocity=DEFAULT_VELOCITY, from_scale=None, from_parser=None, repeat=None, length_mod=1, tied=0, delay=0,
+                 velocity=DEFAULT_VELOCITY, from_scale=None, from_parser=None, repeat=None, length_mod=1, tied=0,
+                 delay=0,
                  no_shift=False, muted=False, track_copy=None, ccs=None, deferred_expressions=None,
-                 from_context=None, octave_set_recorded=None, octave_shifts_recorded=0, degree_shifts_recorded=0, transforms_recorded=None):
+                 from_context=None, octave_set_recorded=None, octave_shifts_recorded=0, degree_shifts_recorded=0,
+                 transforms_recorded=None):
 
-         if name in EQUIVALENCE_SET:
-             name = NOTES[EQUIVALENCE.index(name)]
-         self.name = name
+        if name in EQUIVALENCE_SET:
+            name = NOTES[EQUIVALENCE.index(name)]
+        self.name = name
 
-         self.octave = octave
-         self.tie = tie
-         self.length = length
-         self.start_time = start_time
-         self.end_time = end_time
-         self.velocity = velocity
-         self.from_scale = from_scale
-         self.from_parser = from_parser
-         self.repeat = repeat
-         self.length_mod = length_mod
-         self.no_shift = no_shift
-         self.tied = tied
-         self.delay = delay
-         self.muted = muted
-         self._from_context = from_context
-         # needed to process deferred track grabs
-         self.octave_set_recorded = octave_set_recorded
-         self.octave_shifts_recorded = octave_shifts_recorded
-         self.degree_shifts_recorded = degree_shifts_recorded
+        self.octave = octave
+        self.tie = tie
+        self.length = length
+        self.start_time = start_time
+        self.end_time = end_time
+        self.velocity = velocity
+        self.from_scale = from_scale
+        self.from_parser = from_parser
+        self.repeat = repeat
+        self.length_mod = length_mod
+        self.no_shift = no_shift
+        self.tied = tied
+        self.delay = delay
+        self.muted = muted
+        self._from_context = from_context
+        # needed to process deferred track grabs
+        self.octave_set_recorded = octave_set_recorded
+        self.octave_shifts_recorded = octave_shifts_recorded
+        self.degree_shifts_recorded = degree_shifts_recorded
 
-         if ccs is None:
-             ccs = {}
-         if deferred_expressions is None:
-             deferred_expressions = []
-         if transforms_recorded is None:
-             transforms_recorded = []
+        if ccs is None:
+            ccs = {}
+        if deferred_expressions is None:
+            deferred_expressions = []
+        if transforms_recorded is None:
+            transforms_recorded = []
 
-         self.ccs = ccs
-         self.deferred_expressions = deferred_expressions
-         self._transforms_recorded = transforms_recorded
+        self.ccs = ccs
+        self.deferred_expressions = deferred_expressions
+        self._transforms_recorded = transforms_recorded
 
-         if track_copy is None:
-             track_copy = []
-         self.track_copy = track_copy
+        if track_copy is None:
+            track_copy = []
+        self.track_copy = track_copy
 
     def to_dict(self):
         # this is only used by serializing the scale root
@@ -109,26 +112,26 @@ class Note(object):
                     velocity=self.velocity,
                     from_scale=self.from_scale,
                     from_parser=self.from_parser,
-                    repeat = self.repeat,
-                    length_mod = self.length_mod,
-                    tied = self.tied,
-                    delay = self.delay,
-                    no_shift = self.no_shift,
-                    muted = self.muted,
-                    track_copy = self.track_copy[:],
-                    ccs = self.ccs,
-                    deferred_expressions = self.deferred_expressions[:],
-                    from_context = self._from_context,
-                    octave_shifts_recorded = self.octave_shifts_recorded,
-                    degree_shifts_recorded = self.degree_shifts_recorded,
-                    octave_set_recorded = self.octave_set_recorded
-        )
+                    repeat=self.repeat,
+                    length_mod=self.length_mod,
+                    tied=self.tied,
+                    delay=self.delay,
+                    no_shift=self.no_shift,
+                    muted=self.muted,
+                    track_copy=self.track_copy[:],
+                    ccs=self.ccs,
+                    deferred_expressions=self.deferred_expressions[:],
+                    from_context=self._from_context,
+                    octave_shifts_recorded=self.octave_shifts_recorded,
+                    degree_shifts_recorded=self.degree_shifts_recorded,
+                    octave_set_recorded=self.octave_set_recorded
+                    )
 
     def get_parser(self):
         return self.from_parser
 
     def chordify(self, chord_type):
-        from . chord import Chord
+        from .chord import Chord
         return Chord(root=self, chord_type=chord_type, from_scale=self.from_scale)
 
     def scale_transpose(self, scale_obj, steps):
@@ -141,9 +144,10 @@ class Note(object):
 
         if new_index < 0:
             correct_octaves = (int(new_index / 12) * -1) + 1
-            return self.transpose(octaves=correct_octaves).scale_transpose(scale_obj, steps).transpose(octaves=-correct_octaves)
+            return self.transpose(octaves=correct_octaves).scale_transpose(scale_obj, steps).transpose(
+                octaves=-correct_octaves)
 
-        scale_note = scale_notes[new_index ]
+        scale_note = scale_notes[new_index]
         n1 = self
         n1.name = scale_note.name
         n1.octave = scale_note.octave
@@ -247,7 +251,7 @@ class Note(object):
 
         result = self
         if steps:
-            new_index = result.note_number() + int(2*steps) + 60
+            new_index = result.note_number() + int(2 * steps) + 60
             if new_index < 0:
                 raise InvalidNote("negative note range exceeded")
             (result.name, result.octave) = NOTE_TABLE[new_index]
@@ -256,7 +260,7 @@ class Note(object):
         return result
 
     def get_notes(self):
-        return [ self ]
+        return [self]
 
     def note_number(self):
         if self.name is None:
@@ -286,4 +290,3 @@ class Note(object):
             self.deferred_expressions,
             self.tied
         )
-
