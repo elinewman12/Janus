@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="56aae1ed-42a9-493c-9254-87239fa045d0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/FileIO.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Note.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Song.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Track.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/2021FallTeam17-DeHaan.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2021FallTeam17-DeHaan.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/objects/note.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/note.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/objects/scale.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/scale.py" afterDir="false" />
-    </list>
+    <list default="true" id="56aae1ed-42a9-493c-9254-87239fa045d0" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
