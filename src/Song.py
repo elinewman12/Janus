@@ -1,4 +1,4 @@
-import Track
+from Track import Track
 
 
 # Stores metadata about a song, and the tracks included in the song
@@ -10,6 +10,6 @@ class Song:
     speed = 0
     # add other fields
 
-    # Constructor, takes a list of tracks as input
-    def __init__(self, t):
-        self.tracks = t
+    def addTrack(self, t):
+        assert isinstance(t, Track)
+        self.tracks.append(t)
