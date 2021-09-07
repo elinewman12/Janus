@@ -5,9 +5,8 @@ from Track import Track
 class Song:
     # A list of tracks in the song
     tracks = []
-    # The speed of the song (BPM? Some other format? What happens when tempo changes?
-    # might need to be an array or something)
-    speed = 0
+    # The speed of the song
+    ticks_per_beat = 0
     # add other fields
 
     def addTrack(self, t):
