@@ -8,6 +8,5 @@ class Track:
     # The instrument being played on this track, stored as a string, probably?
     instrument = "instr"
 
-    # Constructor, takes a list of notes as input
-    def __init__(self, n):
-        self.notes = n
+    def addNote(self, n):
+        self.notes.append(n)
