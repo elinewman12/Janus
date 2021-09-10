@@ -1,8 +1,10 @@
-import FileIO
+from Song import Song
 
 
 if __name__ == '__main__':
-    song = FileIO.read_midi_file("music samples/Mii Channel.mid")
+    song = Song()
 
-    FileIO.write_midi_file("music samples/Mii Channel Output.mid", song)
+    song.load(filename="music samples/Mii Channel.mid")
+
+    song.save(filename="music samples/Mii Channel Output.mid")
 
