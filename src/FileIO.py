@@ -11,8 +11,8 @@ from Note import Note
 # the metadata for the song, and creates a "song" object
 #
 # <jmleeder>
-def read_midi_file(song, file_name):
-    midi = MidiFile(file_name)
+def read_midi_file(song, filename):
+    midi = MidiFile(filename)
 
     song.clear_song_data()
     song.ticks_per_beat = midi.ticks_per_beat
@@ -54,6 +54,10 @@ def read_midi_file(song, file_name):
                 if hasattr(msg, 'note'):
                     handle_note(msg=msg, notes=current_notes, time=current_time, track=track)
 
+                # If this message is a program change, (tells the instrument being played on this track)
+                if msg.type == 'program_change':
+                    track.instrument = msg.program
+
             # Add this track and its associated notes to the song (sorted by time)
             track.notes.sort(key=lambda note: note.time)
             song.add_track(track)
@@ -69,21 +73,32 @@ def read_midi_file(song, file_name):
 # in the song object, and exports it to a file with the given name
 #
 # <jmleeder>
-def write_midi_file(song, file_name):
+def write_midi_file(song, filename, print_file=False):
     # Generate new type 1 midi file with the original song's metadata
     midi = MidiFile(type=1)
     midi.ticks_per_beat = song.ticks_per_beat
 
     # For each track in the song
-    for t in song.tracks:
+    for i, t in enumerate(song.tracks):
         # Get an ordered list of messages
         msgs = order_messages(t)
         # Create a new midi track and add these messages to the track
         midi.add_track(name=None)
+        # Set the instrument for the new track
+        instrument_msg = mido.Message(type='program_change', channel=0, program=t.instrument, time=0)
+        midi.tracks[i].append(instrument_msg)
+
         for m in msgs:
-            midi.tracks[len(midi.tracks) - 1].append(m)
+            midi.tracks[i].append(m)
+
+        # Add an End of Track message. Time is 500 to allow a small buffer zone from the last note
+        eot_msg = mido.MetaMessage(type='end_of_track', time=500)
+        midi.tracks[i].append(eot_msg)
     # Save this midi file
-    midi.save(file_name)
+    midi.save(filename)
+
+    if print_file:
+        print_midi(filename, midi)
 
 
 # Takes a track as input and returns an ordered list of midi messages.
@@ -165,3 +180,13 @@ def handle_note(msg, notes, time, track):
                 notes.remove(n)
                 track.add_note(n)
                 break
+
+
+# Prints a midi file in a readable format. Mainly used for debugging
+def print_midi(filename='output.txt', file=None):
+    original_stdout = sys.stdout  # Save a reference to the original standard output
+
+    with open(filename + '.txt', 'w') as f:
+        sys.stdout = f  # Change the standard output to the file we created.
+        print(file)
+    sys.stdout = original_stdout  # Reset the standard output to its original value
