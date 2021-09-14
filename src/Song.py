@@ -38,6 +38,14 @@ class Song:
         self.tracks = []
         self.ticks_per_beat = 0
 
+    def get_c_indexed_note_frequencies(self):
+        c_indexed_note_frequency = [0] * 12
+        for track in self.tracks:
+            track_frequencies = track.get_c_indexed_note_frequencies()
+            for idx, val in enumerate(track_frequencies):
+                c_indexed_note_frequency[idx] += val
+        return c_indexed_note_frequency
+
     # This method will shift all notes in the song up (positive numHalfSteps) or
     # down (negative numHalfSteps) the number of half steps specified.
     # (assuming there are no key changes)
