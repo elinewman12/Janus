@@ -1,5 +1,6 @@
 from Track import Track
 import FileIO
+import matplotlib as plt
 
 NOTES = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
 EQUIVALENCE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -127,3 +128,13 @@ class Song:
                 if interval_begin <= note.time <= interval_end:
                     note.pitch += offset
         return self
+
+    def get_note_graph(self):
+        all_pitch = []
+        all_time = []
+        for track in self.tracks:
+            all_pitch.append(self.track.notes.pitch)
+            all_time.append(self.track.notes.time)
+
+        plt.pyplot.plot(all_time, all_pitch)
+        pyplot.show()
