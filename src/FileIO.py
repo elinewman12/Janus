@@ -2,6 +2,8 @@ import sys
 
 import mido
 from mido import MidiFile
+
+from Control import Control
 from Track import Track
 from Note import Note
 
@@ -11,35 +13,27 @@ from Note import Note
 # the metadata for the song, and creates a "song" object
 #
 # <jmleeder>
-def read_midi_file(song, filename):
+def read_midi_file(song, filename, print_file=False):
     midi = MidiFile(filename)
+
+    if print_file:
+        print_midi(filename=filename, file=midi)
 
     song.clear_song_data()
     song.ticks_per_beat = midi.ticks_per_beat
 
-    # -----------------------------------
-    # This section prints out the input midi file to a text file called "output"
-    # - Remove in final version
-    #    original_stdout = sys.stdout  # Save a reference to the original standard output
-    #
-    #    with open('output.txt', 'w') as f:
-    #        sys.stdout = f  # Change the standard output to the file we created.
-    #        print(midi)
-    #    sys.stdout = original_stdout  # Reset the standard output to its original value
-    # -----------------------------------
-
-    # File has one track with multiple channels
-    if midi.type == 0:
-        raise NotImplementedError()
-
-    # File has multiple synchronous tracks
-    elif midi.type == 1:
+    # File has multiple synchronous tracks or one track with multiple channels
+    if midi.type == 1 or midi.type == 0:
 
         # For each mido track in the file
         for read_track in midi.tracks:
 
-            # Make a new internal track representation
-            track: Track = Track()
+            # The name of this track
+            track_name = None
+            # The name of the device this track is played on
+            device_name = None
+            # A list of tracks to be added to the song (Will only have one element for type 1 and 2 files)
+            tracks = []
             # Notes that have had their note_on message read, but don't yet have a note_off message
             current_notes = []
             # The current running time of the song (In absolute terms)
@@ -47,20 +41,61 @@ def read_midi_file(song, filename):
             # For each message in the mido track
             for msg in read_track:
 
+                # This is the track currently being modified
+                track = None
+
                 # Add the delay between notes to the current time
                 current_time += msg.time
+
+                if hasattr(msg, 'channel'):
+                    for t in tracks:
+                        if t.channel == msg.channel:
+                            track = t
+                    if track is None:
+                        track = Track(channel=msg.channel)
+                        tracks.append(track)
 
                 # If this message is a note and not metadata
                 if hasattr(msg, 'note'):
                     handle_note(msg=msg, notes=current_notes, time=current_time, track=track)
 
+                if msg.type == 'control_change' or msg.type == 'program_change' or msg.type == 'set_tempo':
+                    if msg.type == 'set_tempo':
+                        if len(tracks) > 0:
+                            track = tracks[0]  # set_tempo applies to the whole song, regardless of what track it's on
+                        else:
+                            track = Track(channel=0)  # If there are no tracks yet, create a new one
+                            tracks.append(track)
+
+                    handle_control(msg=msg, track=track, time=current_time)
+
                 # If this message is a program change, (tells the instrument being played on this track)
                 if msg.type == 'program_change':
                     track.instrument = msg.program
 
+                # If this message is a track name
+                if msg.type == 'track_name':
+                    track_name = msg.name
+
+                # If this message is a track device
+                if msg.type == 'device_name':
+                    device_name = msg.name
+
+                # In case there are notes left in the "current_notes" list when the song ends
+                if msg.type == 'end_of_track':
+                    for n in current_notes:
+                        n.duration = current_time - n.time
+                        if n.duration == 0:
+                            n.duration = 1  # A note can't have zero duration (This breaks the file output)
+                        current_notes.remove(n)
+                        track.add_note(n)
+
             # Add this track and its associated notes to the song (sorted by time)
-            track.notes.sort(key=lambda note: note.time)
-            song.add_track(track)
+            for t in tracks:
+                t.track_name = str(track_name) + ": Channel " + str(t.channel)
+                t.device_name = str(device_name)
+                t.notes.sort(key=lambda note: note.time)
+                song.add_track(t)
         return song
 
     # File has multiple asynchronous tracks
@@ -84,9 +119,12 @@ def write_midi_file(song, filename, print_file=False):
         msgs = order_messages(t)
         # Create a new midi track and add these messages to the track
         midi.add_track(name=None)
-        # Set the instrument for the new track
-        instrument_msg = mido.Message(type='program_change', channel=0, program=t.instrument, time=0)
-        midi.tracks[i].append(instrument_msg)
+
+        # Set the name, device, and instrument for the new track
+        name_msg = mido.MetaMessage(type='track_name', name=str(t.track_name), time=0)
+        midi.tracks[i].append(name_msg)
+        device_msg = mido.MetaMessage(type='device_name', name=str(t.device_name), time=0)
+        midi.tracks[i].append(device_msg)
 
         for m in msgs:
             midi.tracks[i].append(m)
@@ -110,23 +148,28 @@ def write_midi_file(song, filename, print_file=False):
 def order_messages(track):
     note_on = []
     note_off = []
+    controls = []
     msgs = []
     time = 0
 
-    # Generate two lists (note_on and note_off) that store the absolute
-    # times when each note starts and ends. These lists consist of tuples,
-    # [Note, int] that stores a note and it's corresponding time (either
-    # starting or ending time)
+    # Generate three lists (control messages, note_on and note_off) that store the absolute
+    # times when each midi event occurs. These lists consist of tuples,
+    # [message, int] that stores a message and it's corresponding time (either
+    # starting or ending time in the case of notes)
     for n in track.notes:
         note_on.append([n, n.time])
         note_off.append([n, n.time + n.duration])
 
+    for c in track.controls:
+        controls.append([c, c.time])
+
     # note_on will be sorted inside the track object, note_off may not be in the same order
     note_off.sort(key=lambda note: note[1])
 
-    # Compare the first element of the note_on and note_off lists. Write which ever one comes
+    # Compare the first element of the three lists. Write which ever one comes
     # first to a midi message, and remove it from its list.
-    while len(note_on) > 0 or len(note_off) > 0:
+    while len(note_on) > 0 or len(note_off) > 0 or len(controls) > 0:
+        # print("on " + str(len(note_on)) + " off " + str(len(note_off)) + " ctrl " + str(len(controls)))
         if len(note_on) > 0:
             next_note_on = note_on[0][0]
             next_note_on_time = note_on[0][1]
@@ -141,19 +184,51 @@ def order_messages(track):
             next_note_off = None
             next_note_off_time = None
 
-        if len(note_on) > 0 and next_note_on_time < next_note_off_time:
+        if len(controls) > 0:
+            next_control = controls[0][0]
+            next_control_time = controls[0][1]
+        else:
+            next_control = None
+            next_control_time = None
+
+        # If the next event is a control change
+        if len(controls) > 0 and ((len(note_on) > 0 and next_control_time < next_note_on_time and
+                                  next_control_time < next_note_off_time) or len(note_on) == 0):
+
+            c = next_control
+            msg_time = c.time
+
+            if c.msg_type == 'set_tempo':
+                msgs.append(mido.MetaMessage(type=c.msg_type, tempo=c.tempo,
+                                             time=msg_time - time))
+            elif c.msg_type == 'control_change':
+                msgs.append(mido.Message(type=c.msg_type, channel=track.channel, control=c.control, value=c.value,
+                                         time=msg_time - time))
+            else:  # implies this message is a program change
+                msgs.append(mido.Message(type=c.msg_type, channel=track.channel, program=c.instrument,
+                                         time=msg_time - time))
+
+            controls.remove(controls[0])
+
+        # If the next event is a note_on event
+        elif len(note_on) > 0 and next_note_on_time < next_note_off_time:
             n = next_note_on
-            msgType = 'note_on'
-            msgTime = next_note_on_time
+            msg_type = 'note_on'
+            msg_time = next_note_on_time
             note_on.remove(note_on[0])
+            msgs.append(mido.Message(type=msg_type, channel=track.channel, note=n.pitch, velocity=n.velocity,
+                                     time=msg_time - time))
+
+        # If the next event is a note_off event
         else:
             n = next_note_off
-            msgType = 'note_off'
-            msgTime = next_note_off_time
+            msg_type = 'note_off'
+            msg_time = next_note_off_time
             note_off.remove(note_off[0])
 
-        msgs.append(mido.Message(type=msgType, channel=0, note=n.pitch, velocity=n.velocity, time=msgTime - time))
-        time = msgTime
+            msgs.append(mido.Message(type=msg_type, channel=track.channel, note=n.pitch, velocity=n.velocity,
+                                     time=msg_time - time))
+        time = msg_time
 
     return msgs
 
@@ -165,12 +240,12 @@ def order_messages(track):
 # track = the track this note will be added to
 def handle_note(msg, notes, time, track):
     # If this message is the start of a note
-    if msg.type == 'note_on':
+    if msg.type == 'note_on' and msg.velocity > 0:
         # Create a new Note object and add it to the array of currently playing notes
         notes.append(Note(pitch=msg.note, time=time, duration=0, velocity=msg.velocity))
 
     # If this message is the end of a note
-    if msg.type == 'note_off':
+    if msg.type == 'note_off' or msg.velocity == 0:
         # For each note that is currently playing
         for n in notes:
             # Check if the pitch is the same (locate the correct note)
@@ -180,6 +255,26 @@ def handle_note(msg, notes, time, track):
                 notes.remove(n)
                 track.add_note(n)
                 break
+
+
+# Handles control messages (control_change/program_change). These can occur at any time in a track, but have to be
+# treated slightly differently to normal notes
+# msg = the message being read in
+# track = the track being modified
+# time = the current time into the song these messages appear
+#
+# <jmleeder>
+def handle_control(msg, track, time):
+    if msg.type == 'control_change':
+        control = Control(msg_type=msg.type, control=msg.control, value=msg.value, time=time)
+    elif msg.type == 'program_change':
+        control = Control(msg_type=msg.type, instrument=msg.program, time=time)
+    elif msg.type == 'set_tempo':
+        control = Control(msg_type=msg.type, tempo=msg.tempo, time=time)
+    else:
+        raise TypeError("message " + str(msg) + "is not a valid control message")
+
+    track.controls.append(control)
 
 
 # Prints a midi file in a readable format. Mainly used for debugging
