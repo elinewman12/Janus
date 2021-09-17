@@ -39,7 +39,7 @@ def read_midi_file(song, file_name):
         for read_track in midi.tracks:
 
             # Make a new internal track representation
-            track: Track = Track()
+            track = Track()
             # Notes that have had their note_on message read, but don't yet have a note_off message
             current_notes = []
             # The current running time of the song (In absolute terms)

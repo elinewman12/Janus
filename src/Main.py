@@ -6,7 +6,7 @@ if __name__ == '__main__':
 
     song.load(filename="music samples/Mii Channel.mid")
 
-    song.get_note_graph()
+    song.get_note_frequency_graph()
 
     #song.change_song_key(origin_key='F#', destination_key='F')
 

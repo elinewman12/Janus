@@ -1,9 +1,13 @@
+from matplotlib import pyplot
+
 from Track import Track
 import FileIO
-import matplotlib as plt
+import matplotlib.pyplot as plt
+import collections
 
 NOTES = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
 EQUIVALENCE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+
 
 # Stores metadata about a song, and the tracks included in the song
 # <jmleeder>
@@ -129,12 +133,34 @@ class Song:
                     note.pitch += offset
         return self
 
-    def get_note_graph(self):
-        all_pitch = []
+    # Shows a graph of the velocity of all the notes in this song
+    def get_note_velocity_graph(self):
+        all_velocity = []
         all_time = []
         for track in self.tracks:
-            all_pitch.append(self.track.notes.pitch)
-            all_time.append(self.track.notes.time)
+            for note in track.notes:
+                all_velocity.append(note.velocity)
+                all_time.append(note.time)
 
-        plt.pyplot.plot(all_time, all_pitch)
+        plt.plot(all_time, all_velocity)
+        plt.xlabel("Time")
+        plt.ylabel("Velocity")
+        # Change this to show title of song when that variable is available
+        plt.title("Velocity of Notes")
         pyplot.show()
+
+    # Shows a graph of the frequency of all the notes in this song
+    def get_note_frequency_graph(self):
+        all_notes = []
+        for track in self.tracks:
+            for note in track.notes:
+                all_notes.append(NOTES[note.pitch % 12])
+
+        counter = collections.Counter(all_notes)
+        counter = dict(sorted(counter.items(), key=lambda item: item[1], reverse=True))
+        plt.bar(x=counter.keys(), height=counter.values())
+        plt.xlabel("Note")
+        plt.ylabel("Frequency")
+        # Change this to show title of song when that variable is available
+        plt.title("Frequency of Notes")
+        plt.show()
