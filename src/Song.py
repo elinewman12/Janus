@@ -1,5 +1,3 @@
-from matplotlib import pyplot
-
 from Track import Track
 import FileIO
 import matplotlib.pyplot as plt
@@ -22,6 +20,10 @@ class Song:
     def add_track(self, t):
         assert isinstance(t, Track)
         self.tracks.append(t)
+
+    @staticmethod
+    def get_notes_array():
+        return NOTES
 
     # Saves a song object to a midi file with the given name
     #
@@ -147,7 +149,7 @@ class Song:
         plt.ylabel("Velocity")
         # Change this to show title of song when that variable is available
         plt.title("Velocity of Notes")
-        pyplot.show()
+        plt.show()
 
     # Shows a graph of the frequency of all the notes in this song
     def get_note_frequency_graph(self):
