@@ -30,8 +30,8 @@ class Song:
     # The new data overwrites any previous data stored in this song
     #
     # <jmleeder>
-    def load(self, filename):
-        FileIO.read_midi_file(self, filename)
+    def load(self, filename, print_file=False):
+        FileIO.read_midi_file(self, filename=filename, print_file=print_file)
 
     # Deletes all of the data from a song object and resets it to default values
     #
@@ -103,6 +103,22 @@ class Song:
                 if interval_begin <= note.time <= interval_end:
                     note.pitch += offset
         return self
+
+    # Prints song object to the console for debugging
+    #
+    # <jmleeder>
+    def print_song(self):
+        print("Ticks per beat: " + str(self.ticks_per_beat))
+        for t in self.tracks:
+            print("  Track name: " + str(t.track_name))
+            print("  Device name: " + str(t.device_name))
+            for n in t.notes:
+                print("  Pitch:" + str(n.pitch) + " Velocity: " + str(n.velocity) + " Time: " + str(n.time) +
+                      " Duration: " + str(n.duration))
+            for c in t.controls:
+                print("  Type: " + str(c.msg_type) + " Tempo: " + str(c.tempo) + " Control: " + str(c.control) +
+                      " Value: " + str(c.value) + " Instrument: " + str(c.instrument) + " Time: " + str(c.time))
+
 
 # Takes a key (as a string) and converts it to the index of this key based on the NOTES and EQUIVALENCE arrays
 # specified at the top of this file
