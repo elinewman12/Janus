@@ -1,0 +1,19 @@
+from Song import Song
+
+
+if __name__ == '__main__':
+    song = Song()
+
+    # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
+    song.load(filename="music samples/Mii Channel.mid", print_file=True)
+    # song.load(filename="music samples/Megadeth-Symphony Of Destruction.mid", print_file=True)
+
+    # song.tracks[1].instrument = 75    # 75 = Pan Flute
+    # song.print_song()
+
+    # song.save(filename="music samples/Megadeth-Tornado of Souls.mid", print_file=True)
+
+    song.change_song_key(origin_key='F#', destination_key='F')
+
+    song.save(filename="music samples/Mii Channel Key Change.mid", print_file=True)
+
