@@ -8,12 +8,23 @@ from Track import Track
 from Note import Note
 
 
-# Takes a song and file name as input, clears the song data and overwrites
-# it with the data from the new file. This creates a list of tracks, gets
-# the metadata for the song, and creates a "song" object
-#
-# <jmleeder>
 def read_midi_file(song, filename, print_file=False):
+    """Takes a song and file name as input, clears the song data and
+    overwrites it with the data from the new file. This creates a list
+    of tracks, gets the metadata for the song, and created a "song" object
+
+    Args:
+        song (Song): Song object to store the MIDI file's song in
+        filename (String): filename of MIDI file
+        print_file (bool, optional): Whether or not to print the MIDI file
+            after reading it in. Defaults to False.
+
+    Raises:
+        NotImplementedError: If a Type 2 MIDI file is read
+
+    Returns:
+        song: The Song object containing the song in the MIDI file
+    """
     midi = MidiFile(filename)
 
     if print_file:
@@ -47,13 +58,10 @@ def read_midi_file(song, filename, print_file=False):
                 # Add the delay between notes to the current time
                 current_time += msg.time
 
+                # Set the current track to the track with the same channel as the current message.
+                # If this track does not yet exist, create it.
                 if hasattr(msg, 'channel'):
-                    for t in tracks:
-                        if t.channel == msg.channel:
-                            track = t
-                    if track is None:
-                        track = Track(channel=msg.channel)
-                        tracks.append(track)
+                    track = set_current_track_by_channel(msg=msg, tracks=tracks)
 
                 # If this message is a note and not metadata
                 if hasattr(msg, 'note'):
@@ -83,16 +91,11 @@ def read_midi_file(song, filename, print_file=False):
 
                 # In case there are notes left in the "current_notes" list when the song ends
                 if msg.type == 'end_of_track':
-                    for n in current_notes:
-                        n.duration = current_time - n.time
-                        if n.duration == 0:
-                            n.duration = 1  # A note can't have zero duration (This breaks the file output)
-                        current_notes.remove(n)
-                        track.add_note(n)
+                    conv_remaining_notes(current_notes=current_notes, current_time=current_time, tracks=tracks)
 
             # Add this track and its associated notes to the song (sorted by time)
             for t in tracks:
-                t.track_name = str(track_name) + ": Channel " + str(t.channel)
+                t.track_name = str(track_name)
                 t.device_name = str(device_name)
                 t.notes.sort(key=lambda note: note.time)
                 song.add_track(t)
@@ -100,15 +103,57 @@ def read_midi_file(song, filename, print_file=False):
 
     # File has multiple asynchronous tracks
     else:
-        raise NotImplementedError()
+        raise NotImplementedError("'Type 2' Midi files are not supported at this time")
 
 
-# Takes a file name and a song as input,
-# recreates a midi file using the tracks and metadata included
-# in the song object, and exports it to a file with the given name
-#
-# <jmleeder>
+def conv_remaining_notes(current_notes, current_time, tracks):
+    """ In the case that a midi song has note_on messages that do not have a closing note_off message, this method
+    will end those notes when the end_of_track message is read in for that particular track. This should not occur,
+    but adding this method increases the program's robustness and allows us to fix malformed midi files
+
+    Args:
+        current_notes (Note[]): An array of notes for which a note_on message was received, but no note_off message was
+        current_time (int): Current absolute time in the song
+        tracks (Track[]): An array of track objects (generated from the current midi track being read in)
+    """
+    for n in current_notes:
+        n.duration = current_time - n.time
+        if n.duration == 0:
+            n.duration = 1  # A note can't have zero duration (This breaks the file output)
+        current_notes.remove(n)
+        track = set_current_track_by_channel(msg=n, tracks=tracks)
+        track.add_note(n)
+
+
+def set_current_track_by_channel(msg, tracks):
+    """ Returns the track that is assigned to the same channel as the given message/note. If this track does not
+    exist, create a new track and set it to this channel.
+
+    Args:
+        msg (Message or Note): A Mido Message object, or a Note object for which the associated track needs to be found
+        tracks (Track[]): An array of possible tracks that could match the channel of the message or note
+    """
+    track = None
+    for t in tracks:
+        if t.channel == msg.channel:
+            track = t
+    if track is None:
+        track = Track(channel=msg.channel)
+        tracks.append(track)
+    return track
+
+
 def write_midi_file(song, filename, print_file=False):
+    """ Takes a file name and a song as input, recreates a midi file
+    using the tracks and metadata included in the song object, and
+    exports it to a file with the given name
+
+    Args:
+        song (Song): Song object containing the song to be output
+        filename (String): Name of the file to write to
+        print_file (bool, optional): Whether or not to print the midi
+            file. Defaults to False.
+    """
     # Generate new type 1 midi file with the original song's metadata
     midi = MidiFile(type=1)
     midi.ticks_per_beat = song.ticks_per_beat
@@ -139,13 +184,18 @@ def write_midi_file(song, filename, print_file=False):
         print_midi(filename, midi)
 
 
-# Takes a track as input and returns an ordered list of midi messages.
-# These messages consist of note_on and note_off messages, and will
-# have their attributes (channel, pitch, velocity, time) set correctly
-# based on the values stored in each note object
-#
-# <jmleeder>
 def order_messages(track):
+    """ Takes a track as input and returns an ordered list of midi messages.
+    These messages consist of note_on, note_off, and control messages, and will have
+    their attributes (channel, pitch, velocity, time, etc) set correctly based
+    on the values stored in each note or control object.
+
+    Args:
+        track (Track): Track to order the messages of
+
+    Returns:
+        String[]: Array of all messages in order
+    """
     note_on = []
     note_off = []
     controls = []
@@ -233,12 +283,15 @@ def order_messages(track):
     return msgs
 
 
-# Handles the case where a note message is read in from a midi file
-# msg = the message being read in
-# notes = A list of notes that have been started (note_on message) but not ended (no note_off message yet)
-# time = the current timestamp where the previous note occurred
-# track = the track this note will be added to
 def handle_note(msg, notes, time, track):
+    """ Handles the case where a note message is read in from a midi file
+
+    Args:
+        msg (mido.Message): Message being read in
+        notes (Note[]): List of notes that have been started but not ended
+        time (int): Current timestamp where the previous note occurred
+        track (Track): Track this note will be added to
+    """
     # If this message is the start of a note
     if msg.type == 'note_on' and msg.velocity > 0:
         # Create a new Note object and add it to the array of currently playing notes
@@ -257,14 +310,30 @@ def handle_note(msg, notes, time, track):
                 break
 
 
-# Handles control messages (control_change/program_change). These can occur at any time in a track, but have to be
-# treated slightly differently to normal notes
-# msg = the message being read in
-# track = the track being modified
-# time = the current time into the song these messages appear
-#
-# <jmleeder>
 def handle_control(msg, track, time):
+    """ Handles control messages (control_change/program_change). These
+    can occur at any time in a track, but have to be treated slightly
+    differently to normal notes
+
+    Args:
+        msg (mido.Message): Message being read in
+        track (Track): Track being modified
+        time (int): Current time into the song this message appears
+
+    Raises:
+        AttributeError: If time is None
+        AttributeError: If msg is None
+        AttributeError: If track is None
+        TypeError: If message type is not control, program, or tempo
+    """
+
+    if time is None:
+        raise AttributeError("Time cannot be None")
+    if msg is None:
+        raise AttributeError("msg cannot be None")
+    if track is None:
+        raise AttributeError("Track cannot be None")
+
     if msg.type == 'control_change':
         control = Control(msg_type=msg.type, control=msg.control, value=msg.value, time=time)
     elif msg.type == 'program_change':
@@ -277,8 +346,14 @@ def handle_control(msg, track, time):
     track.controls.append(control)
 
 
-# Prints a midi file in a readable format. Mainly used for debugging
 def print_midi(filename='output.txt', file=None):
+    """ Prints a MIDI file in a readable format to standard output.
+    Mainly used for debugging.
+
+    Args:
+        filename (str, optional): Name of file to write to. Defaults to 'output.txt'.
+        file (MidiFile): The MidiFile you wish to print (mido object). Defaults to None.
+    """
     original_stdout = sys.stdout  # Save a reference to the original standard output
 
     with open(filename + '.txt', 'w') as f:
