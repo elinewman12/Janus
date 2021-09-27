@@ -1,5 +1,6 @@
 import Note
 
+PERCUSSION_CHANNEL = 9
 
 # Stores metadata about the track and a list of Note objects
 
@@ -17,6 +18,11 @@ class Track:
         self.track_name = track_name
         self.device_name = track_device
         self.channel = channel
+
+        if channel is PERCUSSION_CHANNEL:
+            self.is_percussion = True
+        else:
+            self.is_percussion = False
 
     def add_note(self, note=None):
         self.notes.append(note)
