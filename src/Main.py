@@ -1,4 +1,5 @@
 from Song import Song
+from Key import Key
 
 
 if __name__ == '__main__':
@@ -10,10 +11,11 @@ if __name__ == '__main__':
 
     # song.tracks[1].instrument = 75    # 75 = Pan Flute
     # song.print_song()
+    print(song.detect_key())
 
+    # song.change_song_key(origin_key=Key('F#'), destination_key=Key('C'))
     # song.save(filename="music samples/Megadeth-Tornado of Souls.mid", print_file=True)
 
-    song.change_song_key(origin_key='F#', destination_key='F')
 
-    song.save(filename="music samples/Mii Channel Key Change.mid", print_file=True)
+    # song.save(filename="music samples/Mii Channel Output.mid", print_file=True)
 

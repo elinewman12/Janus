@@ -1,8 +1,9 @@
 from Track import Track
+from Key import Key, KEYS
+from Scale import SCALE_TYPES
+from Note import NUM_NOTES
 import FileIO
 
-NOTES = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
-EQUIVALENCE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 DEFAULT_TICKS_PER_BEAT = 48
 
 
@@ -47,10 +48,20 @@ class Song:
     def get_c_indexed_note_frequencies(self):
         c_indexed_note_frequency = [0] * 12
         for track in self.tracks:
-            track_frequencies = track.get_c_indexed_note_frequencies()
-            for idx, val in enumerate(track_frequencies):
-                c_indexed_note_frequency[idx] += val
+            if not track.is_percussion:
+                track_frequencies = track.get_c_indexed_note_frequencies()
+                for idx, val in enumerate(track_frequencies):
+                    c_indexed_note_frequency[idx] += val
         return c_indexed_note_frequency
+
+    def get_note_frequencies(self, key):
+        indexed_note_frequency = [0] * 12
+        for track in self.tracks:
+            if not track.is_percussion:
+                track_frequencies = track.get_note_frequencies(key)
+                for idx, val in enumerate(track_frequencies):
+                    indexed_note_frequency[idx] += val
+            return indexed_note_frequency
 
     # This method will shift all notes in the song up (positive numHalfSteps) or
     # down (negative numHalfSteps) the number of half steps specified.
@@ -59,8 +70,9 @@ class Song:
     # <jfwiddif>
     def change_song_key_by_half_steps(self, num_half_steps):
         for track in self.tracks:
-            for note in track.notes:
-                note.pitch += num_half_steps
+            if not track.is_percussion:
+                for note in track.notes:
+                    note.pitch += num_half_steps
         return self
 
     # This method will change the key of an entire song from an origin key to a destination key
@@ -69,19 +81,24 @@ class Song:
     # <jfwiddif>
     def change_song_key(self, origin_key, destination_key):
 
+        # Check to make sure params are the correct type
+        if not isinstance(origin_key, Key) or not isinstance(destination_key, Key):
+            raise SyntaxError("Parameters are not of the right type.  They must be of type 'Key'")
+
         # Get the index of the origin key
-        origin_index = get_index_of_key(origin_key)
+        origin_index = origin_key.get_c_based_index_of_key()
 
         # Get the index of the destination key
-        destination_index = get_index_of_key(destination_key)
+        destination_index = destination_key.get_c_based_index_of_key()
 
         # discover offset (this is the number of half steps to move each note to get to the destination key)
         offset = destination_index - origin_index
 
         # apply the offset to each note
         for track in self.tracks:
-            for note in track.notes:
-                note.pitch += offset
+            if not track.is_percussion:
+                for note in track.notes:
+                    note.pitch += offset
 
         return self
 
@@ -92,20 +109,25 @@ class Song:
     # <jfwiddif>
     def change_key_for_interval(self, origin_key, destination_key, interval_begin, interval_end):
 
+        # Check to make sure params are the correct type
+        if not isinstance(origin_key, Key) or not isinstance(destination_key, Key):
+            raise SyntaxError("Parameters are not of the right type.  They must be of type 'Key'")
+
         # Get the index of the origin key
-        origin_index = get_index_of_key(origin_key)
+        origin_index = origin_key.get_c_based_index_of_key()
 
         # Get the index of the destination key
-        destination_index = get_index_of_key(destination_key)
+        destination_index = destination_key.get_c_based_index_of_key()
 
         # discover offset (this is the number of half steps to move each note to get to the destination key)
         offset = destination_index - origin_index
 
         # apply the offset to each note within the time interval
         for track in self.tracks:
-            for note in track.notes:
-                if interval_begin <= note.time <= interval_end:
-                    note.pitch += offset
+            if not track.is_percussion:
+                for note in track.notes:
+                    if interval_begin <= note.time <= interval_end:
+                        note.pitch += offset
         return self
 
     # Prints song object to the console for debugging
@@ -220,17 +242,58 @@ class Song:
 
         return True
 
+    def detect_key(self):
+        note_frequencies = self.get_c_indexed_note_frequencies()
 
-# Takes a key (as a string) and converts it to the index of this key based on the NOTES and EQUIVALENCE arrays
-# specified at the top of this file
-def get_index_of_key(key):
-    if key in NOTES:
-        index = NOTES.index(key)
-    elif key in EQUIVALENCE:
-        index = EQUIVALENCE.index(key)
-    else:
-        raise SyntaxError("Key '" + str(key) +
-                          "' needs to be the key and #/b if necessary. Examples: 'C#', 'Db', 'F' etc")
-    return index
+        key_and_scale_error_record = {}
 
+        # Iterate over each key
+        for key in KEYS:
+            # we have to rotate the frequency array to be 0 indexed at the key.
+            # get the index of the key we want the frequencies indexed by
+            key_index = Key(key).get_c_based_index_of_key()
+
+            # rotate the array left based on the index to have the 0th index contain the frequency of the tonic or key
+            key_indexed_note_frequencies = note_frequencies[key_index:] + note_frequencies[:key_index]
+
+            # iterate over each scale and count errors for each
+            for scale in SCALE_TYPES.items():
+
+                # Break the scale dict into key and value
+                scale_name = scale[0]
+                scale_steps = scale[1]
+
+                # keep an error counter to increment each time a note is not in the key/scale
+                errors = 0
+
+                # generate an array with true in the indexes that are in the key/scale and false in the
+                # indexes that are notes that are out of the scale  (the array is key indexed at 0)
+                accepted_notes = [False] * NUM_NOTES
+
+                # semitones that a note in the scale is away from the key (starts at 0 because regardless of scale the
+                # tonic will be in the scale)
+                semitones_from_key = 0
+                accepted_notes[0] = True
+
+                # iterate through the scale semitones marking notes as valid for the key/scale
+                for semitones in scale_steps:
+                    semitones_from_key += semitones
+                    # % number of notes (12) because some signatures will count semitones back to tonic
+                    accepted_notes[semitones_from_key % NUM_NOTES] = True
+
+                # count all of the errors that occur (notes in the song that are not accepted by key/scale)
+                for idx in range(NUM_NOTES):
+                    if accepted_notes[idx]:
+                        continue
+                    else:
+                        errors += key_indexed_note_frequencies[idx]
+
+                # store errors in a record dictionary
+                key_and_scale_error_record[key + ' ' + scale_name] = errors
+
+        # find the key/scales with the minimum values in the error dictionary
+        minimum_errors = min(key_and_scale_error_record.values())
+        result = [k for k, v in key_and_scale_error_record.items() if v == minimum_errors]
+
+        return result
 
