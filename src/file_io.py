@@ -3,9 +3,9 @@ import sys
 import mido
 from mido import MidiFile
 
-from Control import Control
-from Track import Track
-from Note import Note
+from control import Control
+from track import Track
+from note import Note
 
 
 def read_midi_file(song, filename, print_file=False):

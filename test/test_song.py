@@ -1,11 +1,12 @@
 import pytest
-import FileIO
-from Control import Control
-from Note import Note
-from Song import Song
-from Track import Track
-import mido
 
+import file_io as FileIO
+from control import Control
+from note import Note
+from song import Song
+from track import Track
+
+import mido
 
 # Tests that proper error handling is present on the song constructor
 def test_song_constructor():
@@ -33,12 +34,12 @@ def test_change_song_key_by_half_steps():
     new_song = Song()
     d_scale = Song()
 
-    orig.load(filename="test MIDI/C_major_scale.mid")
+    orig.load(filename="test/test MIDI/C_major_scale.mid")
     orig = orig.change_song_key_by_half_steps(2)
-    orig.save(filename="test MIDI/C_major_scale_Output.mid")
+    orig.save(filename="test/test MIDI/C_major_scale_Output.mid")
 
-    new_song.load(filename="test MIDI/C_major_scale_Output.mid")
-    d_scale.load(filename="test MIDI/D_major_scale.mid")
+    new_song.load(filename="test/test MIDI/C_major_scale_Output.mid")
+    d_scale.load(filename="test/test MIDI/D_major_scale.mid")
 
     assert new_song.tracks[1].notes[0].pitch == d_scale.tracks[1].notes[0].pitch
     assert new_song.tracks[1].notes[1].pitch == d_scale.tracks[1].notes[1].pitch
@@ -55,12 +56,12 @@ def test_change_song_key():
     new_song = Song()
     d_scale = Song()
 
-    orig.load(filename="test MIDI/C_major_scale.mid")
+    orig.load(filename="test/test MIDI/C_major_scale.mid")
     orig = orig.change_song_key(origin_key='C', destination_key='D')
-    orig.save(filename="test MIDI/C_major_scale_Output.mid")
+    orig.save(filename="test/test MIDI/C_major_scale_Output.mid")
 
-    new_song.load(filename="test MIDI/C_major_scale_Output.mid")
-    d_scale.load(filename="test MIDI/D_major_scale.mid")
+    new_song.load(filename="test/test MIDI/C_major_scale_Output.mid")
+    d_scale.load(filename="test/test MIDI/D_major_scale.mid")
 
     assert new_song.tracks[1].notes[0].pitch == d_scale.tracks[1].notes[0].pitch
     assert new_song.tracks[1].notes[1].pitch == d_scale.tracks[1].notes[1].pitch
@@ -78,12 +79,12 @@ def test_change_key_for_interval():
     new_song = Song()
     d_scale = Song()
 
-    orig.load(filename="test MIDI/C_major_scale.mid")
+    orig.load(filename="test/test MIDI/C_major_scale.mid")
     orig = orig.change_key_for_interval(origin_key='C', destination_key='D', interval_begin=0, interval_end=107)
-    orig.save(filename="test MIDI/C_major_scale_Output.mid")
+    orig.save(filename="test/test MIDI/C_major_scale_Output.mid")
 
-    new_song.load(filename="test MIDI/C_major_scale_Output.mid")
-    d_scale.load(filename="test MIDI/D_major_scale.mid")
+    new_song.load(filename="test/test MIDI/C_major_scale_Output.mid")
+    d_scale.load(filename="test/test MIDI/D_major_scale.mid")
 
     assert new_song.tracks[1].notes[0].pitch == d_scale.tracks[1].notes[0].pitch
 

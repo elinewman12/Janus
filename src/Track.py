@@ -1,4 +1,4 @@
-import Note
+import note
 
 
 # Stores metadata about the track and a list of Note objects
