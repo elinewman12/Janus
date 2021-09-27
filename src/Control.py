@@ -1,4 +1,4 @@
-# Stores data about tempo changes, control changes, and program changes in a song
+# Stores data about tempo changes, control changes, and program changes in a song 
 class Control:
 
     def __init__(self, msg_type=None, tempo=None, control=None, value=None, instrument=None, time=None):

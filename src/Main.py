@@ -1,5 +1,5 @@
-from Song import Song
-from Key import Key
+from song import Song
+from key import Key
 
 
 if __name__ == '__main__':

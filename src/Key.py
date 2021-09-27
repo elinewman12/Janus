@@ -12,7 +12,7 @@ class Key:
             self.key = key
 
     # Takes a key (as a string) and converts it to the index of this key based on the NOTES and EQUIVALENCE arrays
-    # specified at the top of this file
+    # specified at the top of this file 
     def get_c_based_index_of_key(self):
         if self.key in KEYS:
             index = KEYS.index(self.key)

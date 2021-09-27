@@ -1,4 +1,4 @@
-import Note
+import note
 
 PERCUSSION_CHANNEL = 9
 

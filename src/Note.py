@@ -4,7 +4,7 @@ NUM_NOTES = 12
 
 class Note:
 
-    # Constructor, takes all fields as inputs
+    # Constructor, takes all fields as inputs 
     def __init__(self, pitch=60, time=0, duration=1, velocity=127):
         # The absolute pitch of the note
         self.pitch = pitch
