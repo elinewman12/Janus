@@ -242,7 +242,16 @@ class Song:
 
         return True
 
-    def detect_key(self):
+    def detect_key_and_scale(self, display_result=False):
+        """ Detect the key of a song using Mr. Dehaan's algorithm.  This algorithm generates the valid notes
+        for every key and for every scale and checks the occurrences of the notes in the song against the valid
+        key/scale notes.  It then finds how many errors (or misses) occurred.  It then finds the key/scale with the
+        lowest number of errors (or the list of key/scale with the same minimum) and returns the result.
+
+        :param display_result: determines if you receive output to console about the algorithms findings (default False)
+        :return: A list containing the keys and scales that were detected.  ex -> ['C major', 'D minor']
+        """
+
         note_frequencies = self.get_c_indexed_note_frequencies()
 
         key_and_scale_error_record = {}
@@ -283,9 +292,7 @@ class Song:
 
                 # count all of the errors that occur (notes in the song that are not accepted by key/scale)
                 for idx in range(NUM_NOTES):
-                    if accepted_notes[idx]:
-                        continue
-                    else:
+                    if not accepted_notes[idx]:
                         errors += key_indexed_note_frequencies[idx]
 
                 # store errors in a record dictionary
@@ -294,6 +301,9 @@ class Song:
         # find the key/scales with the minimum values in the error dictionary
         minimum_errors = min(key_and_scale_error_record.values())
         result = [k for k, v in key_and_scale_error_record.items() if v == minimum_errors]
-
+        if display_result:
+            print("Resulting errors:")
+            print(key_and_scale_error_record)
+            print("Key(s)/Scale(s) with the minimum error:\n" + result.__str__())
         return result
 
