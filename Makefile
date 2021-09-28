@@ -4,7 +4,7 @@ coverage: # Run tests with coverage
 	coverage report -m
 
 deps: # Install dependecies
-	pip3 install requirements.txt
+	pip3 install -r requirements.txt
 
 tests: # Run tests
 	pytest -ra
