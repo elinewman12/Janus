@@ -3,6 +3,8 @@ from Key import Key, KEYS
 from Scale import SCALE_TYPES
 from Note import NUM_NOTES
 import FileIO
+import matplotlib.pyplot as plt
+import collections
 
 DEFAULT_TICKS_PER_BEAT = 48
 
@@ -24,6 +26,10 @@ class Song:
     def add_track(self, t):
         assert isinstance(t, Track)
         self.tracks.append(t)
+
+    @staticmethod
+    def get_notes_array():
+        return KEYS
 
     # Saves a song object to a midi file with the given name
     #
@@ -130,6 +136,38 @@ class Song:
                         note.pitch += offset
         return self
 
+    # Shows a graph of the velocity of all the notes in this song
+    def get_note_velocity_graph(self):
+        all_velocity = []
+        all_time = []
+        for track in self.tracks:
+            for note in track.notes:
+                all_velocity.append(note.velocity)
+                all_time.append(note.time)
+
+        plt.plot(all_time, all_velocity)
+        plt.xlabel("Time")
+        plt.ylabel("Velocity")
+        # Change this to show title of song when that variable is available
+        plt.title("Velocity of Notes")
+        plt.show()
+
+    # Shows a graph of the frequency of all the notes in this song
+    def get_note_frequency_graph(self):
+        all_notes = []
+        for track in self.tracks:
+            for note in track.notes:
+                all_notes.append(KEYS[note.pitch % 12])
+
+        counter = collections.Counter(all_notes)
+        counter = dict(sorted(counter.items(), key=lambda item: item[1], reverse=True))
+        plt.bar(x=counter.keys(), height=counter.values())
+        plt.xlabel("Note")
+        plt.ylabel("Frequency")
+        # Change this to show title of song when that variable is available
+        plt.title("Frequency of Notes")
+        plt.show()
+
     # Prints song object to the console for debugging
     #
     # <jmleeder>
@@ -156,7 +194,7 @@ class Song:
             print("These songs have different ticks_per_beat values")
             print("This: " + str(self.ticks_per_beat) + ", compare to: " + str(song.ticks_per_beat))
             return False
-            
+
         if len(self.tracks) != len(song.tracks):
             print("These songs have a different number of tracks")
             print("This: " + str(len(self.tracks)) + ", compare to: " + str(len(song.tracks)))
@@ -206,7 +244,8 @@ class Song:
 
                 if control.instrument != song.tracks[i].controls[j].instrument:
                     print("tracks " + str(i) + " control " + str(j) + " have different instruments")
-                    print("This: " + str(control.instrument) + ", compare to: " + str(song.tracks[i].controls[j].instrument))
+                    print("This: " + str(control.instrument) + ", compare to: " + str(
+                        song.tracks[i].controls[j].instrument))
                     return False
 
                 if control.time != song.tracks[i].controls[j].time:
@@ -296,4 +335,3 @@ class Song:
         result = [k for k, v in key_and_scale_error_record.items() if v == minimum_errors]
 
         return result
-
