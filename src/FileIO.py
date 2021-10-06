@@ -316,7 +316,7 @@ def handle_control(msg, track, time):
     differently to normal notes
 
     Args:
-        msg (mido.Message): Message being read in
+        msg (mido.Message or mido.MetaMessage): Message being read in
         track (Track): Track being modified
         time (int): Current time into the song this message appears
 
