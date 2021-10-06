@@ -8,8 +8,9 @@ import FileIO
 class Chord:
 
     # Constructor, takes all fields as inputs
-    def __init__(self, notes=None, name=None):
+    def __init__(self, notes=None, name=None, time=0):
         if notes is None:
             notes = []
         self.notes = notes
         self.name = name
+        self.time = time

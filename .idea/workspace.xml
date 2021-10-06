@@ -5,64 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56aae1ed-42a9-493c-9254-87239fa045d0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Country/Garth Brooks/23224_Friends-in-Low-Places.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Country/Garth Brooks/26553_To-Make-You-Feel-My-Love.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Country/John Anderson/2603_Seminole-Wind.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/EDM/Deadmau5/deadmau5 - 2448  (midi by Carlo Prato) (www.cprato.com).mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/EDM/Deadmau5/deadmau5 - So There I Was  (midi by Carlo Prato) (www.cprato.com).mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Hip-Hop/Eminem/20501_Marshall-Mathers.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Hip-Hop/Eminem/23214_My-Name-Is.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Hip-Hop/Eminem/27297_Real-Slim-Shady-The.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Hip-Hop/Jay-Z/13235_Big-Pimpin.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Hip-Hop/Jay-Z/13238_Hard-Knock-Life.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Hip-Hop/Kanye West/21530_All-Falls-Down.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Hip-Hop/Kanye West/24774_Jesus-Walks.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Hip-Hop/Notorious B.I.G/13224_Miss-U.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Hip-Hop/Notorious B.I.G/13225_Mo-Money-Mo-Problems.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Hip-Hop/Notorious B.I.G/13227_One-More-Chance.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Metal/Megadeth/Megadeth-Holy Wars The Punishment Due.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Metal/Megadeth/Megadeth-Symphony Of Destruction.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Metal/Megadeth/Megadeth-Tornado of Souls.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Rock/Aerosmith/ComeTogether.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Rock/Aerosmith/DreamOn.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Rock/Eagles/HotelCalifornia.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Rock/Eagles/HowLong.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Rock/Eagles/TakeItEasy.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Rock/Greenday/BoulevardofBrokenDreams.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Rock/Greenday/GoodRiddance(TimeOfYourLife).mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Rock/U2/IStillHavntFoundWhatImLookingFor.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MIDI Files/Rock/U2/WithorWithoutYou.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Control.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Key.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Scale.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/music samples/Megadeth-Symphony Of Destruction 2.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/music samples/Megadeth-Symphony Of Destruction 2.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/music samples/Megadeth-Symphony Of Destruction.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/music samples/Megadeth-Symphony Of Destruction.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/music samples/Megadeth-Tornado of Souls.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/music samples/Megadeth-Tornado of Souls.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/Resources/GoodRiddance(TimeOfYourLife).mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/Resources/GoodRiddance(TimeOfYourLife)_Output.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/Resources/GoodRiddance(TimeOfYourLife)_Output.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/Resources/My-Name-Is.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/Resources/My-Name-Is_Output.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/Resources/My-Name-Is_Output.mid.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test MIDI/C_major_scale.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test MIDI/C_major_scale_Output.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test MIDI/D_major_scale.mid" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/2021FallTeam17-DeHaan.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2021FallTeam17-DeHaan.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Chord.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Chord.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FileIO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/FileIO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Note.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Note.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Song.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Song.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Genre.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Genre.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Track.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Track.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_file_io.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_file_io.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_note.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_song.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_song.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_track.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,6 +84,7 @@
       <workItem from="1631742704748" duration="405000" />
       <workItem from="1631743127799" duration="2912000" />
       <workItem from="1631908855304" duration="4747000" />
+      <workItem from="1633481242575" duration="2504000" />
     </task>
     <servers />
   </component>
