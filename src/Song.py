@@ -11,6 +11,8 @@ import collections
 DEFAULT_TICKS_PER_BEAT = 48
 
 
+# Stores metadata about a song, and the tracks included in the song
+# <jmleeder>
 class Song:
 
     def __init__(self, tracks=None, ticks_per_beat=DEFAULT_TICKS_PER_BEAT):
@@ -219,6 +221,17 @@ class Song:
         plt.title("Velocity of Notes")
         plt.show()
 
+    def get_bar_graph(self, title, x_label, y_label, items):
+        counter = collections.Counter(items)
+        counter = dict(sorted(counter.items(), key=lambda item: item[1], reverse=True))
+        bar = plt.bar(x=counter.keys(), height=counter.values())
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
+        # Change this to show title of song when that variable is available
+        plt.title(title)
+        return bar
+
+    # Shows a graph of the frequency of all the notes in this song
     def get_note_frequency_graph(self):
         """ Shows a graph of the frequency that each note apperas in this song.
         TODO: make this return rather than 'print'
@@ -228,14 +241,8 @@ class Song:
             for note in track.notes:
                 all_notes.append(KEYS[note.pitch % 12])
 
-        counter = collections.Counter(all_notes)
-        counter = dict(sorted(counter.items(), key=lambda item: item[1], reverse=True))
-        plt.bar(x=counter.keys(), height=counter.values())
-        plt.xlabel("Note")
-        plt.ylabel("Frequency")
-        # Change this to show title of song when that variable is available
-        plt.title("Frequency of Notes")
-        plt.show()
+        graph = self.get_bar_graph("Frequency of Notes", "Note", "Frequency", all_notes)
+        plt.show(graph)
 
     def to_string(self):
         """ Returns the contents of the song as a string in the format: \n
