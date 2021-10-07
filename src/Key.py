@@ -10,6 +10,14 @@ EQUIVALENT_KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', '
 class Key:
 
     def __init__(self, key='C'):
+        """ Constructor for the Key class.
+
+        Args:
+            key (str): Value for the key of the song. Defaults to 'C'.
+
+        Raises:
+            SyntaxError: If the key is not within the list of keys and their equivalents
+        """        
         if key not in KEYS and key not in EQUIVALENT_KEYS:
             raise SyntaxError("Key '" + str(key) +
                               "' needs to be the key and #/b if necessary. Examples: 'C#', 'Db', 'F' etc")
@@ -17,12 +25,15 @@ class Key:
             self.key = key
 
     def get_c_based_index_of_key(self):
-        """ This will return the index of the key in the KEYS or equivalently in the EQUIVALENCE array.  This
-        helps to understand the positioning of a key relative to C. It is useful for generating note frequencies
-        consistently as well as knowing how to shift an array to be indexed at another Key
+        """ Takes a key (as a string) and converts it to the index of this key based on the NOTES and EQUIVALENCE
+        arrays specified at the top of this file
 
-        :return: The index of the key relative to C.  For example 0 would be C, 1 would be C# or Db, 2 would be D etc.
-        """
+        Raises:
+            SyntaxError: The key is not a valid key within the list of keys and equivalents
+
+        Returns:
+            int: index of this key in the list of notes
+        """ 
         if self.key in KEYS:
             index = KEYS.index(self.key)
         elif self.key in EQUIVALENT_KEYS:
