@@ -374,12 +374,15 @@ class Song:
                     return False
 
         return True
+     
+    def detect_key_and_scale(self):
+        """ Detect the key of a song using Mr. Dehaan's algorithm.  This algorithm generates the valid notes
+        for every key and for every scale and checks the occurrences of the notes in the song against the valid
+        key/scale notes.  It then finds how many errors (or misses) occurred.  It then finds the key/scale with the
+        lowest number of errors (or the list of key/scale with the same minimum) and returns the result.
 
-    def detect_key(self):
-        """ Detects the key of this song
-
-        Returns:
-            Key: The key of this song
+        :param display_result: determines if you receive output to console about the algorithms findings (default False)
+        :return: A list containing the keys and scales that were detected.  ex -> ['C major', 'D minor']
         """
         note_frequencies = self.get_c_indexed_note_frequencies()
 
@@ -421,9 +424,7 @@ class Song:
 
                 # count all of the errors that occur (notes in the song that are not accepted by key/scale)
                 for idx in range(NUM_NOTES):
-                    if accepted_notes[idx]:
-                        continue
-                    else:
+                    if not accepted_notes[idx]:
                         errors += key_indexed_note_frequencies[idx]
 
                 # store errors in a record dictionary
@@ -433,4 +434,29 @@ class Song:
         minimum_errors = min(key_and_scale_error_record.values())
         result = [k for k, v in key_and_scale_error_record.items() if v == minimum_errors]
 
-        return result
+        # now we have the relative major and minors, we can use the note frequencies to differentiate
+        # between the two based on the assumption that for most cases the tonic will be played more than
+        # other notes.  This lets us differentiate scales with the same notes such as D major and B Minor.
+
+        # get the resulting keys/scales
+        relative_major_key_scale = result[0]
+        relative_minor_key_scale = result[1]
+
+        # Create the key object to hold potential tonic
+        relative_major_key = Key(key=relative_major_key_scale.split()[0])
+        relative_minor_key = Key(key=relative_minor_key_scale.split()[0])
+
+        # get the index of the key in order to find its frequency in the frequency array
+        idx_of_major_key = relative_major_key.get_c_based_index_of_key()
+        idx_of_minor_key = relative_minor_key.get_c_based_index_of_key()
+
+        # get the frequency of each tonic
+        major_frequency = note_frequencies[idx_of_major_key]
+        minor_frequency = note_frequencies[idx_of_minor_key]
+
+        # compare and return the most common key scale
+        if major_frequency >= minor_frequency:
+            return relative_major_key_scale
+        else:
+            return relative_minor_key_scale
+          
