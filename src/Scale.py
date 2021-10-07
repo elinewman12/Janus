@@ -14,6 +14,11 @@
 SCALE_TYPES = dict(
     major=[2, 2, 1, 2, 2, 2, 1],
     minor=[2, 1, 2, 2, 1, 2, 2],
+)
+
+"""
+    other potential scales/modes that may be useful later
+    
     pentatonic=[2, 2, 3, 2],
     pentatonic_minor=[3, 2, 2, 3],
     blues=[3, 2, 1, 1, 3, 2],
@@ -28,5 +33,4 @@ SCALE_TYPES = dict(
     super_locrian=[1, 2, 1, 2, 2, 2, 2],
     japanese=[1, 4, 2, 3, 2],
     akebono=[2, 1, 4, 2, 3],
-)
-
+"""

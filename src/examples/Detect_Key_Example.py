@@ -12,7 +12,7 @@ song = Song()
 song.load(filename="../../MIDI Files/Indie/Simon and Garfunkel/scarborough_fair.mid")
 
 # Run the key detection algorithm and display it's findings
-song.detect_key_and_scale(display_result=True)
+print(song.detect_key_and_scale())
 
 # or alternatively song.detect_key returns the resulting keys/scales so if you don't care about the inner
 # workings of the detection algorithm just print the result (or use it as a list) as such:

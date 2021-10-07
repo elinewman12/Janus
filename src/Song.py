@@ -242,7 +242,7 @@ class Song:
 
         return True
 
-    def detect_key_and_scale(self, display_result=False):
+    def detect_key_and_scale(self):
         """ Detect the key of a song using Mr. Dehaan's algorithm.  This algorithm generates the valid notes
         for every key and for every scale and checks the occurrences of the notes in the song against the valid
         key/scale notes.  It then finds how many errors (or misses) occurred.  It then finds the key/scale with the
@@ -301,9 +301,30 @@ class Song:
         # find the key/scales with the minimum values in the error dictionary
         minimum_errors = min(key_and_scale_error_record.values())
         result = [k for k, v in key_and_scale_error_record.items() if v == minimum_errors]
-        if display_result:
-            print("Resulting errors:")
-            print(key_and_scale_error_record)
-            print("Key(s)/Scale(s) with the minimum error:\n" + result.__str__())
-        return result
+
+        # now we have the relative major and minors, we can use the note frequencies to differentiate
+        # between the two based on the assumption that for most cases the tonic will be played more than
+        # other notes.  This lets us differentiate scales with the same notes such as D major and B Minor.
+
+        # get the resulting keys/scales
+        relative_major_key_scale = result[0]
+        relative_minor_key_scale = result[1]
+
+        # Create the key object to hold potential tonic
+        relative_major_key = Key(key=relative_major_key_scale.split()[0])
+        relative_minor_key = Key(key=relative_minor_key_scale.split()[0])
+
+        # get the index of the key in order to find its frequency in the frequency array
+        idx_of_major_key = relative_major_key.get_c_based_index_of_key()
+        idx_of_minor_key = relative_minor_key.get_c_based_index_of_key()
+
+        # get the frequency of each tonic
+        major_frequency = note_frequencies[idx_of_major_key]
+        minor_frequency = note_frequencies[idx_of_minor_key]
+
+        # compare and return the most common key scale
+        if major_frequency >= minor_frequency:
+            return relative_major_key_scale
+        else:
+            return relative_minor_key_scale
 
