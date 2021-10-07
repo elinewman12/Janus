@@ -25,7 +25,7 @@ if __name__ == '__main__':
     song = Song()
 
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
-    song.load(filename="music samples/Mii Channel.mid", print_file=True)
+    song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
     # song.load(filename="music samples/Megadeth-Symphony Of Destruction.mid", print_file=True)
 
     # song.tracks[1].instrument = 75    # 75 = Pan Flute

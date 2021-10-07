@@ -1,6 +1,11 @@
 KEYS = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
 EQUIVALENT_KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
+'''
+    This class is how we are representing the key of a musical piece.  It consists of a simple data field (key)
+    which is a string representation of the key such as 'C#', 'Db', 'F', etc.
+'''
+
 
 class Key:
 
@@ -30,7 +35,7 @@ class Key:
 
         Returns:
             int: index of this key in the list of notes
-        """        
+        """ 
         if self.key in KEYS:
             index = KEYS.index(self.key)
         elif self.key in EQUIVALENT_KEYS:
@@ -39,3 +44,4 @@ class Key:
             raise SyntaxError("Key '" + str(self.key) +
                               "' needs to be the key and #/b if necessary. Examples: 'C#', 'Db', 'F' etc")
         return index
+
