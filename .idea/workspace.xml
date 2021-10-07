@@ -7,9 +7,8 @@
     <list default="true" id="56aae1ed-42a9-493c-9254-87239fa045d0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Chord.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Chord.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FileIO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/FileIO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Genre.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Genre.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Track.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Track.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Key.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Key.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Song.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Song.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +83,8 @@
       <workItem from="1631742704748" duration="405000" />
       <workItem from="1631743127799" duration="2912000" />
       <workItem from="1631908855304" duration="4747000" />
-      <workItem from="1633481242575" duration="2504000" />
+      <workItem from="1633481242575" duration="2604000" />
+      <workItem from="1633568418083" duration="3731000" />
     </task>
     <servers />
   </component>

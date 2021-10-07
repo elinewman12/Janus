@@ -11,6 +11,6 @@ class Chord:
     def __init__(self, notes=None, name=None, time=0):
         if notes is None:
             notes = []
-        self.notes = notes
+        self.notes = notes.sort(key=lambda x: x.pitch)
         self.name = name
         self.time = time
