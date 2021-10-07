@@ -49,7 +49,7 @@ class Genre:
 
         bar = song.get_bar_graph(title="Frequency of Notes in " + self.name,
                                  x_label="Note", y_label="Frequency", items=all_notes)
-        plt.show(bar)
+        plt.show()
 
     def get_chord_frequency_graph(self):
         all_chords = []
