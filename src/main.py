@@ -6,7 +6,7 @@ from key import Key
 
 if __name__ == '__main__':
 
-    # genre = Genre(name="Rock")
+    # genre = Genre(name="Rock") 
     # directory = r 'C:\Users\Eli\Documents\GitHub\2021FallTeam17-DeHaan\MIDI Files' + '\\' + genre.name
     # for artist in os.listdir(directory):
     #     artist_directory = directory + '\\' + artist.title()

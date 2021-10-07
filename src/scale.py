@@ -1,5 +1,4 @@
-SCALE_TYPES = dict( 
-    """
+"""
     These array values are semitone differences from the previous note. This is formatted this way because
     notes in the scale change based on the tonic.
 
@@ -11,6 +10,8 @@ SCALE_TYPES = dict(
     C Major is defined as C (tonic), D (a whole step away from previous), E (a whole steep away from D),
     F (only a half step away from E) and so on...
 """
+
+SCALE_TYPES = dict( 
     major=[2, 2, 1, 2, 2, 2, 1],
     minor=[2, 1, 2, 2, 1, 2, 2],
 )

@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 class Genre:
 
     def __init__(self, songs=None, name=None):
-        """ Constructor for the Genre object
+        """ Constructor for the Genre object 
 
         Args:
             songs (Song[], optional): List of Songs in this genre. Defaults to None.

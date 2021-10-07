@@ -11,8 +11,6 @@ import collections
 DEFAULT_TICKS_PER_BEAT = 48
 
 
-# Stores metadata about a song, and the tracks included in the song
-# <jmleeder>
 class Song:
 
     def __init__(self, tracks=None, ticks_per_beat=DEFAULT_TICKS_PER_BEAT):

@@ -9,6 +9,12 @@ class Chord:
 
     # Constructor, takes all fields as inputs
     def __init__(self, notes=None, name=None):
+        """ Constructor for Chord class
+
+        Args:
+            notes (Note[], optional): List of notes in the chord. Defaults to None.
+            name (String, optional): Name of the chord. Defaults to None.
+        """        
         if notes is None:
             notes = []
         self.notes = notes
