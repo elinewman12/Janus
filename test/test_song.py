@@ -9,8 +9,10 @@ from key import Key
 
 import mido
 
-# Tests that proper error handling is present on the song constructor
 def test_song_constructor():
+    """
+        Tests the constructor of Song
+    """    
     tracks = [Track()]
 
     song = Song()
