@@ -335,3 +335,12 @@ class Song:
         result = [k for k, v in key_and_scale_error_record.items() if v == minimum_errors]
 
         return result
+
+    def detect_key_by_phrase_endings(self):
+        for track in self.tracks:
+            for idx, note in enumerate(track.notes):
+                if idx != 0:
+                    if note.time - track.notes[idx-1].time > 200:
+                        print(track.track_name + " time: " + str(track.notes[idx-1].time) + " pitch: " +
+                              str(track.notes[idx-1].c_indexed_pitch_class) + " ch: " + str(track.channel))
+
