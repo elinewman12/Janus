@@ -6,8 +6,6 @@ from Key import Key
 
 if __name__ == '__main__':
 
-    # genre = Genre(name="Rock")
-    # directory = r 'C:\Users\Eli\Documents\GitHub\2021FallTeam17-DeHaan\MIDI Files' + '\\' + genre.name
     # for artist in os.listdir(directory):
     #     artist_directory = directory + '\\' + artist.title()
     #     for song in os.listdir(artist_directory):
@@ -23,8 +21,8 @@ if __name__ == '__main__':
     # genre.print_songs()
 
     song = Song()
-
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
+
     # song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
     song.load(filename="../MIDI Files/Country/Garth Brooks/23224_Friends-in-Low-Places.mid", print_file=False)
 
@@ -35,7 +33,7 @@ if __name__ == '__main__':
     for track in song.tracks:
         print(track.track_name + " -- " + str(track.tag))
 
-    # song.change_song_key(origin_key=Key('F#'), destination_key=Key('C'))
+    # song.change_song_key(origin_key=Key('F#', 'major'), destination_key=Key('C', 'major'))
     # song.save(filename="music samples/Megadeth-Tornado of Souls.mid", print_file=True)
 
     # song.save(filename="music samples/Mii Channel Output.mid", print_file=True)

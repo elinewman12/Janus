@@ -4,6 +4,7 @@ from Control import Control
 from Note import Note
 from Song import Song
 from Track import Track
+from Key import Key
 import mido
 
 
@@ -58,7 +59,7 @@ def test_change_song_key():
     d_scale = Song()
 
     orig.load(filename="test MIDI/C_major_scale.mid")
-    orig = orig.change_song_key(origin_key='C', destination_key='D')
+    orig = orig.change_song_key(origin_key=Key('C', 'major'), destination_key=Key('D', 'major'))
     orig.save(filename="test MIDI/C_major_scale_Output.mid")
 
     new_song.load(filename="test MIDI/C_major_scale_Output.mid")
@@ -81,7 +82,7 @@ def test_change_key_for_interval():
     d_scale = Song()
 
     orig.load(filename="test MIDI/C_major_scale.mid")
-    orig = orig.change_key_for_interval(origin_key='C', destination_key='D', interval_begin=0, interval_end=107)
+    orig = orig.change_key_for_interval(origin_key=Key('C', 'major'), destination_key=Key('D', 'major'), interval_begin=0, interval_end=107)
     orig.save(filename="test MIDI/C_major_scale_Output.mid")
 
     new_song.load(filename="test MIDI/C_major_scale_Output.mid")

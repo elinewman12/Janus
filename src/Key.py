@@ -1,28 +1,28 @@
 KEYS = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
 EQUIVALENT_KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-
-'''
-    This class is how we are representing the key of a musical piece.  It consists of a simple data field (key)
-    which is a string representation of the key such as 'C#', 'Db', 'F', etc.
-'''
-
+MODES = ['major', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'minor', 'locrian']
+EQUIVALENT_MODES = ['ionian', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'aeolian', 'locrian']
 
 class Key:
 
-    def __init__(self, key='C'):
+    def __init__(self, tonic='C', mode='major'):
         """ Constructor for the Key class.
 
         Args:
-            key (str): Value for the key of the song. Defaults to 'C'.
+            tonic (str): Value for the tonic of the key of the song. Defaults to 'C'.
+            type (str): Type of key the song is in. Defaults to 'major'.
 
         Raises:
             SyntaxError: If the key is not within the list of keys and their equivalents
         """        
-        if key not in KEYS and key not in EQUIVALENT_KEYS:
-            raise SyntaxError("Key '" + str(key) +
+        if tonic not in KEYS and tonic not in EQUIVALENT_KEYS:
+            raise SyntaxError("Key '" + str(tonic) +
                               "' needs to be the key and #/b if necessary. Examples: 'C#', 'Db', 'F' etc")
+        elif mode.lower() not in MODES and mode.lower() not in EQUIVALENT_MODES:
+            raise SyntaxError("Mode " + str(mode) + "needs to be a valid mode. Examples: major, minor, dorian, etc" )
         else:
-            self.key = key
+            self.tonic = tonic
+            self.mode = mode.lower()
 
     def get_c_based_index_of_key(self):
         """ Takes a key (as a string) and converts it to the index of this key based on the NOTES and EQUIVALENCE
@@ -33,13 +33,13 @@ class Key:
 
         Returns:
             int: index of this key in the list of notes
-        """ 
-        if self.key in KEYS:
-            index = KEYS.index(self.key)
-        elif self.key in EQUIVALENT_KEYS:
-            index = EQUIVALENT_KEYS.index(self.key)
+        """        
+        if self.tonic in KEYS:
+            index = KEYS.index(self.tonic)
+        elif self.tonic in EQUIVALENT_KEYS:
+            index = EQUIVALENT_KEYS.index(self.tonic)
         else:
-            raise SyntaxError("Key '" + str(self.key) +
+            raise SyntaxError("Key '" + str(self.tonic) +
                               "' needs to be the key and #/b if necessary. Examples: 'C#', 'Db', 'F' etc")
         return index
 
