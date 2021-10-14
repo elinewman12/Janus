@@ -33,6 +33,8 @@ if __name__ == '__main__':
     for track in song.tracks:
         print(track.track_name + " -- " + str(track.tag))
 
+    song.detect_key_by_phrase_endings()
+
     # song.change_song_key(origin_key=Key('F#', 'major'), destination_key=Key('C', 'major'))
     # song.save(filename="music samples/Megadeth-Tornado of Souls.mid", print_file=True)
 

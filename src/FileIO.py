@@ -299,7 +299,6 @@ def handle_note(msg, notes, time, track):
         track (Track): Track this note will be added to
     """
     # If this message is the start of a note
-    print(msg)
     if msg.type == 'note_on' and msg.velocity > 0:
         # Create a new Note object and add it to the array of currently playing notes
         notes.append(Note(pitch=msg.note, time=time, duration=0, velocity=msg.velocity, channel=msg.channel))
