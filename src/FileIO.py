@@ -64,7 +64,7 @@ def read_midi_file(song, filename, print_file=False):
                     track = set_current_track_by_channel(msg=msg, tracks=tracks)
 
                 # If this message is a note and not metadata
-                if hasattr(msg, 'note'):
+                if hasattr(msg, 'note') and hasattr(msg, 'velocity'):
                     handle_note(msg=msg, notes=current_notes, time=current_time, track=track)
 
                 if msg.type == 'control_change' or msg.type == 'program_change' or msg.type == 'set_tempo':
@@ -298,12 +298,13 @@ def handle_note(msg, notes, time, track):
         track (Track): Track this note will be added to
     """
     # If this message is the start of a note
+    print(msg)
     if msg.type == 'note_on' and msg.velocity > 0:
         # Create a new Note object and add it to the array of currently playing notes
-        notes.append(Note(pitch=msg.note, time=time, duration=0, velocity=msg.velocity))
+        notes.append(Note(pitch=msg.note, time=time, duration=0, velocity=msg.velocity, channel=msg.channel))
 
     # If this message is the end of a note
-    if msg.type == 'note_off' or msg.velocity == 0:
+    elif msg.type == 'note_off' or msg.velocity == 0:
         # For each note that is currently playing
         for n in notes:
             # Check if the pitch is the same (locate the correct note)
@@ -321,7 +322,7 @@ def handle_control(msg, track, time):
     differently to normal notes
 
     Args:
-        msg (mido.Message): Message being read in
+        msg (mido.Message or mido.MetaMessage): Message being read in
         track (Track): Track being modified
         time (int): Current time into the song this message appears
 

@@ -80,6 +80,9 @@ def test_order_messages():
 
 
 def test_handle_note():
+    """
+        Tests the handle_note() method
+    """    
     track = Track()
     current_notes = []
 
@@ -128,8 +131,10 @@ def test_handle_note():
     assert track.notes[3].duration == 600
 
 
-# Test Handle Control method. This method should take a control message and append it to the given track
 def test_handle_control():
+    """
+        Tests the handle_control() method
+    """    
 
     track = Track()
 

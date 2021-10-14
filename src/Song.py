@@ -1,3 +1,5 @@
+import logging
+from logging import info
 from Track import Track
 from Key import Key, KEYS
 from Scale import SCALE_TYPES
@@ -14,6 +16,16 @@ DEFAULT_TICKS_PER_BEAT = 48
 class Song:
 
     def __init__(self, tracks=None, ticks_per_beat=DEFAULT_TICKS_PER_BEAT):
+        """ Constructor for the Song class.
+
+        Args:
+            tracks (Track[], optional): List of Tracks that make up the song. Defaults to None.
+            ticks_per_beat (int, optional): The amount of ticks that pass within one beat in the 
+                song. Defaults to DEFAULT_TICKS_PER_BEAT (48).
+
+        Raises:
+            ValueError: For a negative ticks_per_beat value
+        """
         if tracks is None:
             tracks = []
         self.tracks = tracks
@@ -22,36 +34,58 @@ class Song:
         else:
             raise ValueError
 
-    # Adds a new track to the song
     def add_track(self, t):
+        """ Adds a new track to the song.
+
+        Args:
+            t (Track): Track to add to the song
+        """
         assert isinstance(t, Track)
         self.tracks.append(t)
 
     @staticmethod
     def get_notes_array():
+        """ TODO: ?
+
+        Returns:
+            String[]: List of each key possible represented as strings.
+        """
         return KEYS
 
-    # Saves a song object to a midi file with the given name
-    #
-    # <jmleeder>
     def save(self, filename, print_file=False):
+        """ Saves a song object to a midi file with the given name
+
+        Args:
+            filename (String): Name of file to save the song as
+            print_file (bool, optional): Whether or not to print out the song. Mainly 
+                used for debugging purposes. Defaults to False.
+        """
         FileIO.write_midi_file(self, filename=filename, print_file=print_file)
 
-    # Loads a file into the song object this method was called from
-    # The new data overwrites any previous data stored in this song
-    #
-    # <jmleeder>
     def load(self, filename, print_file=False):
+        """ Loads a file into this song object. The new data overwrites any previous
+        data stored in this song.
+
+        Args:
+            filename (String): Name of the file to load in
+            print_file (bool, optional): Whether or not to print out the song. Mainly 
+                used for debugging purposes. Defaults to False.
+        """
         FileIO.read_midi_file(self, filename=filename, print_file=print_file)
 
-    # Deletes all of the data from a song object and resets it to default values
-    #
-    # <jmleeder>
     def clear_song_data(self):
+        """ Deletes all of the data from this song object and resets its default values
+        """
         self.tracks = []
-        self.ticks_per_beat = 0
+        self.ticks_per_beat = DEFAULT_TICKS_PER_BEAT
 
     def get_c_indexed_note_frequencies(self):
+        """ Returns an array containing how many times each of the 12 notes appears in this 
+        song, starting with C.
+
+        Returns:
+            int[]: note frequencies array
+        """
         c_indexed_note_frequency = [0] * 12
         for track in self.tracks:
             if not track.is_percussion:
@@ -61,6 +95,15 @@ class Song:
         return c_indexed_note_frequency
 
     def get_note_frequencies(self, key):
+        """ Returns an array containing how many times each of the 12 notes appears in this 
+        song, starting with key.
+
+        Args:
+            key (Key): Key to start the array with
+
+        Returns:
+            int[]: note frequencies array
+        """
         indexed_note_frequency = [0] * 12
         for track in self.tracks:
             if not track.is_percussion:
@@ -69,23 +112,37 @@ class Song:
                     indexed_note_frequency[idx] += val
             return indexed_note_frequency
 
-    # This method will shift all notes in the song up (positive numHalfSteps) or
-    # down (negative numHalfSteps) the number of half steps specified.
-    # (assuming there are no key changes)
-    #
-    # <jfwiddif>
     def change_song_key_by_half_steps(self, num_half_steps):
+        """ Shifts all notes in the song up the by num_half_steps half steps.
+        If num_half_steps is negative, the notes will be shifted down instead
+        of up.
+
+        Args:
+            num_half_steps (int): Number of half steps to move the notes in the song by
+
+        Returns:
+            Song: The newly edited song.
+        """
         for track in self.tracks:
             if not track.is_percussion:
                 for note in track.notes:
                     note.pitch += num_half_steps
         return self
 
-    # This method will change the key of an entire song from an origin key to a destination key
-    # (assuming there are no key changes)
-    #
-    # <jfwiddif>
     def change_song_key(self, origin_key, destination_key):
+        """ Changes the key of an entire song from an origin key to a desintaiton key
+        TODO: Will not need origin_key param once key detection is fully implemented and tested
+
+        Args:
+            origin_key (Key): current key of the song
+            destination_key (Key): key to change the song to
+
+        Raises:
+            SyntaxError: If origin_key or destination_key is not a valid Key
+
+        Returns:
+            Song: The newly edited song
+        """
 
         # Check to make sure params are the correct type
         if not isinstance(origin_key, Key) or not isinstance(destination_key, Key):
@@ -108,12 +165,22 @@ class Song:
 
         return self
 
-    # This method will change the key of a section of a song from an origin key to a destination key
-    # between the provided time intervals.  Time intervals are given in absolute
-    #
-    #
-    # <jfwiddif>
     def change_key_for_interval(self, origin_key, destination_key, interval_begin, interval_end):
+        """ Changes the key of a song for a certain time interval during it.
+        TODO: this will not need origin_key once key detection is fully implemented
+
+        Args:
+            origin_key (Key): Current key of the song
+            destination_key (Key): Key to change the song to
+            interval_begin (int): Absolute time during the song to start the key change
+            interval_end (int): Absolute time during the song to end the key change
+
+        Raises:
+            SyntaxError: If origin_key or destination_key is not a valid Key
+
+        Returns:
+            Song: the newly edited song
+        """
 
         # Check to make sure params are the correct type
         if not isinstance(origin_key, Key) or not isinstance(destination_key, Key):
@@ -136,8 +203,10 @@ class Song:
                         note.pitch += offset
         return self
 
-    # Shows a graph of the velocity of all the notes in this song
     def get_note_velocity_graph(self):
+        """ Shows a graph of the velocity (intensity/loudness) of all the notes in this song.
+        TODO: make this return rather than 'print'
+        """
         all_velocity = []
         all_time = []
         for track in self.tracks:
@@ -152,42 +221,67 @@ class Song:
         plt.title("Velocity of Notes")
         plt.show()
 
+    def get_bar_graph(self, title, x_label, y_label, items):
+        counter = collections.Counter(items)
+        counter = dict(sorted(counter.items(), key=lambda item: item[1], reverse=True))
+        bar = plt.bar(x=counter.keys(), height=counter.values())
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
+        # Change this to show title of song when that variable is available
+        plt.title(title)
+        return bar
+
     # Shows a graph of the frequency of all the notes in this song
     def get_note_frequency_graph(self):
+        """ Shows a graph of the frequency that each note apperas in this song.
+        TODO: make this return rather than 'print'
+        """
         all_notes = []
         for track in self.tracks:
             for note in track.notes:
                 all_notes.append(KEYS[note.pitch % 12])
 
-        counter = collections.Counter(all_notes)
-        counter = dict(sorted(counter.items(), key=lambda item: item[1], reverse=True))
-        plt.bar(x=counter.keys(), height=counter.values())
-        plt.xlabel("Note")
-        plt.ylabel("Frequency")
-        # Change this to show title of song when that variable is available
-        plt.title("Frequency of Notes")
-        plt.show()
+        graph = self.get_bar_graph("Frequency of Notes", "Note", "Frequency", all_notes)
+        plt.show(graph)
 
-    # Prints song object to the console for debugging
-    #
-    # <jmleeder>
-    def print_song(self):
-        print("Ticks per beat: " + str(self.ticks_per_beat))
+    def to_string(self):
+        """ Returns the contents of the song as a string in the format: \n
+        Song metadata       \n
+        Track1 metadata     \n
+        notes               \n
+        ...V...             \n
+        control messages    \n
+        ...V...             \n
+        Track 2 metadata    \n
+        notes               \n
+        ...V...             \n
+        etc
+
+        Note: The notes and control messages are listed separately, they are not sorted together by time.
+        """
+        message = ""
+        message += ("Ticks per beat: " + str(self.ticks_per_beat) + "\n")
         for t in self.tracks:
-            print("  Track name: " + str(t.track_name))
-            print("  Device name: " + str(t.device_name))
+            message += ("  Track name: " + str(t.track_name) + "\n")
+            message += ("  Device name: " + str(t.device_name) + "\n")
             for n in t.notes:
-                print("  Pitch:" + str(n.pitch) + " Velocity: " + str(n.velocity) + " Time: " + str(n.time) +
-                      " Duration: " + str(n.duration))
+                message += ("  Pitch:" + str(n.pitch) + " Velocity: " + str(n.velocity) + " Time: " + str(n.time) +
+                            " Duration: " + str(n.duration) + " Channel: " + str(n.channel) + "\n")
             for c in t.controls:
-                print("  Type: " + str(c.msg_type) + " Tempo: " + str(c.tempo) + " Control: " + str(c.control) +
-                      " Value: " + str(c.value) + " Instrument: " + str(c.instrument) + " Time: " + str(c.time))
+                message += (
+                        "  Type: " + str(c.msg_type) + " Tempo: " + str(c.tempo) + " Control: " + str(c.control) +
+                        " Value: " + str(c.value) + " Instrument: " + str(c.instrument) + " Time: " + str(c.time) +
+                        "\n")
+        return message
 
     def equals(self, song):
-        """ Compares if two song contain identical contents
+        """ Determines whether this song and the specified song are equivalent.
 
-        :param song: The song to compare to
-        :return: True, if the two songs contain identical contents
+        Args:
+            song (Song): Song to check this song against
+
+        Returns:
+            bool: True if the songs are equivalent, false otherwise
         """
 
         if self.ticks_per_beat != song.ticks_per_beat:
@@ -279,9 +373,22 @@ class Song:
                     print("This: " + str(note.velocity) + ", compare to: " + str(song.tracks[i].notes[j].velocity))
                     return False
 
-        return True
+                if note.channel != song.tracks[i].notes[j].channel:
+                    print("tracks " + str(i) + " note " + str(j) + " have different channels")
+                    print("This: " + str(note.channel) + ", compare to: " + str(song.tracks[i].notes[j].channel))
+                    return False
 
-    def detect_key(self):
+        return True
+     
+    def detect_key_and_scale(self):
+        """ Detect the key of a song using Mr. Dehaan's algorithm.  This algorithm generates the valid notes
+        for every key and for every scale and checks the occurrences of the notes in the song against the valid
+        key/scale notes.  It then finds how many errors (or misses) occurred.  It then finds the key/scale with the
+        lowest number of errors (or the list of key/scale with the same minimum) and returns the result.
+
+        :param display_result: determines if you receive output to console about the algorithms findings (default False)
+        :return: A list containing the keys and scales that were detected.  ex -> ['C major', 'D minor']
+        """
         note_frequencies = self.get_c_indexed_note_frequencies()
 
         key_and_scale_error_record = {}
@@ -322,9 +429,7 @@ class Song:
 
                 # count all of the errors that occur (notes in the song that are not accepted by key/scale)
                 for idx in range(NUM_NOTES):
-                    if accepted_notes[idx]:
-                        continue
-                    else:
+                    if not accepted_notes[idx]:
                         errors += key_indexed_note_frequencies[idx]
 
                 # store errors in a record dictionary
@@ -334,13 +439,31 @@ class Song:
         minimum_errors = min(key_and_scale_error_record.values())
         result = [k for k, v in key_and_scale_error_record.items() if v == minimum_errors]
 
-        return result
+        # now we have the relative major and minors, we can use the note frequencies to differentiate
+        # between the two based on the assumption that for most cases the tonic will be played more than
+        # other notes.  This lets us differentiate scales with the same notes such as D major and B Minor.
 
-    def detect_key_by_phrase_endings(self):
-        for track in self.tracks:
-            for idx, note in enumerate(track.notes):
-                if idx != 0:
-                    if note.time - track.notes[idx-1].time > 200:
-                        print(track.track_name + " time: " + str(track.notes[idx-1].time) + " pitch: " +
-                              str(track.notes[idx-1].c_indexed_pitch_class) + " ch: " + str(track.channel))
+        # get the resulting keys/scales
+        relative_major_key_scale = result[0]
+        relative_minor_key_scale = result[1]
+
+        # Create the key object to hold potential tonic
+        relative_major_key = Key(key=relative_major_key_scale.split()[0])
+        relative_minor_key = Key(key=relative_minor_key_scale.split()[0])
+
+        # get the index of the key in order to find its frequency in the frequency array
+        idx_of_major_key = relative_major_key.get_c_based_index_of_key()
+        idx_of_minor_key = relative_minor_key.get_c_based_index_of_key()
+
+        # get the frequency of each tonic
+        major_frequency = note_frequencies[idx_of_major_key]
+        minor_frequency = note_frequencies[idx_of_minor_key]
+
+        # compare and return the most common key scale
+        if major_frequency >= minor_frequency:
+            return relative_major_key_scale
+        else:
+            return relative_minor_key_scale
+          
+        return result
 
