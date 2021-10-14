@@ -1,6 +1,9 @@
 import Note
+from enum import Enum
 
 PERCUSSION_CHANNEL = 9
+BASS_AVERAGE = 45
+
 
 class Track:
 
@@ -25,6 +28,7 @@ class Track:
         self.track_name = track_name
         self.device_name = track_device
         self.channel = channel
+        self.tag = TagEnum.NONE
 
         if channel is PERCUSSION_CHANNEL:
             self.is_percussion = True
@@ -52,5 +56,37 @@ class Track:
             c_indexed_frequencies[note.c_indexed_pitch_class] += 1
 
         return c_indexed_frequencies
+
+    def generate_tags(self):
+        """ Sets 'tag' field in the song to the appropriate tag based on its attributes
+        This method assumes a track is only used for one section of a song and does not
+        dramatically change roles during the song (ex, switch from guitar track to vocal
+        track)
+
+        """
+        if len(self.notes) == 0:
+            self.tag = TagEnum.NONE
+
+        elif self.channel is PERCUSSION_CHANNEL:
+            self.tag = TagEnum.PERCUSSION
+
+        else:
+            pitch_total = 0
+            for note in self.notes:
+                pitch_total += note.pitch
+            if pitch_total / len(self.notes) < BASS_AVERAGE:
+                self.tag = TagEnum.BASS      # If the average note pitch is lower than BASS_AVERAGE
+            elif False:   # TODO: Once chords are added, count the number of chords in the track
+                self.tag = TagEnum.CHORDS
+            else:
+                self.tag = TagEnum.MELODY    # If nothing else fits, this is likely a melody track
+
+
+class TagEnum(Enum):
+    NONE = 0
+    MELODY = 1
+    CHORDS = 2
+    BASS = 3
+    PERCUSSION = 4
 
 

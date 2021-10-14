@@ -98,6 +98,7 @@ def read_midi_file(song, filename, print_file=False):
                 t.track_name = str(track_name)
                 t.device_name = str(device_name)
                 t.notes.sort(key=lambda note: note.time)
+                t.generate_tags()
                 song.add_track(t)
         return song
 
