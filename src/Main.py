@@ -25,13 +25,15 @@ if __name__ == '__main__':
     song = Song()
 
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
-    song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
-    # song.load(filename="music samples/Megadeth-Symphony Of Destruction.mid", print_file=True)
+    # song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
+    song.load(filename="../MIDI Files/Country/Garth Brooks/23224_Friends-in-Low-Places.mid", print_file=False)
 
-    # song.tracks[1].instrument = 75    # 75 = Pan Flute
-    print(song.to_string())
+    # print(song.to_string())
 
-    print(song.detect_key())
+    # print(song.detect_key())
+
+    for track in song.tracks:
+        print(track.track_name + " -- " + str(track.tag))
 
     # song.change_song_key(origin_key=Key('F#'), destination_key=Key('C'))
     # song.save(filename="music samples/Megadeth-Tornado of Souls.mid", print_file=True)
