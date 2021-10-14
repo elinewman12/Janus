@@ -243,7 +243,7 @@ def order_messages(track):
 
         # If the next event is a control change
         if len(controls) > 0 and ((len(note_on) > 0 and next_control_time < next_note_on_time and
-                                  next_control_time < next_note_off_time) or len(note_on) == 0):
+                                   next_control_time < next_note_off_time) or len(note_on) == 0):
 
             c = next_control
             msg_time = c.time
@@ -285,11 +285,16 @@ def order_messages(track):
 
 def handle_note(msg, notes, time, track):
     """ Handles the case where a note message is read in from a midi file
+    If this is a note_on message, create a new Note object and store it
+    in the notes[] array (for now)
+    If this is a note_off message, find the corresponding Note object in
+    the notes[] array, set the duration, and add this Note object to the
+    track being edited. Remove this note from notes[].
 
     Args:
         msg (mido.Message): Message being read in
         notes (Note[]): List of notes that have been started but not ended
-        time (int): Current timestamp where the previous note occurred
+        time (int): Current timestamp where this note occurs
         track (Track): Track this note will be added to
     """
     # If this message is the start of a note

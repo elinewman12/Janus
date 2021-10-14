@@ -465,3 +465,5 @@ class Song:
         else:
             return relative_minor_key_scale
           
+        return result
+
