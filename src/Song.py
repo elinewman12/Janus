@@ -266,7 +266,7 @@ class Song:
             message += ("  Device name: " + str(t.device_name) + "\n")
             for n in t.notes:
                 message += ("  Pitch:" + str(n.pitch) + " Velocity: " + str(n.velocity) + " Time: " + str(n.time) +
-                            " Duration: " + str(n.duration) + "\n")
+                            " Duration: " + str(n.duration) + " Channel: " + str(n.channel) + "\n")
             for c in t.controls:
                 message += (
                         "  Type: " + str(c.msg_type) + " Tempo: " + str(c.tempo) + " Control: " + str(c.control) +
@@ -371,6 +371,11 @@ class Song:
                 if note.velocity != song.tracks[i].notes[j].velocity:
                     print("tracks " + str(i) + " note " + str(j) + " have different velocities")
                     print("This: " + str(note.velocity) + ", compare to: " + str(song.tracks[i].notes[j].velocity))
+                    return False
+
+                if note.channel != song.tracks[i].notes[j].channel:
+                    print("tracks " + str(i) + " note " + str(j) + " have different channels")
+                    print("This: " + str(note.channel) + ", compare to: " + str(song.tracks[i].notes[j].channel))
                     return False
 
         return True
