@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     print(song.detect_key())
 
-    # song.change_song_key(origin_key=Key('F#'), destination_key=Key('C'))
+    # song.change_song_key(origin_key=Key('F#', 'major'), destination_key=Key('C', 'major'))
     # song.save(filename="music samples/Megadeth-Tornado of Souls.mid", print_file=True)
 
     # song.save(filename="music samples/Mii Channel Output.mid", print_file=True)
