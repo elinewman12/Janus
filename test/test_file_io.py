@@ -85,13 +85,15 @@ def test_handle_note():
     """    
     track = Track()
     current_notes = []
+    num_notes_per_channel = [0] * 16
+    found_chord = [False] * 16
 
     note_on_ch0_30 = mido.Message(type='note_on', channel=0, note=30, velocity=100, time=200)
     note_on_ch1_30 = mido.Message(type='note_on', channel=1, note=30, velocity=100, time=200)
     note_on_ch0_40 = mido.Message(type='note_on', channel=0, note=40, velocity=100, time=200)
 
     note_on_ch0_30_vel0 = mido.Message(type='note_on', channel=0, note=30, velocity=0, time=200)
-    note_on_ch0_30_vel0 = mido.Message(type='note_on', channel=1, note=30, velocity=0, time=200)
+    note_on_ch1_30_vel0 = mido.Message(type='note_on', channel=1, note=30, velocity=0, time=200)
     note_on_ch0_40_vel0 = mido.Message(type='note_on', channel=0, note=40, velocity=0, time=200)
 
     note_off_ch0_30 = mido.Message(type='note_off', channel=0, note=30, time=200)
@@ -99,36 +101,71 @@ def test_handle_note():
     note_off_ch0_40 = mido.Message(type='note_off', channel=0, note=40, time=200)
 
     # Test two notes starting on the same channel, then ending on the same channel
-    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_30, time=1000)
-    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_40, time=1200)
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_30, time=1000,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_40, time=1200,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
     assert len(track.notes) == 0
     assert len(current_notes) == 2
+    assert num_notes_per_channel[0] == 2
 
-    FileIO.handle_note(track=track, notes=current_notes, msg=note_off_ch0_30, time=1400)
-    FileIO.handle_note(track=track, notes=current_notes, msg=note_off_ch0_40, time=1600)
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_off_ch0_30, time=1400,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_off_ch0_40, time=1600,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
     assert len(track.notes) == 2
     assert len(current_notes) == 0
+    assert num_notes_per_channel[0] == 0
 
     # Same as above, but using note_on_velocity_0 messages instead of note_off messages
-    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_40, time=1800)
-    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_30, time=2000)
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_40, time=1800,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_30, time=2000,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
     assert len(track.notes) == 2
     assert len(current_notes) == 2
+    assert num_notes_per_channel[0] == 2
 
-    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_30_vel0, time=2200)
-    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_40_vel0, time=2400)
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_30_vel0, time=2200,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_40_vel0, time=2400,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
     assert len(track.notes) == 4
     assert len(current_notes) == 0
+    assert num_notes_per_channel[0] == 0
+
+    # Test two of the same notes starting on different channels, then ending on different channels
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch1_30, time=2600,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_on_ch0_30, time=2800,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
+    assert len(track.notes) == 4
+    assert len(current_notes) == 2
+    assert num_notes_per_channel[0] == 1
+    assert num_notes_per_channel[1] == 1
+
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_off_ch1_30, time=2700,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
+    FileIO.handle_note(track=track, notes=current_notes, msg=note_off_ch0_30, time=2900,
+                       num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
+    assert len(track.notes) == 6
+    assert len(current_notes) == 0
+    assert num_notes_per_channel[0] == 0
+    assert num_notes_per_channel[1] == 0
 
     assert track.notes[0].time == 1000
     assert track.notes[1].time == 1200
     assert track.notes[2].time == 2000
     assert track.notes[3].time == 1800
+    assert track.notes[4].time == 2600
+    assert track.notes[5].time == 2800
 
     assert track.notes[0].duration == 400
     assert track.notes[1].duration == 400
     assert track.notes[2].duration == 200
     assert track.notes[3].duration == 600
+    assert track.notes[4].duration == 100
+    assert track.notes[5].duration == 100
 
 
 def test_handle_control():
