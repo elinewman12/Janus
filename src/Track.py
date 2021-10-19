@@ -1,8 +1,12 @@
 import Note
 from enum import Enum
 
+# The channel percussion information will be on
 PERCUSSION_CHANNEL = 9
+# The average note pitch on a track must be below this number to be considered a bass track
 BASS_AVERAGE = 45
+# The chord to note ratio required to classify a track as "chords"
+CHORD_PERCENTAGE = 0.15
 
 
 class Track:
@@ -87,7 +91,7 @@ class Track:
                 pitch_total += note.pitch
             if pitch_total / len(self.notes) < BASS_AVERAGE:
                 self.tag = TagEnum.BASS      # If the average note pitch is lower than BASS_AVERAGE
-            elif False:   # TODO: Once chords are added, count the number of chords in the track
+            elif len(self.chords) > CHORD_PERCENTAGE * len(self.notes):
                 self.tag = TagEnum.CHORDS
             else:
                 self.tag = TagEnum.MELODY    # If nothing else fits, this is likely a melody track

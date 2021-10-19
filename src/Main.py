@@ -25,7 +25,7 @@ if __name__ == '__main__':
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
 
     # song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
-    song.load(filename="../MIDI Files/Country/Garth Brooks/23224_Friends-in-Low-Places.mid", print_file=False)
+    song.load(filename="../MIDI Files/Indie/Simon and Garfunkel/scarborough_fair.mid", print_file=False)
 
     for track in song.tracks:
         print("track: " + track.track_name)
@@ -51,7 +51,10 @@ if __name__ == '__main__':
     # for track in song.tracks:
     #     print(track.track_name + " -- " + str(track.tag))
 
-    # song.detect_key_by_phrase_endings()
+    song.detect_key_by_phrase_endings()
+
+    for track in song.tracks:
+        print(track.track_name + "  " + str(track.tag))
 
     # song.change_song_key(origin_key=Key('F#', 'major'), destination_key=Key('C', 'major'))
     # song.save(filename="music samples/Megadeth-Tornado of Souls.mid", print_file=True)

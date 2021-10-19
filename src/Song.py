@@ -473,7 +473,7 @@ class Song:
                 for idx, note in enumerate(track.notes):
                     if idx != len(track.notes):
                         # If this note is the last note of the song, or has a long pause after
-                        if idx == len(track.notes) - 1 or track.notes[idx+1].time - note.time > 800:
+                        if idx == len(track.notes) - 1 or track.notes[idx+1].time - note.time > 1200:
                             c_indexed_track_note_frequency[note.c_indexed_pitch_class] += 1
                             # print(track.track_name + " time: " + str(track.notes[idx-1].time) + " pitch: " +
                             #       str(track.notes[idx-1].c_indexed_pitch_class) + " ch: " + str(track.channel))
@@ -482,7 +482,6 @@ class Song:
                     c_indexed_total_note_frequency[i] += c_indexed_track_note_frequency[i]
 
         print("totals: " + str(c_indexed_total_note_frequency))
-
 
     def get_chord_names(self):
         # It would be helpful for us here to have an accidental field on a key to know if its sharp or flat
