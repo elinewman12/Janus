@@ -3,6 +3,7 @@ import sys
 import mido
 from mido import MidiFile
 
+from Chord import Chord
 from Control import Control
 from Track import Track
 from Note import Note
@@ -301,7 +302,10 @@ def handle_note(msg, notes, time, track):
     print(msg)
     if msg.type == 'note_on' and msg.velocity > 0:
         # Create a new Note object and add it to the array of currently playing notes
+
         notes.append(Note(pitch=msg.note, time=time, duration=0, velocity=msg.velocity, channel=msg.channel))
+        if len(notes) >= 3:
+            track.add_chord(Chord(notes=notes, time=time))
 
     # If this message is the end of a note
     elif msg.type == 'note_off' or msg.velocity == 0:
@@ -314,6 +318,8 @@ def handle_note(msg, notes, time, track):
                 notes.remove(n)
                 track.add_note(n)
                 break
+        if len(notes) >= 3:
+            track.add_chord(Chord(notes=notes, time=time))
 
 
 def handle_control(msg, track, time):

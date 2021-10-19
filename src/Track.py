@@ -4,7 +4,7 @@ PERCUSSION_CHANNEL = 9
 
 class Track:
 
-    def __init__(self, notes=None, controls=None, track_name=None, track_device=None, channel=0):
+    def __init__(self, notes=None, controls=None, track_name=None, track_device=None, chords=None, channel=0):
         """ Constructor for the Track object
 
         Args:
@@ -16,6 +16,8 @@ class Track:
         """        
         if notes is None:
             notes = []
+        if chords is None:
+            chords = []
         # Control messages (and program change messages) store data about how the track should be played back,
         # but are not necessarily "events" in the file. These can occur at any point during a song
         if controls is None:
@@ -25,6 +27,7 @@ class Track:
         self.track_name = track_name
         self.device_name = track_device
         self.channel = channel
+        self.chords = chords
 
         if channel is PERCUSSION_CHANNEL:
             self.is_percussion = True
@@ -38,6 +41,14 @@ class Track:
             note (Note): Note to append to the song. Defaults to None.
         """        
         self.notes.append(note)
+
+    def add_chord(self, chord=None):
+        """ Adds a chord to the track array
+
+        Args:
+            chord (Chord): Note to append to the song. Defaults to None.
+        """
+        self.chords.append(chord)
 
     def get_c_indexed_note_frequencies(self):
         """ Returns an array representing each note's number of appearances in this track, starting
