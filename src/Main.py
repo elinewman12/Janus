@@ -22,17 +22,12 @@ if __name__ == '__main__':
     # genre.print_songs()
 
     song = Song()
-    song.load(filename="../MIDI Files/Rock/Elton John/CircleofLife.mid", print_file=True)
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
-    
-    song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
-    # song.load(filename="music samples/Megadeth-Symphony Of Destruction.mid", print_file=False)
 
-    print(song.to_string())
+    # song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
+    song.load(filename="../MIDI Files/Country/Garth Brooks/23224_Friends-in-Low-Places.mid", print_file=False)
 
-    print(song.detect_key())
-    
-    # song.load(filename="music samples/Mii Channel.mid", print_file=True)
+    # print(song.to_string())
 
     # song.print_song()
 
@@ -45,6 +40,11 @@ if __name__ == '__main__':
     # print(song.to_string())
 
     # print(song.detect_key())
+
+    for track in song.tracks:
+        print(track.track_name + " -- " + str(track.tag))
+
+    song.detect_key_by_phrase_endings()
 
     # song.change_song_key(origin_key=Key('F#', 'major'), destination_key=Key('C', 'major'))
     # song.save(filename="music samples/Megadeth-Tornado of Souls.mid", print_file=True)

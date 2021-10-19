@@ -1,6 +1,6 @@
 import logging
 from logging import info
-from Track import Track
+from Track import Track, TagEnum
 from Key import Key, KEYS
 from Scale import SCALE_TYPES
 from Note import NUM_NOTES
@@ -464,8 +464,25 @@ class Song:
             return relative_major_key_scale
         else:
             return relative_minor_key_scale
-          
-        return result
+
+    def detect_key_by_phrase_endings(self):
+        c_indexed_total_note_frequency = [0] * 12
+        for track in self.tracks:
+            if track.tag == TagEnum.MELODY or track.tag == TagEnum.BASS:
+                c_indexed_track_note_frequency = [0] * 12
+                for idx, note in enumerate(track.notes):
+                    if idx != len(track.notes):
+                        # If this note is the last note of the song, or has a long pause after
+                        if idx == len(track.notes) - 1 or track.notes[idx+1].time - note.time > 800:
+                            c_indexed_track_note_frequency[note.c_indexed_pitch_class] += 1
+                            # print(track.track_name + " time: " + str(track.notes[idx-1].time) + " pitch: " +
+                            #       str(track.notes[idx-1].c_indexed_pitch_class) + " ch: " + str(track.channel))
+                print(str(c_indexed_track_note_frequency) + ": " + str(track.tag) + " - " + track.track_name)
+                for i in range(12):
+                    c_indexed_total_note_frequency[i] += c_indexed_track_note_frequency[i]
+
+        print("totals: " + str(c_indexed_total_note_frequency))
+
 
     def get_chord_names(self):
         # It would be helpful for us here to have an accidental field on a key to know if its sharp or flat

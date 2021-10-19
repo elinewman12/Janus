@@ -99,6 +99,7 @@ def read_midi_file(song, filename, print_file=False):
                 t.track_name = str(track_name)
                 t.device_name = str(device_name)
                 t.notes.sort(key=lambda note: note.time)
+                t.generate_tags()
                 song.add_track(t)
         return song
 
@@ -299,7 +300,6 @@ def handle_note(msg, notes, time, track):
         track (Track): Track this note will be added to
     """
     # If this message is the start of a note
-    print(msg)
     if msg.type == 'note_on' and msg.velocity > 0:
         # Create a new Note object and add it to the array of currently playing notes
 
