@@ -203,7 +203,7 @@ class Song:
                         note.pitch += offset
         return self
 
-    def get_note_velocity_graph(self):
+    def get_note_velocity_graph(self, name):
         """ Shows a graph of the velocity (intensity/loudness) of all the notes in this song.
         TODO: make this return rather than 'print'
         """
@@ -218,7 +218,7 @@ class Song:
         plt.xlabel("Time")
         plt.ylabel("Velocity")
         # Change this to show title of song when that variable is available
-        plt.title("Velocity of Notes")
+        plt.title("Velocity of Notes in " + name)
         plt.show()
 
     def get_bar_graph(self, title, x_label, y_label, items):
@@ -232,7 +232,7 @@ class Song:
         return bar
 
     # Shows a graph of the frequency of all the notes in this song
-    def get_note_frequency_graph(self):
+    def get_note_frequency_graph(self, name):
         """ Shows a graph of the frequency that each note apperas in this song.
         TODO: make this return rather than 'print'
         """
@@ -241,8 +241,8 @@ class Song:
             for note in track.notes:
                 all_notes.append(KEYS[note.pitch % 12])
 
-        graph = self.get_bar_graph("Frequency of Notes", "Note", "Frequency", all_notes)
-        plt.show(graph)
+        graph = self.get_bar_graph("Frequency of Notes in " + name, "Note", "Frequency", all_notes)
+        plt.show()
 
     def to_string(self):
         """ Returns the contents of the song as a string in the format: \n
@@ -484,3 +484,25 @@ class Song:
         print("totals: " + str(c_indexed_total_note_frequency))
 
 
+    def get_chord_names(self):
+        # It would be helpful for us here to have an accidental field on a key to know if its sharp or flat
+        # That's because then you know whether to use the keys or equivalent keys array
+        # I think this should work for all natural keys though
+        # This also doesn't account for diminished chords
+        major = [1, 4, 5]
+        minor = [2, 3, 6]
+        key = self.detect_key().get_c_based_index_of_key()
+        for track in self.tracks:
+            for chord in track.chords:
+                first_note_index = chord.notes[0].c_indexed_pitch_class
+                first_note_name = KEYS[chord.notes[0] % NUM_NOTES]
+                distance_between_notes = KEYS[first_note_index] - KEYS[key] - 1
+                if distance_between_notes in major:
+                    if distance_between_notes == 5 and len(chord.notes) == 4:
+                        chord.name = first_note_name + " Dominant"
+                    else:
+                        chord.name = first_note_name + " Major"
+                else:
+                    chord.name = first_note_name + " Minor"
+                if len(chord.notes) == 4:
+                    chord.name = chord.name + " Seventh"
