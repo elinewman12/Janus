@@ -7,7 +7,7 @@ song = Song()
 # song.load(filename="../../MIDI Files/Country/John Anderson/2603_Seminole-Wind.mid")           # Actual Key: E
 # song.load(filename="../../MIDI Files/Indie/Simon and Garfunkel/scarborough_fair.mid")         # Actual Key: E
 # song.load(filename="../../MIDI Files/Rock/Elton John/RocketMan.mid")                          # Actual Key: Bb
-song.load(filename="../../MIDI Files/Hip-Hop/Kanye West/21530_All-Falls-Down.mid")            # Actual Key: D#
+song.load(filename="../../MIDI Files/Grunge/Pearl Jam/Jeremy.mid", print_file=True)           # Actual Key: A
 
 print(song.detect_key_by_phrase_endings()[1])
 
