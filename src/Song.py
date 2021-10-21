@@ -448,8 +448,9 @@ class Song:
         relative_minor_key_scale = result[1]
 
         # Create the key object to hold potential tonic
-        relative_major_key = Key(key=relative_major_key_scale.split()[0])
-        relative_minor_key = Key(key=relative_minor_key_scale.split()[0])
+        (key, scale) = relative_major_key_scale.split()
+        relative_major_key = Key(tonic=key, mode=scale)
+        relative_minor_key = Key(tonic=key, mode=scale)
 
         # get the index of the key in order to find its frequency in the frequency array
         idx_of_major_key = relative_major_key.get_c_based_index_of_key()
