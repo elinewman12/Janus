@@ -7,6 +7,7 @@ from Note import NUM_NOTES
 import FileIO
 import matplotlib.pyplot as plt
 import collections
+import graphviz
 
 DEFAULT_TICKS_PER_BEAT = 48
 
@@ -72,6 +73,7 @@ class Song:
                 used for debugging purposes. Defaults to False.
         """
         FileIO.read_midi_file(self, filename=filename, print_file=print_file)
+        self.get_chord_names()
 
     def clear_song_data(self):
         """ Deletes all of the data from this song object and resets its default values
@@ -379,7 +381,7 @@ class Song:
                     return False
 
         return True
-     
+
     def detect_key_and_scale(self):
         """ Detect the key of a song using Mr. Dehaan's algorithm.  This algorithm generates the valid notes
         for every key and for every scale and checks the occurrences of the notes in the song against the valid
@@ -448,8 +450,9 @@ class Song:
         relative_minor_key_scale = result[1]
 
         # Create the key object to hold potential tonic
-        relative_major_key = Key(key=relative_major_key_scale.split()[0])
-        relative_minor_key = Key(key=relative_minor_key_scale.split()[0])
+        (key, scale) = relative_major_key_scale.split()
+        relative_major_key = Key(tonic=key, mode=scale)
+        relative_minor_key = Key(tonic=key, mode=scale)
 
         # get the index of the key in order to find its frequency in the frequency array
         idx_of_major_key = relative_major_key.get_c_based_index_of_key()
@@ -473,7 +476,7 @@ class Song:
                 for idx, note in enumerate(track.notes):
                     if idx != len(track.notes):
                         # If this note is the last note of the song, or has a long pause after
-                        if idx == len(track.notes) - 1 or track.notes[idx+1].time - note.time > 800:
+                        if idx == len(track.notes) - 1 or track.notes[idx + 1].time - note.time > 800:
                             c_indexed_track_note_frequency[note.c_indexed_pitch_class] += 1
                             # print(track.track_name + " time: " + str(track.notes[idx-1].time) + " pitch: " +
                             #       str(track.notes[idx-1].c_indexed_pitch_class) + " ch: " + str(track.channel))
@@ -483,7 +486,6 @@ class Song:
 
         print("totals: " + str(c_indexed_total_note_frequency))
 
-
     def get_chord_names(self):
         # It would be helpful for us here to have an accidental field on a key to know if its sharp or flat
         # That's because then you know whether to use the keys or equivalent keys array
@@ -491,12 +493,12 @@ class Song:
         # This also doesn't account for diminished chords
         major = [1, 4, 5]
         minor = [2, 3, 6]
-        key = self.detect_key().get_c_based_index_of_key()
+        key = Key(tonic=self.detect_key_and_scale()[0:1], mode=self.detect_key_and_scale()[2:]).get_c_based_index_of_key()
         for track in self.tracks:
             for chord in track.chords:
                 first_note_index = chord.notes[0].c_indexed_pitch_class
-                first_note_name = KEYS[chord.notes[0] % NUM_NOTES]
-                distance_between_notes = KEYS[first_note_index] - KEYS[key] - 1
+                first_note_name = KEYS[chord.notes[0].pitch % NUM_NOTES]
+                distance_between_notes = first_note_index - key - 1
                 if distance_between_notes in major:
                     if distance_between_notes == 5 and len(chord.notes) == 4:
                         chord.name = first_note_name + " Dominant"
@@ -506,3 +508,19 @@ class Song:
                     chord.name = first_note_name + " Minor"
                 if len(chord.notes) == 4:
                     chord.name = chord.name + " Seventh"
+
+    def get_transition_graph(self):
+        graph = graphviz.Digraph(comment="Chord transitions in Song")
+        chord_set = set()
+        for track in self.tracks:
+            prev_chord = track.chords[0]
+            graph.node(prev_chord.name)
+            chord_set.add(prev_chord.name)
+            for i in range(1, len(track.chords)):
+                curr = tracks.chords[i]
+                if curr.name not in chord_set:
+                    graph.node(curr.name)
+                    chord_set.add(curr.name)
+                graph.edge(prev_chord.name, curr.name)
+                prev_chord = curr
+        graph.view()
