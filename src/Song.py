@@ -493,12 +493,19 @@ class Song:
         # This also doesn't account for diminished chords
         major = [1, 4, 5]
         minor = [2, 3, 6]
-        key = Key(tonic=self.detect_key_and_scale()[0:1], mode=self.detect_key_and_scale()[2:]).get_c_based_index_of_key()
+        # Gets the current key for the song
+        key = Key(tonic=self.detect_key_and_scale()[0:1],
+                  mode=self.detect_key_and_scale()[2:]).get_c_based_index_of_key()
+        # Iterate over every chord in every track
         for track in self.tracks:
             for chord in track.chords:
+                # Get the name of the first note in the chord which will
+                # commonly be the name of the chord.
                 first_note_index = chord.notes[0].c_indexed_pitch_class
                 first_note_name = KEYS[chord.notes[0].pitch % NUM_NOTES]
-                distance_between_notes = first_note_index - key - 1
+                # The distance between our first note and the key will tell
+                # us if its major or minor.
+                distance_between_notes = first_note_index - key + 1
                 if distance_between_notes in major:
                     if distance_between_notes == 5 and len(chord.notes) == 4:
                         chord.name = first_note_name + " Dominant"
@@ -510,6 +517,7 @@ class Song:
                     chord.name = chord.name + " Seventh"
 
     def get_transition_graph(self):
+        # TODO: Reduce the amount of edges and add labels to them for frequency
         graph = graphviz.Digraph(comment="Chord transitions in Song")
         chord_set = set()
         for track in self.tracks:
@@ -517,7 +525,7 @@ class Song:
             graph.node(prev_chord.name)
             chord_set.add(prev_chord.name)
             for i in range(1, len(track.chords)):
-                curr = tracks.chords[i]
+                curr = track.chords[i]
                 if curr.name not in chord_set:
                     graph.node(curr.name)
                     chord_set.add(curr.name)
