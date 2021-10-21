@@ -25,7 +25,7 @@ if __name__ == '__main__':
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
 
     # song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
-    song.load(filename="../MIDI Files/Indie/Simon and Garfunkel/scarborough_fair.mid", print_file=False)
+    song.load(filename="../MIDI Files/Rock/Rolling Stones/PaintItBlack.mid", print_file=False)
 
     for track in song.tracks:
         print("track: " + track.track_name)

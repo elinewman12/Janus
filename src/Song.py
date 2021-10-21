@@ -466,22 +466,73 @@ class Song:
             return relative_minor_key_scale
 
     def detect_key_by_phrase_endings(self):
-        c_indexed_total_note_frequency = [0] * 12
-        for track in self.tracks:
-            if track.tag == TagEnum.MELODY or track.tag == TagEnum.BASS:
-                c_indexed_track_note_frequency = [0] * 12
-                for idx, note in enumerate(track.notes):
-                    if idx != len(track.notes):
-                        # If this note is the last note of the song, or has a long pause after
-                        if idx == len(track.notes) - 1 or track.notes[idx+1].time - note.time > 1200:
-                            c_indexed_track_note_frequency[note.c_indexed_pitch_class] += 1
-                            # print(track.track_name + " time: " + str(track.notes[idx-1].time) + " pitch: " +
-                            #       str(track.notes[idx-1].c_indexed_pitch_class) + " ch: " + str(track.channel))
-                print(str(c_indexed_track_note_frequency) + ": " + str(track.tag) + " - " + track.track_name)
-                for i in range(12):
-                    c_indexed_total_note_frequency[i] += c_indexed_track_note_frequency[i]
+        """
+        Takes the song object and looks at the notes in the melody and bass tracks, and finds the notes with the longest
+        pauses after them (likely the ends of melodic phrases). These notes are narrowed down until the set number of
+        notes (as a percentage) are found.
+        :return: A tuple in the format [key: Key, message: String]. This message contains lots of diagnostic information
+        that explains what's going on behind the scenes, and shows a confidence value.
+        """
+        TIME_INTERVAL_INCREASE = 20
+        PERCENTAGE_TO_FIND = 0.01
 
-        print("totals: " + str(c_indexed_total_note_frequency))
+        total_song_notes = 0
+        time_interval = 0
+        detected_key = ""
+        message = ""
+
+        for track in self.tracks:
+            total_song_notes += len(track.notes)
+
+        total_found_notes = total_song_notes
+        # total_found_notes = 0
+
+        while total_found_notes > PERCENTAGE_TO_FIND * total_song_notes:
+
+            total_found_notes = 0
+            time_interval += TIME_INTERVAL_INCREASE
+
+            c_indexed_total_note_frequency = [0] * NUM_NOTES
+            for track in self.tracks:
+                if track.tag == TagEnum.MELODY or track.tag == TagEnum.BASS:
+                    c_indexed_track_note_frequency = [0] * NUM_NOTES
+                    for idx, note in enumerate(track.notes):
+                        if idx != len(track.notes):
+                            # If this note is the last note of the song, or has a long pause after
+
+                            # if idx == len(track.notes) - 1 \
+                            #         or (track.notes[idx].time + track.notes[idx].duration) % \
+                            #         (4 * self.ticks_per_beat) < time_interval:
+                            if idx == len(track.notes) - 1 or track.notes[idx+1].time - note.time > time_interval:
+
+                                total_found_notes += 1
+                                c_indexed_track_note_frequency[note.c_indexed_pitch_class] += 1
+                                # print(track.track_name + " time: " + str(track.notes[idx-1].time) + " pitch: " +
+                                #       str(track.notes[idx-1].c_indexed_pitch_class) + " ch: " + str(track.channel))
+                            # if idx == len(track.notes) - 1:
+                                # print("Last note: " + str(note.c_indexed_pitch_class))
+                    message += (str(c_indexed_track_note_frequency) + ": " + str(track.tag) + " - " + track.track_name
+                                + "\n")
+                    for i in range(12):
+                        c_indexed_total_note_frequency[i] += c_indexed_track_note_frequency[i]
+
+            message += (str(c_indexed_total_note_frequency) + ": totals"  + "\n")
+
+            max_val = 0
+            max_idx = 0
+            for i in range(len(c_indexed_total_note_frequency)):
+                if max_val < c_indexed_total_note_frequency[i]:
+                    max_val = c_indexed_total_note_frequency[i]
+                    max_idx = i
+            message += ("Detected key: " + KEYS[max_idx] + "\n")
+            message += ("Time interval: " + str(time_interval) + "\n")
+            message += ("Found notes: " + str(total_found_notes) + "\n")
+            message += ("Confidence: " + str(c_indexed_total_note_frequency[max_idx]/total_found_notes) + "\n")
+            message += ("ticks per beat: " + str(self.ticks_per_beat) + "\n\n")
+
+            detected_key = KEYS[max_idx]
+
+        return [Key(tonic=detected_key), message]
 
     def get_chord_names(self):
         # It would be helpful for us here to have an accidental field on a key to know if its sharp or flat
