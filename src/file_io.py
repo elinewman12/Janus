@@ -1,11 +1,13 @@
 import sys
+# insert at 1, 0 is the script path (or '' in REPL)
+sys.path.insert(1, '/Users/erinlitty/Desktop/CSC492/2021FallTeam17-DeHaan/src')
 
 import mido
 from mido import MidiFile
 
 from control import Control
 from Track import Track
-from note import Note
+from Note import Note
 
 
 def read_midi_file(song, filename, print_file=False):
@@ -64,7 +66,7 @@ def read_midi_file(song, filename, print_file=False):
                     track = set_current_track_by_channel(msg=msg, tracks=tracks)
 
                 # If this message is a note and not metadata
-                if hasattr(msg, 'note') and hasattr(msg, 'velocity'):
+                if hasattr(msg, 'note'):
                     handle_note(msg=msg, notes=current_notes, time=current_time, track=track)
 
                 if msg.type == 'control_change' or msg.type == 'program_change' or msg.type == 'set_tempo':
@@ -243,7 +245,7 @@ def order_messages(track):
 
         # If the next event is a control change
         if len(controls) > 0 and ((len(note_on) > 0 and next_control_time < next_note_on_time and
-                                   next_control_time < next_note_off_time) or len(note_on) == 0):
+                                  next_control_time < next_note_off_time) or len(note_on) == 0):
 
             c = next_control
             msg_time = c.time
@@ -285,26 +287,20 @@ def order_messages(track):
 
 def handle_note(msg, notes, time, track):
     """ Handles the case where a note message is read in from a midi file
-    If this is a note_on message, create a new Note object and store it
-    in the notes[] array (for now)
-    If this is a note_off message, find the corresponding Note object in
-    the notes[] array, set the duration, and add this Note object to the
-    track being edited. Remove this note from notes[].
 
     Args:
         msg (mido.Message): Message being read in
         notes (Note[]): List of notes that have been started but not ended
-        time (int): Current timestamp where this note occurs
+        time (int): Current timestamp where the previous note occurred
         track (Track): Track this note will be added to
     """
     # If this message is the start of a note
-    print(msg)
     if msg.type == 'note_on' and msg.velocity > 0:
         # Create a new Note object and add it to the array of currently playing notes
-        notes.append(Note(pitch=msg.note, time=time, duration=0, velocity=msg.velocity, channel=msg.channel))
+        notes.append(Note(pitch=msg.note, time=time, duration=0, velocity=msg.velocity))
 
     # If this message is the end of a note
-    elif msg.type == 'note_off' or msg.velocity == 0:
+    if msg.type == 'note_off' or msg.velocity == 0:
         # For each note that is currently playing
         for n in notes:
             # Check if the pitch is the same (locate the correct note)

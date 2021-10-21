@@ -1,8 +1,8 @@
 import collections
 
-from Song import Song
-from Track import Track
-import FileIO
+from song import Song
+from track import Track
+import file_io as FileIO
 import matplotlib.pyplot as plt
 
 

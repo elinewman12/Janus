@@ -1,6 +1,6 @@
 MidiFile(type=1, ticks_per_beat=960, tracks=[
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 0', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=0, control=101, value=0, time=0),
     Message('control_change', channel=0, control=100, value=0, time=0),
@@ -12,7 +12,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     MetaMessage('set_tempo', tempo=705882, time=3840),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 1', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=1, control=101, value=0, time=0),
     Message('control_change', channel=1, control=100, value=0, time=0),
@@ -20,7 +20,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=1, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 2', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=2, control=101, value=0, time=0),
     Message('control_change', channel=2, control=100, value=0, time=0),
@@ -28,7 +28,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=2, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 3', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=3, control=101, value=0, time=0),
     Message('control_change', channel=3, control=100, value=0, time=0),
@@ -36,7 +36,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=3, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 4', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=4, control=101, value=0, time=0),
     Message('control_change', channel=4, control=100, value=0, time=0),
@@ -44,7 +44,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=4, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 5', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=5, control=101, value=0, time=0),
     Message('control_change', channel=5, control=100, value=0, time=0),
@@ -52,7 +52,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=5, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 6', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=6, control=101, value=0, time=0),
     Message('control_change', channel=6, control=100, value=0, time=0),
@@ -60,7 +60,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=6, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 7', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=7, control=101, value=0, time=0),
     Message('control_change', channel=7, control=100, value=0, time=0),
@@ -68,7 +68,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=7, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 8', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=8, control=101, value=0, time=0),
     Message('control_change', channel=8, control=100, value=0, time=0),
@@ -76,7 +76,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=8, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 9', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=9, control=101, value=0, time=0),
     Message('control_change', channel=9, control=100, value=0, time=0),
@@ -84,7 +84,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=9, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 10', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=10, control=101, value=0, time=0),
     Message('control_change', channel=10, control=100, value=0, time=0),
@@ -92,7 +92,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=10, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 11', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=11, control=101, value=0, time=0),
     Message('control_change', channel=11, control=100, value=0, time=0),
@@ -100,7 +100,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=11, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 12', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=12, control=101, value=0, time=0),
     Message('control_change', channel=12, control=100, value=0, time=0),
@@ -108,7 +108,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=12, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 13', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=13, control=101, value=0, time=0),
     Message('control_change', channel=13, control=100, value=0, time=0),
@@ -116,7 +116,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=13, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 14', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=14, control=101, value=0, time=0),
     Message('control_change', channel=14, control=100, value=0, time=0),
@@ -124,7 +124,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=14, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 15', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=15, control=101, value=0, time=0),
     Message('control_change', channel=15, control=100, value=0, time=0),
@@ -132,7 +132,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('control_change', channel=15, control=38, value=0, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 0', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=0, control=7, value=95, time=0),
     Message('control_change', channel=0, control=10, value=63, time=0),
@@ -4322,7 +4322,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('note_off', channel=0, note=62, velocity=79, time=3480),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 6', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=6, control=7, value=95, time=0),
     Message('control_change', channel=6, control=10, value=71, time=0),
@@ -4952,7 +4952,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('note_off', channel=6, note=31, velocity=95, time=3840),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 7', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=7, control=7, value=95, time=0),
     Message('control_change', channel=7, control=10, value=71, time=0),
@@ -4964,7 +4964,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('program_change', channel=7, program=33, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 1', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=1, control=7, value=127, time=0),
     Message('control_change', channel=1, control=10, value=63, time=0),
@@ -5350,7 +5350,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('note_off', channel=1, note=55, velocity=95, time=1440),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 2', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=2, control=7, value=111, time=0),
     Message('control_change', channel=2, control=10, value=63, time=0),
@@ -5446,7 +5446,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('note_off', channel=2, note=71, velocity=95, time=2160),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 3', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=3, control=7, value=127, time=0),
     Message('control_change', channel=3, control=10, value=95, time=0),
@@ -5504,7 +5504,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('note_off', channel=3, note=59, velocity=95, time=3840),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 4', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=4, control=7, value=103, time=0),
     Message('control_change', channel=4, control=10, value=71, time=0),
@@ -5606,7 +5606,7 @@ MidiFile(type=1, ticks_per_beat=960, tracks=[
     Message('note_off', channel=4, note=66, velocity=95, time=3840),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 5', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=5, control=7, value=127, time=0),
     Message('control_change', channel=5, control=10, value=119, time=0),
