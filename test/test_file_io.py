@@ -1,15 +1,11 @@
 import mido
 import pytest
 
-import sys
-# insert at 1, 0 is the script path (or '' in REPL)
-sys.path.insert(1, '/Users/erinlitty/Desktop/CSC492/2021FallTeam17-DeHaan/src')
-
-import file_io as FileIO
-from control import Control
-from note import Note
-from song import Song
-from track import Track
+from FileIO import FileIO
+from Control import Control
+from Note import Note
+from Song import Song
+from Track import Track
 
 
 def test_read_write_midi_file():

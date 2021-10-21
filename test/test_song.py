@@ -1,10 +1,10 @@
 import pytest
-import file_io as FileIO
-from control import Control
-from note import Note
-from song import Song
-from track import Track
-from key import Key
+from FileIO import FileIO
+from Control import Control
+from Note import Note
+from Song import Song
+from Track import Track
+from Key import Key
 import mido
 
 

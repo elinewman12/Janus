@@ -2,10 +2,10 @@ import sys
 # insert at 1, 0 is the script path (or '' in REPL)
 sys.path.insert(1, '/Users/erinlitty/Desktop/CSC492/2021FallTeam17-DeHaan/src')
 
-from track import Track
-from key import Key, KEYS
+from Track import Track
+from Key import Key, KEYS
 from scale import SCALE_TYPES
-from note import Note, NUM_NOTES
+from Note import Note, NUM_NOTES
 import file_io as FileIO
 
 

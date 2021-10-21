@@ -5,7 +5,7 @@ from mido import MidiFile
 
 from control import Control
 from Track import Track
-from note import Note
+from Note import Note
 
 
 def read_midi_file(song, filename, print_file=False):

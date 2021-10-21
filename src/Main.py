@@ -1,7 +1,7 @@
-from genre import Genre
-from song import Song
+from Genre import Genre
+from Song import Song
 import os
-from key import Key
+from Key import Key
 
 
 if __name__ == '__main__':
