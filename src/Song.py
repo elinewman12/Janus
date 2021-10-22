@@ -521,6 +521,8 @@ class Song:
         graph = graphviz.Digraph(comment="Chord transitions in Song")
         chord_set = set()
         for track in self.tracks:
+            if not track.chords:
+                continue
             prev_chord = track.chords[0]
             graph.node(prev_chord.name)
             chord_set.add(prev_chord.name)

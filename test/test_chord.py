@@ -17,7 +17,6 @@ def test_chord_functionality():
     orig = Song()
 
     orig.load(filename="test MIDI/C_major_chord_single.mid")
-    print(orig.tracks[1].chords)
     assert orig.tracks[1].chords[0].notes[0].pitch == 48  # The pitch of a C3 note
     assert orig.tracks[1].chords[0].notes[1].pitch == 52  # The pitch of a E3 note
     assert orig.tracks[1].chords[0].notes[2].pitch == 55  # The pitch of a G3 note

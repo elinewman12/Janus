@@ -23,16 +23,16 @@ if __name__ == '__main__':
 
     song = Song()
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
-
+    # song.load(filename="../test/test MIDI/C_major_chords.mid")
     # song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
-    song.load(filename="../MIDI Files/Country/Garth Brooks/23224_Friends-in-Low-Places.mid", print_file=False)
-
-    for track in song.tracks:
-        print("track: " + track.track_name)
-        for chord in track.chords:
-            print("  Chord: ")
-            for note in chord.notes:
-                print("    " + str(note.pitch) + " Time: " + str(note.time) + " channel: " + str(note.channel))
+    song.load(filename="../MIDI Files/Rock/Elton John/RocketMan.mid", print_file=False)
+    song.get_transition_graph()
+    # for track in song.tracks:
+    #     print("track: " + track.track_name)
+    #     for chord in track.chords:
+    #         print("  Chord: ")
+    #         for note in chord.notes:
+    #             print("    " + str(note.pitch) + " Time: " + str(note.time) + " channel: " + str(note.channel))
 
     # print(song.to_string())
 
