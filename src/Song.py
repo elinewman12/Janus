@@ -517,8 +517,8 @@ class Song:
                     chord.name = chord.name + " Seventh"
 
     def get_transition_graph(self):
-        # TODO: Reduce the amount of edges and add labels to them for frequency
         graph = graphviz.Digraph(comment="Chord transitions in Song")
+        graph.attr(ranksep='0.01', nodesep='0.1')
         chord_set = set()
         edges = []
 
@@ -533,9 +533,10 @@ class Song:
                 if curr.name not in chord_set:
                     graph.node(curr.name)
                     chord_set.add(curr.name)
-                edges.add([prev_chord.name, curr.name])
+                edges.append([prev_chord.name, curr.name])
                 prev_chord = curr
-        counter = Counter(edges)
+        counter = collections.Counter(tuple(edge) for edge in edges)
         for edge, count in counter.items():
-            graph.edge(edge[0], edge[1], label=count)
+            print(str(edge[0]), count)
+            graph.edge(str(edge[0]), str(edge[1]), label=str(count))
         graph.view()

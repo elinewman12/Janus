@@ -1,0 +1,33 @@
+// Chord transitions in Song
+digraph {
+	nodesep=0.1 ranksep=0.01
+	"D Minor"
+	"G Major"
+	"B Minor"
+	"A Minor"
+	"G Major Seventh"
+	"E Major"
+	"G Major Seventh"
+	"D Minor"
+	"G Major Seventh"
+	"C Minor"
+	"D Minor" -> "D Minor" [label=279]
+	"D Minor" -> "G Major" [label=27]
+	"G Major" -> "G Major" [label=221]
+	"G Major" -> "D Minor" [label=27]
+	"D Minor" -> "B Minor" [label=15]
+	"B Minor" -> "B Minor" [label=122]
+	"B Minor" -> "D Minor" [label=15]
+	"D Minor" -> "A Minor" [label=2]
+	"A Minor" -> "G Major" [label=2]
+	"D Minor" -> "G Major Seventh" [label=4]
+	"G Major Seventh" -> "G Major Seventh" [label=33]
+	"G Major Seventh" -> "G Major" [label=2]
+	"G Major" -> "G Major Seventh" [label=2]
+	"G Major Seventh" -> "D Minor" [label=3]
+	"D Minor" -> "E Major" [label=1]
+	"E Major" -> "D Minor" [label=4]
+	"G Major" -> "E Major" [label=2]
+	"G Major Seventh" -> "E Major" [label=1]
+	"C Minor" -> "C Minor" [label=20]
+}
