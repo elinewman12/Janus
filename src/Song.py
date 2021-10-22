@@ -520,6 +520,8 @@ class Song:
         # TODO: Reduce the amount of edges and add labels to them for frequency
         graph = graphviz.Digraph(comment="Chord transitions in Song")
         chord_set = set()
+        edges = []
+
         for track in self.tracks:
             if not track.chords:
                 continue
@@ -531,6 +533,9 @@ class Song:
                 if curr.name not in chord_set:
                     graph.node(curr.name)
                     chord_set.add(curr.name)
-                graph.edge(prev_chord.name, curr.name)
+                edges.add([prev_chord.name, curr.name])
                 prev_chord = curr
+        counter = Counter(edges)
+        for edge, count in counter.items():
+            graph.edge(edge[0], edge[1], label=count)
         graph.view()
