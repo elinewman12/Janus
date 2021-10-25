@@ -3,7 +3,9 @@ import sys
 import mido
 from mido import MidiFile
 
-from control import Control
+
+from Chord import Chord
+from Control import Control
 from Track import Track
 from Note import Note
 
@@ -49,6 +51,11 @@ def read_midi_file(song, filename, print_file=False):
             current_notes = []
             # The current running time of the song (In absolute terms)
             current_time = 0
+            # Keeps track of number of concurrent notes in a track or channel
+            num_notes_per_channel = [0] * 16
+            # Keeps track of if a chord has been detected already on a channel
+            # (prevents the same chord from being counted multiple times)
+            found_chord = [False] * 16
             # For each message in the mido track
             for msg in read_track:
 
@@ -65,7 +72,8 @@ def read_midi_file(song, filename, print_file=False):
 
                 # If this message is a note and not metadata
                 if hasattr(msg, 'note') and hasattr(msg, 'velocity'):
-                    handle_note(msg=msg, notes=current_notes, time=current_time, track=track)
+                    handle_note(msg=msg, notes=current_notes, time=current_time, track=track,
+                                num_notes_per_channel=num_notes_per_channel, found_chord=found_chord)
 
                 if msg.type == 'control_change' or msg.type == 'program_change' or msg.type == 'set_tempo':
                     if msg.type == 'set_tempo':
@@ -98,6 +106,7 @@ def read_midi_file(song, filename, print_file=False):
                 t.track_name = str(track_name)
                 t.device_name = str(device_name)
                 t.notes.sort(key=lambda note: note.time)
+                t.generate_tags()
                 song.add_track(t)
         return song
 
@@ -283,7 +292,7 @@ def order_messages(track):
     return msgs
 
 
-def handle_note(msg, notes, time, track):
+def handle_note(msg, notes, time, track, num_notes_per_channel, found_chord):
     """ Handles the case where a note message is read in from a midi file
     If this is a note_on message, create a new Note object and store it
     in the notes[] array (for now)
@@ -296,24 +305,42 @@ def handle_note(msg, notes, time, track):
         notes (Note[]): List of notes that have been started but not ended
         time (int): Current timestamp where this note occurs
         track (Track): Track this note will be added to
+        num_notes_per_channel (Int[]): An array noting how many notes are currently
+            playing on each channel, for chord detection.
+        found_chord (Boolean[]): Flags (for each channel) if a chord was found with the current notes
+            that are playing to avoid marking duplicates. Resets when a new note starts
     """
+    
     # If this message is the start of a note
-
     if msg.type == 'note_on' and msg.velocity > 0:
         # Create a new Note object and add it to the array of currently playing notes
+
         notes.append(Note(pitch=msg.note, time=time, duration=0, velocity=msg.velocity, channel=msg.channel))
+        num_notes_per_channel[msg.channel] += 1
+        found_chord[msg.channel] = False
 
     # If this message is the end of a note
     elif msg.type == 'note_off' or msg.velocity == 0:
+        # Find a possible chord in this channel first
+        if num_notes_per_channel[msg.channel] >= 3 and not found_chord[msg.channel]:
+            chord = []
+            for n in notes:
+                if n.channel == msg.channel:
+                    chord.append(n)
+            track.add_chord(Chord(notes=chord, time=time))
+            found_chord[n.channel] = True
+
         # For each note that is currently playing
         for n in notes:
-            # Check if the pitch is the same (locate the correct note)
-            if n.pitch == msg.note:
+            # Check if the pitch and channel are the same (locate the correct note)
+            if n.pitch == msg.note and n.channel == msg.channel:
                 # Set the duration of this note based on current_time - start time, add it to the track
                 n.duration = time - n.time
                 notes.remove(n)
+                num_notes_per_channel[n.channel] -= 1
                 track.add_note(n)
                 break
+
 
 
 def handle_control(msg, track, time):

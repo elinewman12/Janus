@@ -1,6 +1,6 @@
 import logging
 from logging import info
-from Track import Track
+from Track import Track, TagEnum
 from Key import Key, KEYS
 from scale import SCALE_TYPES
 from Note import NUM_NOTES
@@ -203,7 +203,7 @@ class Song:
                         note.pitch += offset
         return self
 
-    def get_note_velocity_graph(self):
+    def get_note_velocity_graph(self, name):
         """ Shows a graph of the velocity (intensity/loudness) of all the notes in this song.
         TODO: make this return rather than 'print'
         """
@@ -218,7 +218,7 @@ class Song:
         plt.xlabel("Time")
         plt.ylabel("Velocity")
         # Change this to show title of song when that variable is available
-        plt.title("Velocity of Notes")
+        plt.title("Velocity of Notes in " + name)
         plt.show()
 
     def get_bar_graph(self, title, x_label, y_label, items):
@@ -232,7 +232,7 @@ class Song:
         return bar
 
     # Shows a graph of the frequency of all the notes in this song
-    def get_note_frequency_graph(self):
+    def get_note_frequency_graph(self, name):
         """ Shows a graph of the frequency that each note apperas in this song.
         TODO: make this return rather than 'print'
         """
@@ -241,8 +241,8 @@ class Song:
             for note in track.notes:
                 all_notes.append(KEYS[note.pitch % 12])
 
-        graph = self.get_bar_graph("Frequency of Notes", "Note", "Frequency", all_notes)
-        plt.show(graph)
+        graph = self.get_bar_graph("Frequency of Notes in " + name, "Note", "Frequency", all_notes)
+        plt.show()
 
     def to_string(self):
         """ Returns the contents of the song as a string in the format: \n
@@ -465,6 +465,95 @@ class Song:
             return relative_major_key_scale
         else:
             return relative_minor_key_scale
-          
-        return result
 
+    def detect_key_by_phrase_endings(self):
+        """
+        Takes the song object and looks at the notes in the melody and bass tracks, and finds the notes with the longest
+        pauses after them (likely the ends of melodic phrases). These notes are narrowed down until the set number of
+        notes (as a percentage) are found.
+        :return: A tuple in the format [key: Key, message: String]. This message contains lots of diagnostic information
+        that explains what's going on behind the scenes, and shows a confidence value.
+        """
+        TIME_INTERVAL_INCREASE = 20
+        PERCENTAGE_TO_FIND = 0.01
+
+        total_song_notes = 0
+        time_interval = 0
+        detected_key = ""
+        message = ""
+
+        for track in self.tracks:
+            total_song_notes += len(track.notes)
+
+        total_found_notes = total_song_notes
+        # total_found_notes = 0
+
+        while total_found_notes > PERCENTAGE_TO_FIND * total_song_notes:
+
+            total_found_notes = 0
+            time_interval += TIME_INTERVAL_INCREASE
+
+            c_indexed_total_note_frequency = [0] * NUM_NOTES
+            for track in self.tracks:
+                if track.tag == TagEnum.MELODY or track.tag == TagEnum.BASS:
+                    c_indexed_track_note_frequency = [0] * NUM_NOTES
+                    for idx, note in enumerate(track.notes):
+                        if idx != len(track.notes):
+                            # If this note is the last note of the song, or has a long pause after
+
+                            # if idx == len(track.notes) - 1 \
+                            #         or (track.notes[idx].time + track.notes[idx].duration) % \
+                            #         (4 * self.ticks_per_beat) < time_interval:
+                            if idx == len(track.notes) - 1 or track.notes[idx+1].time - note.time > time_interval:
+
+                                total_found_notes += 1
+                                c_indexed_track_note_frequency[note.c_indexed_pitch_class] += 1
+                                # print(track.track_name + " time: " + str(track.notes[idx-1].time) + " pitch: " +
+                                #       str(track.notes[idx-1].c_indexed_pitch_class) + " ch: " + str(track.channel))
+                            # if idx == len(track.notes) - 1:
+                                # print("Last note: " + str(note.c_indexed_pitch_class))
+                    message += (str(c_indexed_track_note_frequency) + ": " + str(track.tag) + " - " + track.track_name
+                                + "\n")
+                    for i in range(12):
+                        c_indexed_total_note_frequency[i] += c_indexed_track_note_frequency[i]
+
+            message += (str(c_indexed_total_note_frequency) + ": totals"  + "\n")
+
+            max_val = 0
+            max_idx = 0
+            for i in range(len(c_indexed_total_note_frequency)):
+                if max_val < c_indexed_total_note_frequency[i]:
+                    max_val = c_indexed_total_note_frequency[i]
+                    max_idx = i
+            message += ("Detected key: " + KEYS[max_idx] + "\n")
+            message += ("Time interval: " + str(time_interval) + "\n")
+            message += ("Found notes: " + str(total_found_notes) + "\n")
+            message += ("Confidence: " + str(c_indexed_total_note_frequency[max_idx]/total_found_notes) + "\n")
+            message += ("ticks per beat: " + str(self.ticks_per_beat) + "\n\n")
+
+            detected_key = KEYS[max_idx]
+
+        return [Key(tonic=detected_key), message]
+
+    def get_chord_names(self):
+        # It would be helpful for us here to have an accidental field on a key to know if its sharp or flat
+        # That's because then you know whether to use the keys or equivalent keys array
+        # I think this should work for all natural keys though
+        # This also doesn't account for diminished chords
+        major = [1, 4, 5]
+        minor = [2, 3, 6]
+        key = self.detect_key().get_c_based_index_of_key()
+        for track in self.tracks:
+            for chord in track.chords:
+                first_note_index = chord.notes[0].c_indexed_pitch_class
+                first_note_name = KEYS[chord.notes[0] % NUM_NOTES]
+                distance_between_notes = KEYS[first_note_index] - KEYS[key] - 1
+                if distance_between_notes in major:
+                    if distance_between_notes == 5 and len(chord.notes) == 4:
+                        chord.name = first_note_name + " Dominant"
+                    else:
+                        chord.name = first_note_name + " Major"
+                else:
+                    chord.name = first_note_name + " Minor"
+                if len(chord.notes) == 4:
+                    chord.name = chord.name + " Seventh"

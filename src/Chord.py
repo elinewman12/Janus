@@ -12,8 +12,10 @@ import file_io as FileIO
 class Chord:
 
     # Constructor, takes all fields as inputs
-    def __init__(self, notes=None, name=None):
+    def __init__(self, notes=None, name=None, time=0):
         if notes is None:
             notes = []
         self.notes = notes
+        notes.sort(key=lambda x: x.pitch)
         self.name = name
+        self.time = time
