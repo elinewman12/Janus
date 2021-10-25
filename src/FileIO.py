@@ -3,6 +3,7 @@ import sys
 import mido
 from mido import MidiFile
 
+
 from Chord import Chord
 from Control import Control
 from Track import Track

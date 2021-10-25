@@ -2,10 +2,10 @@ import logging
 from logging import info
 from Track import Track, TagEnum
 from Key import Key, KEYS
-from Scale import SCALE_TYPES
+from scale import SCALE_TYPES
 from Note import NUM_NOTES
-import FileIO
-import matplotlib.pyplot as plt
+import file_io as FileIO
+# import matplotlib.pyplot as plt
 import collections
 
 DEFAULT_TICKS_PER_BEAT = 48

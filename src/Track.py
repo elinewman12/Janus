@@ -1,3 +1,4 @@
+
 import Note
 from enum import Enum
 

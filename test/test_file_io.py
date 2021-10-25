@@ -1,7 +1,7 @@
 import mido
 import pytest
 
-import FileIO
+from FileIO import FileIO
 from Control import Control
 from Note import Note
 from Song import Song
@@ -21,15 +21,15 @@ def test_read_write_midi_file():
     type_1_new = Song()
     # type_2_new = Song()
 
-    type_0_orig.load(filename="Resources/My-Name-Is.mid")
-    type_1_orig.load(filename="Resources/GoodRiddance(TimeOfYourLife).mid")
+    type_0_orig.load(filename="test/Resources/My-Name-Is.mid")
+    type_1_orig.load(filename="test/Resources/GoodRiddance(TimeOfYourLife).mid")
     # type_2_orig.load(filename="Resources/")
 
-    type_0_orig.save(filename="Resources/My-Name-Is_Output.mid", print_file=True)
-    type_1_orig.save(filename="Resources/GoodRiddance(TimeOfYourLife)_Output.mid", print_file=True)
+    type_0_orig.save(filename="test/Resources/My-Name-Is_Output.mid", print_file=True)
+    type_1_orig.save(filename="test/Resources/GoodRiddance(TimeOfYourLife)_Output.mid", print_file=True)
 
-    type_0_new.load(filename="Resources/My-Name-Is_Output.mid")
-    type_1_new.load(filename="Resources/GoodRiddance(TimeOfYourLife)_Output.mid")
+    type_0_new.load(filename="test/Resources/My-Name-Is_Output.mid")
+    type_1_new.load(filename="test/Resources/GoodRiddance(TimeOfYourLife)_Output.mid")
 
     # Check that the two song objects are the same by using the equals method in Song
     assert type_0_orig.equals(type_0_new)

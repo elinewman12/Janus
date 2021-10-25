@@ -1,0 +1,4 @@
+[run]
+ omit =
+     *test/*
+     /usr/local/lib/python3.9/* 

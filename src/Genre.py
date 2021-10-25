@@ -2,7 +2,7 @@ import collections
 
 from Song import Song
 from Track import Track
-import FileIO
+import file_io as FileIO
 import matplotlib.pyplot as plt
 
 
