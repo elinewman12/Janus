@@ -4,9 +4,9 @@ sys.path.insert(1, '/Users/erinlitty/Desktop/CSC492/2021FallTeam17-DeHaan/src')
 
 from Track import Track
 from Key import Key, KEYS
-from scale import SCALE_TYPES
+from Scale import SCALE_TYPES
 from Note import Note, NUM_NOTES
-import file_io as FileIO
+import FileIO as FileIO
 
 
 class Chord:
