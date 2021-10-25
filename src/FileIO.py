@@ -211,6 +211,8 @@ def order_messages(track):
     msgs = []
     time = 0
 
+    track.notes.sort(key=lambda x: x.time)
+
     # Generate three lists (control messages, note_on and note_off) that store the absolute
     # times when each midi event occurs. These lists consist of tuples,
     # [message, int] that stores a message and it's corresponding time (either
@@ -284,7 +286,6 @@ def order_messages(track):
             msg_type = 'note_off'
             msg_time = next_note_off_time
             note_off.remove(note_off[0])
-
             msgs.append(mido.Message(type=msg_type, channel=track.channel, note=n.pitch, velocity=n.velocity,
                                      time=msg_time - time))
         time = msg_time
