@@ -1,11 +1,11 @@
 MidiFile(type=1, ticks_per_beat=240, tracks=[
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 0', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     MetaMessage('set_tempo', tempo=1000000, time=0),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 1', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('note_on', channel=1, note=29, velocity=110, time=0),
     Message('control_change', channel=1, control=0, value=0, time=0),
@@ -762,7 +762,7 @@ MidiFile(type=1, ticks_per_beat=240, tracks=[
     Message('note_off', channel=1, note=32, velocity=110, time=82),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 2', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('note_on', channel=2, note=53, velocity=110, time=0),
     Message('control_change', channel=2, control=0, value=0, time=0),
@@ -1292,7 +1292,7 @@ MidiFile(type=1, ticks_per_beat=240, tracks=[
     Message('note_off', channel=2, note=63, velocity=110, time=40),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 5', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('control_change', channel=5, control=0, value=0, time=0),
     Message('control_change', channel=5, control=32, value=0, time=0),
@@ -1806,7 +1806,7 @@ MidiFile(type=1, ticks_per_beat=240, tracks=[
     Message('note_off', channel=5, note=84, velocity=110, time=39),
     MetaMessage('end_of_track', time=500)]),
   MidiTrack([
-    MetaMessage('track_name', name='None: Channel 9', time=0),
+    MetaMessage('track_name', name='None', time=0),
     MetaMessage('device_name', name='None', time=0),
     Message('note_on', channel=9, note=35, velocity=127, time=0),
     Message('note_on', channel=9, note=42, velocity=127, time=0),

@@ -3,7 +3,7 @@ import sys
 import mido
 from mido import MidiFile
 
-from Control import Control
+from control import Control
 from Track import Track
 from Note import Note
 
