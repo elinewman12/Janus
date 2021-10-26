@@ -390,6 +390,7 @@ class Song:
         :return: A list containing the keys and scales that were detected.  ex -> ['C major', 'D minor']
         """
         note_frequencies = self.get_c_indexed_note_frequencies()
+        num_notes = sum(note_frequencies)
 
         key_and_scale_error_record = {}
 
@@ -460,11 +461,22 @@ class Song:
         major_frequency = note_frequencies[idx_of_major_key]
         minor_frequency = note_frequencies[idx_of_minor_key]
 
+        returnval = ''
         # compare and return the most common key scale
         if major_frequency >= minor_frequency:
-            return relative_major_key_scale
+            returnval = relative_major_key_scale
         else:
-            return relative_minor_key_scale
+            returnval = relative_minor_key_scale
+
+        # parse it into a key object for return as tuple with key object and error
+        detected_return_key = Key(returnval.split()[0], returnval.split()[1])
+
+        # determine confidence based on number of 1 - number of errors/ number of notes
+        confidence = 1 - minimum_errors / num_notes
+
+        # return the tuple
+        return detected_return_key, minimum_errors, confidence
+
 
     def detect_key_by_phrase_endings(self):
         """

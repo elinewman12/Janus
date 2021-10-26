@@ -1,0 +1,115 @@
+Genre,Artist,Song,Detected Tonic,Detected Mode,Errors,% Confidence
+Country,Garth Brooks,23224_Friends-in-Low-Places,Gb,minor,71,98.56854838709678%
+Country,Garth Brooks,26553_To-Make-You-Feel-My-Love,D,major,111,94.31352459016394%
+Country,John Anderson,2601_I-Wish-I-Could-Have-Been-There (1),C,major,9,99.66923925027564%
+Country,John Anderson,2601_I-Wish-I-Could-Have-Been-There,C,major,9,99.66923925027564%
+Country,John Anderson,2603_Seminole-Wind,D,major,16,99.65315412963365%
+Country,Tim McGraw,1576_Dont-Take-the-Girl,E,minor,0,100.0%
+Country,Tim McGraw,1577_I-Like-It-I-Love-It,D,minor,466,92.6579486371514%
+Country,Tim McGraw,2610_Something-Like-That,D,minor,134,95.53184394798267%
+EDM,Alan Walker,Alan Walker - Alone  (midi by Carlo Prato) (www.cprato.com),G,minor,0,100.0%
+EDM,Alan Walker,Alan Walker - Faded (Piano Cover Tutorial - Easy) (midi by Carlo Prato) (www.cprato.com),Eb,minor,0,100.0%
+EDM,Alan Walker,Alan Walker - Sing Me To Sleep  (midi by Carlo Prato) (www.cprato.com),E,minor,0,100.0%
+EDM,Deadmau5,deadmau5 - 2448  (midi by Carlo Prato) (www.cprato.com),E,minor,14,91.66666666666666%
+EDM,Deadmau5,deadmau5 - Deus Ex Machina  (midi by Carlo Prato) (www.cprato.com),F,minor,0,100.0%
+EDM,Deadmau5,deadmau5 - Hyperlandia  (midi by Carlo Prato) (www.cprato.com),D,major,0,100.0%
+EDM,Deadmau5,deadmau5 - No Problem  (midi by Carlo Prato) (www.cprato.com),D,major,33,88.42105263157895%
+EDM,Deadmau5,deadmau5 - So There I Was  (midi by Carlo Prato) (www.cprato.com),Db,major,0,100.0%
+EDM,Deadmau5,deadmau5 feat. Grabbitz - Let Go  (midi by Carlo Prato) (www.cprato.com),C,minor,0,100.0%
+EDM,Marshmello,Marshmello - Alone (Original Mix) (midi by Carlo Prato) (www.cprato.com),D,major,0,100.0%
+EDM,Marshmello,Marshmello - Ritual (Original Mix) (midi by Carlo Prato) (www.cprato.com),D,minor,0,100.0%
+EDM,Marshmello,Marshmello - Summer  (midi by Carlo Prato) (www.cprato.com),Eb,minor,0,100.0%
+EDM,Martin Garrix,Martin Garrix & Bebe Rexha - In The Name Of Love  (midi by Carlo Prato) (www.cprato.com),C,major,0,100.0%
+EDM,Martin Garrix,Martin Garrix & Dua Lipa - Scared To Be Lonely  (midi by Carlo Prato) (www.cprato.com),Db,minor,0,100.0%
+EDM,Martin Garrix,Martin Garrix ft. The Federal Empire - Hold On & Believe (Original Mix) (midi by Carlo Prato) (www.cprato.com),Ab,minor,0,100.0%
+Gospel,John Newton,Amazing_Grace,E,minor,0,100.0%
+Grunge,Nirvana,AboutAGirl,D,major,303,92.74425287356321%
+Grunge,Nirvana,ComeAsYouAre,F,minor,114,91.11457521434139%
+Grunge,Nirvana,HeartShapedBox,Ab,minor,277,91.86490455212922%
+Grunge,Nirvana,InBloom,C,minor,488,86.56387665198237%
+Grunge,Nirvana,Lithium,D,minor,317,87.0928338762215%
+Grunge,Nirvana,SmellsLikeTeenSpirit,F,minor,113,97.44517295952974%
+Grunge,Pearl Jam,Alive,D,major,719,93.52135519913499%
+Grunge,Pearl Jam,BetterMan,D,major,149,97.30219083831251%
+Grunge,Pearl Jam,EvenFlow,C,major,288,90.83386378103118%
+Grunge,Pearl Jam,Jeremy,C,major,88,98.26292933280695%
+Grunge,Pearl Jam,YellowLedbetter,Db,minor,119,97.59887005649718%
+Grunge,Soundgarden,BlackHoleSun,Eb,minor,609,82.76740237691001%
+Grunge,Soundgarden,SpoonMan,C,major,24,99.40119760479041%
+Grunge,Stone Temple Pilots,Creep,E,minor,79,98.0848484848485%
+Grunge,Stone Temple Pilots,InterstateLoveSong,Db,minor,309,92.13740458015268%
+Grunge,Stone Temple Pilots,Plush,G,minor,342,87.71551724137932%
+Grunge,Stone Temple Pilots,TrippingOnAHole,D,major,312,91.85165839644816%
+Grunge,Stone Temple Pilots,Vasoline,G,minor,616,85.47169811320755%
+Hip-Hop,Chance The Rapper,Chance_the_Rapper_-_All_We_Got_for_Marching_Band,C,minor,0,100.0%
+Hip-Hop,Chance The Rapper,NO_PROBLEM,D,major,21,99.18636187524216%
+Hip-Hop,Chance The Rapper,Sunday_Candy_G_Major_Final,C,major,78,96.88622754491017%
+Hip-Hop,Eminem,20455_Lose-Yourself,D,minor,65,98.30773236136423%
+Hip-Hop,Eminem,20501_Marshall-Mathers,E,minor,111,93.36917562724014%
+Hip-Hop,Eminem,23214_My-Name-Is,G,minor,153,82.75084554678692%
+Hip-Hop,Eminem,27297_Real-Slim-Shady-The,C,minor,78,95.54030874785592%
+Hip-Hop,Jay-Z,13235_Big-Pimpin,Db,minor,18,97.45762711864407%
+Hip-Hop,Jay-Z,13238_Hard-Knock-Life,C,major,0,100.0%
+Hip-Hop,Jay-Z,20535_03-Bonnie--Clyde,Db,major,9,96.39999999999999%
+Hip-Hop,Kanye West,21530_All-Falls-Down,Eb,minor,16,93.01310043668123%
+Hip-Hop,Kanye West,24774_Jesus-Walks,Db,major,0,100.0%
+Hip-Hop,Kanye West,24851_Gold-Digger,Eb,minor,30,95.50898203592814%
+Hip-Hop,Notorious B.I.G,13224_Miss-U,E,minor,299,94.8287789692148%
+Hip-Hop,Notorious B.I.G,13225_Mo-Money-Mo-Problems,Db,minor,54,99.11140365311832%
+Hip-Hop,Notorious B.I.G,13227_One-More-Chance,C,major,0,100.0%
+Hip-Hop,OutKast,20700_Hey-Ya,E,minor,4,99.93167065254526%
+Hip-Hop,OutKast,21165_Miss-Jackson,C,major,0,100.0%
+Hip-Hop,OutKast,25535_Roses,E,minor,19,84.67741935483872%
+Indie,Simon and Garfunkel,scarborough_fair,D,major,0,100.0%
+Jazz,Frank Sinatra,my_way,C,major,417,95.54439576877871%
+Metal,Black Sabbath,Black Sabbath-Iron Man,D,major,756,86.00259211257175%
+Metal,Black Sabbath,Black Sabbath-Paranoid,E,minor,6,99.84717269485482%
+Metal,Black Sabbath,Black Sabbath-War pigs,E,minor,270,93.44182657274715%
+Metal,Judas Priest,Judas Priest - Grinder,E,minor,131,94.72624798711755%
+Metal,Judas Priest,Judas Priest - Living after Midnight,Db,minor,361,91.75234178661184%
+Metal,Judas Priest,Judas Priest - Night Crawler,D,major,167,96.46336298178738%
+Metal,Megadeth,Megadeth-Holy Wars The Punishment Due,E,minor,609,90.36849596710422%
+Metal,Megadeth,Megadeth-Symphony Of Destruction,C,major,415,87.41661613098847%
+Metal,Megadeth,Megadeth-Tornado Of Souls,D,major,195,96.0357796300061%
+Metal,Metallica,EnterSandman,D,major,368,89.53356086461889%
+Pop,Adele,Adele_-_Set_fire_to_the_rain,D,minor,0,100.0%
+Pop,Adele,Adele_-_Skyfall,C,minor,97,94.41887226697354%
+Pop,Adele,Love in the Dark,C,major,0,100.0%
+Pop,Adele,Someone_Like_You_easy_piano,Gb,minor,0,100.0%
+Pop,Billie Eilish,Billie Eilish - All The Good Girls Go To Hell  (midi by Carlo Prato) (www.cprato.com),Ab,minor,2,99.80099502487563%
+Pop,Billie Eilish,Billie Eilish - Bad Guy  (midi by Carlo Prato) (www.cprato.com),G,minor,14,83.72093023255813%
+Pop,Billie Eilish,Billie Eilish - No Time To Die (James Bond) (midi by Carlo Prato) (www,E,minor,11,91.85185185185185%
+Pop,Billie Eilish,Billie Eilish - Therefore I Am- (midi by Carlo Prato) (www.cprato.com),D,minor,10,90.0%
+Pop,Bruno Mars,Grenade,D,minor,22,98.4%
+Pop,Bruno Mars,RunawayBaby,E,minor,94,97.80527667522765%
+Pop,Bruno Mars,Thelazysong,Ab,minor,48,98.63052781740372%
+Pop,Ed Sheeran,Ed Sheeran - Galway Girl  (midi by Carlo Prato) (www.cprato.com),Gb,minor,0,100.0%
+Pop,Ed Sheeran,Ed Sheeran - Perfect  (midi by Carlo Prato) (www.cprato.com),F,minor,0,100.0%
+Pop,Ed Sheeran,Ed Sheeran - Shape of You  (midi by Carlo Prato) (www.cprato.com),Db,minor,0,100.0%
+Pop,Imagine Dragons,Believer_-_Imagine_Dragons,Db,major,111,92.43869209809264%
+Pop,Imagine Dragons,Demons_-_Imagine_Dragons,C,minor,0,100.0%
+Pop,Imagine Dragons,Radioactive,Gb,minor,4,99.81718464351006%
+Pop,The Chainsmokers,The Chainsmokers - Paris  (midi by Carlo Prato) (www.cprato.com),D,major,0,100.0%
+Pop,The Chainsmokers,The Chainsmokers feat. XYLØ - Setting Fires  (midi by Carlo Prato) (www.cprato.com),Ab,minor,0,100.0%
+Pop,The Chainsmokers,The Chainsmokers ft. Halsey - Closer  (midi by Carlo Prato) (www.cprato.com),F,minor,0,100.0%
+Pop,The Chainsmokers,The Chainsmokers ft. Phoebe Ryan - All We Know  (midi by Carlo Prato) (www.cprato.com),C,major,0,100.0%
+Pop,The Weeknd,The Weeknd - Party Monster  (midi by Carlo Prato) (www.cprato.com),Eb,minor,0,100.0%
+Pop,The Weeknd,The Weeknd - Reminder  (midi by Carlo Prato) (www.cprato.com),G,minor,0,100.0%
+Pop,The Weeknd,The Weeknd ft. Daft Punk - I Feel It Coming  (midi by Carlo Prato) (www.cprato.com),C,minor,0,100.0%
+Rock,Aerosmith,ComeTogether,C,major,145,94.45506692160612%
+Rock,Aerosmith,DreamOn,F,minor,102,95.38043478260869%
+Rock,Aerosmith,JaniesGotAGun,Ab,minor,104,94.98553519768564%
+Rock,Eagles,HotelCalifornia,D,major,435,94.21696357351767%
+Rock,Eagles,HowLong,C,major,62,98.94683200271785%
+Rock,Eagles,TakeItEasy,E,minor,87,98.64083736916108%
+Rock,Elton John,RocketMan,G,minor,72,96.35627530364373%
+Rock,Elton John,TinyDancer,C,major,160,95.73787959509856%
+Rock,Elton John,YourSong,C,minor,43,97.8005115089514%
+Rock,Fall Out Boy,LightEmUp,D,minor,0,100.0%
+Rock,Fall Out Boy,SugarWereGoingDown(2),E,minor,30,99.33569530558016%
+Rock,Greenday,BoulevardofBrokenDreams,F,minor,496,92.6354862657758%
+Rock,Greenday,GoodRiddance(TimeOfYourLife),E,minor,0,100.0%
+Rock,Rolling Stones,PaintItBlack,D,major,455,90.54054054054053%
+Rock,Rolling Stones,Satisfaction,D,major,274,93.62048894062865%
+Rock,U2,IStillHavntFoundWhatImLookingFor,Db,major,1,99.96819338422391%
+Rock,U2,WithorWithoutYou,C,minor,0,100.0%
