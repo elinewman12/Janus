@@ -1,0 +1,13 @@
+Genre,Artist,Song,Detected Tonic,Detected Mode,Errors,% Confidence,Detected Tonic by Endings,Detected Mode by Endings
+Country,Garth Brooks,23224_Friends-in-Low-Places,A,major,71,98.56854838709678%,B,dorian
+Country,Garth Brooks,26553_To-Make-You-Feel-My-Love,D,major,111,94.31352459016394%,D,major
+Country,John Anderson,2601_I-Wish-I-Could-Have-Been-There (1),C,major,9,99.66923925027564%,G,mixolydian
+Country,John Anderson,2601_I-Wish-I-Could-Have-Been-There,C,major,9,99.66923925027564%,G,mixolydian
+Country,John Anderson,2603_Seminole-Wind,D,major,16,99.65315412963365%,E,dorian
+Country,Tim McGraw,1576_Dont-Take-the-Girl,G,major,0,100.0%,G,major
+Country,Tim McGraw,1577_I-Like-It-I-Love-It,F,major,466,92.6579486371514%,C,mixolydian
+Country,Tim McGraw,2610_Something-Like-That,F,major,134,95.53184394798267%,F,major
+EDM,Alan Walker,Alan Walker - Alone  (midi by Carlo Prato) (www.cprato.com),Bb,major,0,100.0%,F,mixolydian
+EDM,Alan Walker,Alan Walker - Faded (Piano Cover Tutorial - Easy) (midi by Carlo Prato) (www.cprato.com),Gb,major,0,100.0%,Db,mixolydian
+EDM,Alan Walker,Alan Walker - Sing Me To Sleep  (midi by Carlo Prato) (www.cprato.com),G,major,0,100.0%,D,mixolydian
+EDM,Deadmau5,deadmau5 - 2448  (midi by Carlo Prato) (www.cprato.com),E,minor,14,91.66666666666666%,C,lydian

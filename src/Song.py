@@ -15,7 +15,7 @@ DEFAULT_TICKS_PER_BEAT = 48
 # <jmleeder>
 class Song:
 
-    def __init__(self, tracks=None, ticks_per_beat=DEFAULT_TICKS_PER_BEAT):
+    def __init__(self, tracks=None, ticks_per_beat=DEFAULT_TICKS_PER_BEAT, key=None):
         """ Constructor for the Song class.
 
         Args:
@@ -33,6 +33,8 @@ class Song:
             self.ticks_per_beat = ticks_per_beat
         else:
             raise ValueError
+        if isinstance(key, Key):
+            self.key = key
 
     def add_track(self, t):
         """ Adds a new track to the song.
@@ -111,6 +113,18 @@ class Song:
                 for idx, val in enumerate(track_frequencies):
                     indexed_note_frequency[idx] += val
             return indexed_note_frequency
+
+    def get_tracks_by_tag(self, tag: TagEnum):
+        """
+        Returns an array of tracks in the song that have the given tag attached
+        :param tag: the tag enum that will be searched for
+        :return: An array of tracks that match the given tag enum
+        """
+        tracks = []
+        for track in self.tracks:
+            if track.tag == tag:
+                tracks.append(track)
+        return tracks
 
     def change_song_key_by_half_steps(self, num_half_steps):
         """ Shifts all notes in the song up the by num_half_steps half steps.
@@ -379,18 +393,17 @@ class Song:
                     return False
 
         return True
-     
-    def detect_key_and_scale(self):
-        """ Detect the key of a song using Mr. Dehaan's algorithm.  This algorithm generates the valid notes
+
+    def generate_possible_keys_and_scales(self):
+        """
+        Detect the key of a song using Mr. Dehaan's algorithm.  This algorithm generates the valid notes
         for every key and for every scale and checks the occurrences of the notes in the song against the valid
         key/scale notes.  It then finds how many errors (or misses) occurred.  It then finds the key/scale with the
         lowest number of errors (or the list of key/scale with the same minimum) and returns the result.
-
-        :param display_result: determines if you receive output to console about the algorithms findings (default False)
-        :return: A list containing the keys and scales that were detected.  ex -> ['C major', 'D minor']
+        :return: A list of Key objects that have the minimum number of errors [0], and the minimum errors [1]
         """
+
         note_frequencies = self.get_c_indexed_note_frequencies()
-        num_notes = sum(note_frequencies)
 
         key_and_scale_error_record = {}
 
@@ -440,39 +453,57 @@ class Song:
         minimum_errors = min(key_and_scale_error_record.values())
         result = [k for k, v in key_and_scale_error_record.items() if v == minimum_errors]
 
+        keys = []
+        for key in result:
+            keys.append(Key(key.split()[0], key.split()[1]))
+
+        return keys, minimum_errors
+
+    def detect_key_and_scale(self):
+        """
+        Uses the generate possible keys and scales method to get a list of potential keys, determines which is
+        the most likely based on the most common notes in the song.
+
+        :return: The detected key [0], the minimum errors [1], and the confidence level [2]
+        """
+
+        note_frequencies = self.get_c_indexed_note_frequencies()
+        num_notes = sum(note_frequencies)
+        keys, minimum_errors = self.generate_possible_keys_and_scales()
+
+
         # now we have the relative major and minors, we can use the note frequencies to differentiate
         # between the two based on the assumption that for most cases the tonic will be played more than
         # other notes.  This lets us differentiate scales with the same notes such as D major and B Minor.
 
         # get the resulting keys/scales
-        relative_major_key_scale = result[0]
-        relative_minor_key_scale = result[1]
-
-        # Create the key object to hold potential tonic
-        (key, scale) = relative_major_key_scale.split()
-        relative_major_key = Key(tonic=key, mode=scale)
-        relative_minor_key = Key(tonic=key, mode=scale)
+        relative_major_key_scale = None
+        relative_minor_key_scale = None
+        for key in keys:
+            if key.mode == "major":
+                relative_major_key_scale = key
+            elif key.mode == "minor":
+                relative_minor_key_scale = key
 
         # get the index of the key in order to find its frequency in the frequency array
-        idx_of_major_key = relative_major_key.get_c_based_index_of_key()
-        idx_of_minor_key = relative_minor_key.get_c_based_index_of_key()
+        idx_of_major_key = relative_major_key_scale.get_c_based_index_of_key()
+        idx_of_minor_key = relative_minor_key_scale.get_c_based_index_of_key()
 
         # get the frequency of each tonic
         major_frequency = note_frequencies[idx_of_major_key]
         minor_frequency = note_frequencies[idx_of_minor_key]
 
-        returnval = ''
         # compare and return the most common key scale
         if major_frequency >= minor_frequency:
-            returnval = relative_major_key_scale
+            detected_return_key = relative_major_key_scale
         else:
-            returnval = relative_minor_key_scale
-
-        # parse it into a key object for return as tuple with key object and error
-        detected_return_key = Key(returnval.split()[0], returnval.split()[1])
+            detected_return_key = relative_minor_key_scale
 
         # determine confidence based on number of 1 - number of errors/ number of notes
         confidence = 1 - minimum_errors / num_notes
+
+        # set the key of the song
+        self.key = detected_return_key
 
         # return the tuple
         return detected_return_key, minimum_errors, confidence
@@ -491,7 +522,7 @@ class Song:
 
         total_song_notes = 0
         time_interval = 0
-        detected_key = ""
+        detected_tonic = ""
         message = ""
 
         for track in self.tracks:
@@ -500,6 +531,7 @@ class Song:
         total_found_notes = total_song_notes
         # total_found_notes = 0
 
+        # Until you find less than the percentage in PERCENTAGE_TO_FIND
         while total_found_notes > PERCENTAGE_TO_FIND * total_song_notes:
 
             total_found_notes = 0
@@ -543,9 +575,20 @@ class Song:
             message += ("Confidence: " + str(c_indexed_total_note_frequency[max_idx]/total_found_notes) + "\n")
             message += ("ticks per beat: " + str(self.ticks_per_beat) + "\n\n")
 
-            detected_key = KEYS[max_idx]
+            # The detected tonic of the song (NOT a Key object yet)
+            detected_tonic = KEYS[max_idx]
 
-        return [Key(tonic=detected_key), message]
+        # Convert detected_key into a Key object with the correct scale
+        possible_keys = self.generate_possible_keys_and_scales()[0]
+        detected_key = None
+        for key in possible_keys:
+            if key.tonic == detected_tonic:
+                detected_key = key
+
+        # set the key of the song
+        self.key = detected_key
+
+        return [detected_key, message]
 
     def get_chord_names(self):
         # It would be helpful for us here to have an accidental field on a key to know if its sharp or flat

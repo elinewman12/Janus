@@ -2,6 +2,7 @@ from os import walk, path, makedirs
 from Song import Song
 import csv
 
+
 def generate_batch_key_detection_report(top_directory_path=None):
     '''
     This method will generate a CSV report showing the genre, artist, song and detected key
@@ -23,7 +24,8 @@ def generate_batch_key_detection_report(top_directory_path=None):
     # open the key detection report so that we are able to add rows to it
     with open(path.relpath("reports/key_detection_report.csv"), "w+", newline="") as outputFile:
         writer = csv.writer(outputFile)
-        writer.writerow(["Genre", "Artist", "Song", "Detected Tonic", "Detected Mode", "Errors", "% Confidence"])
+        writer.writerow(["Genre", "Artist", "Song", "Detected Tonic", "Detected Mode", "Errors", "% Confidence",
+                         "Detected Tonic by Endings", "Detected Mode by Endings"])
 
         # Iterate through the file structure converting to songs and adding to csv file
         for (dirpath, dirnames, filenames) in walk(top_directory_path):
@@ -35,5 +37,8 @@ def generate_batch_key_detection_report(top_directory_path=None):
                         song = Song()
                         song.load(file_path)
                         detected_tuple = song.detect_key_and_scale()
+                        detected_key_by_endings = song.detect_key_by_phrase_endings()[0]
                         (pwd, genre, artist) = dirpath.split("\\")
-                        writer.writerow([genre, artist, fileName, detected_tuple[0].tonic, detected_tuple[0].mode, detected_tuple[1], str(detected_tuple[2] * 100) + "%"])
+                        writer.writerow([genre, artist, fileName, detected_tuple[0].tonic, detected_tuple[0].mode,
+                                         detected_tuple[1], str(detected_tuple[2] * 100) + "%",
+                                         detected_key_by_endings.tonic, detected_key_by_endings.mode])

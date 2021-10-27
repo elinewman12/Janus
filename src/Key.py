@@ -1,7 +1,10 @@
+import string
+
 KEYS = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
 EQUIVALENT_KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 MODES = ['major', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'minor', 'locrian']
 EQUIVALENT_MODES = ['ionian', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'aeolian', 'locrian']
+
 
 class Key:
 
@@ -19,7 +22,7 @@ class Key:
             raise SyntaxError("Key '" + str(tonic) +
                               "' needs to be the key and #/b if necessary. Examples: 'C#', 'Db', 'F' etc")
         elif mode.lower() not in MODES and mode.lower() not in EQUIVALENT_MODES:
-            raise SyntaxError("Mode " + str(mode) + "needs to be a valid mode. Examples: major, minor, dorian, etc" )
+            raise SyntaxError("Mode " + str(mode) + " needs to be a valid mode. Examples: major, minor, dorian, etc" )
         else:
             self.tonic = tonic
             self.mode = mode.lower()
