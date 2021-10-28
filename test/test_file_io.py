@@ -1,7 +1,7 @@
 import mido
 import pytest
 
-import FileIO
+import FileIO as FileIO
 from Control import Control
 from Note import Note
 from Song import Song

@@ -3,6 +3,7 @@ import sys
 import mido
 from mido import MidiFile
 
+
 from Chord import Chord
 from Control import Control
 from Track import Track
@@ -304,7 +305,12 @@ def handle_note(msg, notes, time, track, num_notes_per_channel, found_chord):
         notes (Note[]): List of notes that have been started but not ended
         time (int): Current timestamp where this note occurs
         track (Track): Track this note will be added to
+        num_notes_per_channel (Int[]): An array noting how many notes are currently
+            playing on each channel, for chord detection.
+        found_chord (Boolean[]): Flags (for each channel) if a chord was found with the current notes
+            that are playing to avoid marking duplicates. Resets when a new note starts
     """
+    
     # If this message is the start of a note
     if msg.type == 'note_on' and msg.velocity > 0:
         # Create a new Note object and add it to the array of currently playing notes
