@@ -25,8 +25,16 @@ if __name__ == '__main__':
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
     # song.load(filename="../test/test MIDI/C_major_chords.mid")
     # song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
-    song.load(filename="../MIDI Files/Rock/Fall Out Boy/SugarWereGoingDown(2).mid", print_file=False)
-    song.get_transition_graph()
+    song.load(filename="../MIDI Files/Pop/Adele/Someone_Like_You_easy_piano.mid", print_file=False)
+    song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
+    song.get_transition_graph(name="Someone Like You")
+    # song.load(filename="../MIDI Files/Rock/Elton John/TinyDancer.mid", print_file=False)
+    # song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
+    # song.get_transition_graph(name="Tiny Dancer")
+    # song.load(filename="../MIDI Files/Rock/Elton John/YourSong.mid", print_file=False)
+    # song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
+    # song.get_transition_graph(name="Your Song")
+
     # for track in song.tracks:
     #     print("track: " + track.track_name)
     #     for chord in track.chords:

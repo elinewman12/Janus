@@ -19,7 +19,7 @@ class Key:
             raise SyntaxError("Key '" + str(tonic) +
                               "' needs to be the key and #/b if necessary. Examples: 'C#', 'Db', 'F' etc")
         elif mode.lower() not in MODES and mode.lower() not in EQUIVALENT_MODES:
-            raise SyntaxError("Mode " + str(mode) + "needs to be a valid mode. Examples: major, minor, dorian, etc" )
+            raise SyntaxError("Mode " + str(mode) + " needs to be a valid mode. Examples: major, minor, dorian, etc" )
         else:
             self.tonic = tonic
             self.mode = mode.lower()

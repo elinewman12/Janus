@@ -129,6 +129,8 @@ class Song:
             if not track.is_percussion:
                 for note in track.notes:
                     note.pitch += num_half_steps
+
+        self.get_chord_names()
         return self
 
     def change_song_key(self, origin_key, destination_key):
@@ -165,6 +167,7 @@ class Song:
                 for note in track.notes:
                     note.pitch += offset
 
+        self.get_chord_names()
         return self
 
     def change_key_for_interval(self, origin_key, destination_key, interval_begin, interval_end):
@@ -494,8 +497,9 @@ class Song:
         major = [1, 4, 5]
         minor = [2, 3, 6]
         # Gets the current key for the song
-        key = Key(tonic=self.detect_key_and_scale()[0:1],
-                  mode=self.detect_key_and_scale()[2:]).get_c_based_index_of_key()
+        key = Key(tonic=self.detect_key_and_scale()[0:1]
+                  # ,mode=self.detect_key_and_scale()[2:]
+                  ).get_c_based_index_of_key()
         # Iterate over every chord in every track
         for track in self.tracks:
             for chord in track.chords:
@@ -516,27 +520,39 @@ class Song:
                 if len(chord.notes) == 4:
                     chord.name = chord.name + " Seventh"
 
-    def get_transition_graph(self):
+    def get_transition_graph(self, name):
+        # TODO: Change the way it iterates through tracks so the chords are always connected by the time
+        # they occur in the song.
+        # Create a directed graph object and set dimensions
         graph = graphviz.Digraph(comment="Chord transitions in Song")
-        graph.attr(ranksep='0.01', nodesep='0.1')
+        graph.attr(ranksep='0.01', nodesep='0.1', label=name + " Chord Transitions", labelloc="t")
         chord_set = set()
         edges = []
-
+        all_chords = []
+        # Iterate over every track in song
         for track in self.tracks:
             if not track.chords:
                 continue
-            prev_chord = track.chords[0]
-            graph.node(prev_chord.name)
-            chord_set.add(prev_chord.name)
-            for i in range(1, len(track.chords)):
-                curr = track.chords[i]
-                if curr.name not in chord_set:
-                    graph.node(curr.name)
-                    chord_set.add(curr.name)
-                edges.append([prev_chord.name, curr.name])
-                prev_chord = curr
+            all_chords += track.chords
+
+        all_chords.sort(key=lambda chord: chord.time)
+        # Hold the previous chord
+        prev_chord = all_chords[0]
+        graph.node(prev_chord.name)
+        chord_set.add(prev_chord.name)
+        # Iterate over every chord in track
+        for i in range(1, len(all_chords)):
+            curr = all_chords[i]
+            # Only add chords that are not already on graph
+            if curr.name not in chord_set:
+                graph.node(curr.name)
+                chord_set.add(curr.name)
+            edges.append([prev_chord.name, curr.name])
+            print(prev_chord.name + " -> " + curr.name)
+            prev_chord = curr
+
         counter = collections.Counter(tuple(edge) for edge in edges)
         for edge, count in counter.items():
-            print(str(edge[0]), count)
+            # print(str(edge[0]), count)
             graph.edge(str(edge[0]), str(edge[1]), label=str(count))
         graph.view()
