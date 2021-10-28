@@ -5,7 +5,7 @@ from Key import Key, KEYS
 from Scale import SCALE_TYPES
 from Note import NUM_NOTES
 import FileIO as FileIO
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import collections
 
 DEFAULT_TICKS_PER_BEAT = 48
@@ -508,7 +508,6 @@ class Song:
         # return the tuple
         return detected_return_key, minimum_errors, confidence
 
-
     def detect_key_by_phrase_endings(self):
         """
         Takes the song object and looks at the notes in the melody and bass tracks, and finds the notes with the longest
@@ -524,6 +523,7 @@ class Song:
         time_interval = 0
         detected_tonic = ""
         message = ""
+        confidence = ""
 
         for track in self.tracks:
             total_song_notes += len(track.notes)
@@ -569,10 +569,13 @@ class Song:
                 if max_val < c_indexed_total_note_frequency[i]:
                     max_val = c_indexed_total_note_frequency[i]
                     max_idx = i
+
+            confidence = str(c_indexed_total_note_frequency[max_idx] / total_found_notes)
+
             message += ("Detected key: " + KEYS[max_idx] + "\n")
             message += ("Time interval: " + str(time_interval) + "\n")
             message += ("Found notes: " + str(total_found_notes) + "\n")
-            message += ("Confidence: " + str(c_indexed_total_note_frequency[max_idx]/total_found_notes) + "\n")
+            message += ("Confidence: " + confidence + "\n")
             message += ("ticks per beat: " + str(self.ticks_per_beat) + "\n\n")
 
             # The detected tonic of the song (NOT a Key object yet)
@@ -588,7 +591,7 @@ class Song:
         # set the key of the song
         self.key = detected_key
 
-        return [detected_key, message]
+        return [detected_key, message, confidence]
 
     def get_chord_names(self):
         # It would be helpful for us here to have an accidental field on a key to know if its sharp or flat
