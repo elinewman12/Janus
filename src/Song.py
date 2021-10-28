@@ -513,8 +513,9 @@ class Song:
         Takes the song object and looks at the notes in the melody and bass tracks, and finds the notes with the longest
         pauses after them (likely the ends of melodic phrases). These notes are narrowed down until the set number of
         notes (as a percentage) are found.
-        :return: A tuple in the format [key: Key, message: String]. This message contains lots of diagnostic information
-        that explains what's going on behind the scenes, and shows a confidence value.
+        :return: Three objects in the format [key: Key, message: String, confidence: String]. The message contains
+        lots of diagnostic information that explains what's going on behind the scenes, and shows a confidence value.
+        Note: If the detected tonic is not a note in the detected scale,
         """
         TIME_INTERVAL_INCREASE = 20
         PERCENTAGE_TO_FIND = 0.01
@@ -532,7 +533,7 @@ class Song:
         # total_found_notes = 0
 
         # Until you find less than the percentage in PERCENTAGE_TO_FIND
-        while total_found_notes > PERCENTAGE_TO_FIND * total_song_notes:
+        while total_found_notes > PERCENTAGE_TO_FIND * total_song_notes and total_found_notes > len(self.tracks):
 
             total_found_notes = 0
             time_interval += TIME_INTERVAL_INCREASE
@@ -587,6 +588,12 @@ class Song:
         for key in possible_keys:
             if key.tonic == detected_tonic:
                 detected_key = key
+
+        # If the detected tonic is not in the list of possible keys, choose the major mode of the detected scale.
+        if detected_key is None:
+            for key in possible_keys:
+                if key.mode == 'major':
+                    detected_key = key
 
         # set the key of the song
         self.key = detected_key

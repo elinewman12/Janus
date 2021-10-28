@@ -37,7 +37,7 @@ def generate_batch_key_detection_report(top_directory_path=None):
                         song = Song()
                         song.load(file_path)
                         detected_tuple = song.detect_key_and_scale()
-                        detect_by_phrase_endings = song.detect_key_by_phrase_endings()[0]
+                        detect_by_phrase_endings = song.detect_key_by_phrase_endings()
                         detected_key_by_endings = detect_by_phrase_endings[0]
                         confidence = detect_by_phrase_endings[2]
                         (pwd, genre, artist) = dirpath.split("\\")

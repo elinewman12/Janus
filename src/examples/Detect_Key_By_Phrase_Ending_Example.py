@@ -6,8 +6,8 @@ song = Song()
 # song.load(filename="../../MIDI Files/Rock/Aerosmith/DreamOn.mid")                             # Actual Key: F
 # song.load(filename="../../MIDI Files/Country/John Anderson/2603_Seminole-Wind.mid")           # Actual Key: E
 # song.load(filename="../../MIDI Files/Indie/Simon and Garfunkel/scarborough_fair.mid")         # Actual Key: E
-song.load(filename="../../MIDI Files/Rock/Elton John/RocketMan.mid")                          # Actual Key: Bb
-# song.load(filename="../../MIDI Files/Grunge/Soundgarden/SpoonMan.mid", print_file=False)           # Actual Key: A
+# song.load(filename="../../MIDI Files/Rock/Elton John/RocketMan.mid")                          # Actual Key: Bb
+song.load(filename="../../MIDI Files/Grunge/Nirvana/InBloom.mid", print_file=False)           # Actual Key: A
 
 detect_key_object = song.detect_key_by_phrase_endings()
 

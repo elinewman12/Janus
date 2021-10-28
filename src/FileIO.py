@@ -222,7 +222,8 @@ def order_messages(track):
     for c in track.controls:
         controls.append([c, c.time])
 
-    # note_on will be sorted inside the track object, note_off may not be in the same order
+    # Sort note on and off messages so they're in chronological order
+    note_on.sort(key=lambda note: note[1])
     note_off.sort(key=lambda note: note[1])
 
     # Compare the first element of the three lists. Write which ever one comes
