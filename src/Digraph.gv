@@ -1,0 +1,59 @@
+// Chord transitions in Song
+digraph {
+	label="Someone Like You Chord Transitions" labelloc=t nodesep=0.1 ranksep=0.01
+	"D Minor"
+	"Db Minor"
+	"A Minor"
+	"B Minor Seventh"
+	"G Minor"
+	"Gb Minor"
+	"E Major"
+	"E Dominant Seventh"
+	"B Minor"
+	"G Minor Seventh"
+	"D Minor Seventh"
+	"Db Minor Seventh"
+	"D Minor" -> "Db Minor" [label=2]
+	"Db Minor" -> "D Minor" [label=1]
+	"D Minor" -> "D Minor" [label=25]
+	"D Minor" -> "A Minor" [label=4]
+	"A Minor" -> "A Minor" [label=15]
+	"A Minor" -> "B Minor Seventh" [label=4]
+	"B Minor Seventh" -> "B Minor Seventh" [label=4]
+	"B Minor Seventh" -> "G Minor" [label=2]
+	"G Minor" -> "G Minor" [label=14]
+	"G Minor" -> "A Minor" [label=8]
+	"B Minor Seventh" -> "A Minor" [label=1]
+	"A Minor" -> "G Minor" [label=3]
+	"A Minor" -> "Gb Minor" [label=2]
+	"Gb Minor" -> "Gb Minor" [label=20]
+	"Gb Minor" -> "E Major" [label=3]
+	"E Major" -> "E Major" [label=22]
+	"E Major" -> "D Minor" [label=7]
+	"D Minor" -> "Gb Minor" [label=3]
+	"Gb Minor" -> "E Dominant Seventh" [label=1]
+	"E Dominant Seventh" -> "E Major" [label=1]
+	"D Minor" -> "G Minor" [label=4]
+	"A Minor" -> "D Minor" [label=3]
+	"A Minor" -> "B Minor" [label=3]
+	"B Minor" -> "B Minor" [label=8]
+	"B Minor" -> "G Minor Seventh" [label=1]
+	"G Minor Seventh" -> "G Minor" [label=1]
+	"G Minor" -> "D Minor" [label=3]
+	"Gb Minor" -> "D Minor" [label=2]
+	"D Minor" -> "B Minor" [label=1]
+	"B Minor" -> "A Minor" [label=1]
+	"B Minor Seventh" -> "G Minor Seventh" [label=1]
+	"G Minor Seventh" -> "G Minor Seventh" [label=3]
+	"G Minor Seventh" -> "A Minor" [label=1]
+	"D Minor" -> "E Major" [label=2]
+	"B Minor" -> "G Minor" [label=2]
+	"Db Minor" -> "B Minor Seventh" [label=1]
+	"B Minor Seventh" -> "D Minor" [label=2]
+	"D Minor" -> "D Minor Seventh" [label=1]
+	"D Minor Seventh" -> "E Major" [label=1]
+	"E Major" -> "Db Minor Seventh" [label=1]
+	"Db Minor Seventh" -> "E Major" [label=1]
+	"D Minor" -> "B Minor Seventh" [label=1]
+	"G Minor" -> "Gb Minor" [label=1]
+}

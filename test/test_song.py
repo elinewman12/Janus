@@ -90,6 +90,11 @@ def test_change_key_for_interval():
 
     assert new_song.tracks[1].notes[0].pitch == d_scale.tracks[1].notes[0].pitch
 
+def test_transition_graph():
+    song = Song()
+    song.load(filename="test MIDI/C_major_chords.mid")
+
+
 
 def test_equals():
     """
