@@ -36,6 +36,8 @@ class Song:
             raise ValueError
         if isinstance(key, Key):
             self.key = key
+        else:
+            self.key = None
 
     def add_track(self, t):
         """ Adds a new track to the song.
@@ -75,6 +77,7 @@ class Song:
                 used for debugging purposes. Defaults to False.
         """
         FileIO.read_midi_file(self, filename=filename, print_file=print_file)
+        self.detect_key_and_scale()
         self.get_chord_names()
 
     def clear_song_data(self):
@@ -304,97 +307,106 @@ class Song:
         """
 
         if self.ticks_per_beat != song.ticks_per_beat:
-            print("These songs have different ticks_per_beat values")
-            print("This: " + str(self.ticks_per_beat) + ", compare to: " + str(song.ticks_per_beat))
+            logging.info(msg="These songs have different ticks_per_beat values")
+            logging.info(msg="This: " + str(self.ticks_per_beat) + ", compare to: " + str(song.ticks_per_beat))
             return False
 
         if len(self.tracks) != len(song.tracks):
-            print("These songs have a different number of tracks")
-            print("This: " + str(len(self.tracks)) + ", compare to: " + str(len(song.tracks)))
+            logging.info(msg="These songs have a different number of tracks")
+            logging.info(msg="This: " + str(len(self.tracks)) + ", compare to: " + str(len(song.tracks)))
             return False
 
         for i, track in enumerate(self.tracks):
             if track.channel != song.tracks[i].channel:
-                print("tracks " + str(i) + " have different channel values")
-                print("This: " + track.channel + ", compare to: " + song.tracks[i].channel)
+                logging.info(msg="tracks " + str(i) + " have different channel values")
+                logging.info(msg="This: " + track.channel + ", compare to: " + song.tracks[i].channel)
                 return False
 
             if track.track_name != song.tracks[i].track_name:
-                print("tracks " + str(i) + " have different track names :")
-                print("This: '" + track.track_name + "', compare to: '" + song.tracks[i].track_name + "'")
+                logging.info(msg="tracks " + str(i) + " have different track names :")
+                logging.info(msg="This: '" + track.track_name + "', compare to: '" + song.tracks[i].track_name + "'")
                 return False
 
             if track.device_name != song.tracks[i].device_name:
-                print("tracks " + str(i) + " have different device names")
-                print("This: '" + track.device_name + "', compare to: '" + song.tracks[i].device_name + "'")
+                logging.info(msg="tracks " + str(i) + " have different device names")
+                logging.info(msg="This: '" + track.device_name + "', compare to: '" + song.tracks[i].device_name + "'")
                 return False
 
             if len(track.controls) != len(song.tracks[i].controls):
-                print("tracks " + str(i) + " have different numbers of control messages")
-                print("This: " + str(len(track.controls)) + ", compare to: " + str(len(song.tracks[i].controls)))
+                logging.info(msg="tracks " + str(i) + " have different numbers of control messages")
+                logging.info(msg="This: " + str(len(track.controls)) + ", compare to: "
+                                 + str(len(song.tracks[i].controls)))
                 return False
 
             for j, control in enumerate(track.controls):
                 if control.msg_type != song.tracks[i].controls[j].msg_type:
-                    print("tracks " + str(i) + " control " + str(j) + " have different message types")
-                    print("This: '" + control.msg_type + "', compare to: '" + song.tracks[i].controls[j].msg_type + "'")
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different message types")
+                    logging.info(msg="This: '" + control.msg_type + "', compare to: '"
+                                     + song.tracks[i].controls[j].msg_type + "'")
                     return False
 
                 if control.control != song.tracks[i].controls[j].control:
-                    print("tracks " + str(i) + " control " + str(j) + " have different control numbers")
-                    print("This: " + str(control.control) + ", compare to: " + str(song.tracks[i].controls[j].control))
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different control numbers")
+                    logging.info(msg="This: " + str(control.control) + ", compare to: "
+                                     + str(song.tracks[i].controls[j].control))
                     return False
 
                 if control.value != song.tracks[i].controls[j].value:
-                    print("tracks " + str(i) + " control " + str(j) + " have different values")
-                    print("This: " + str(control.value) + ", compare to: " + str(song.tracks[i].controls[j].value))
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different values")
+                    logging.info(msg="This: " + str(control.value) + ", compare to: "
+                                     + str(song.tracks[i].controls[j].value))
                     return False
 
                 if control.tempo != song.tracks[i].controls[j].tempo:
-                    print("tracks " + str(i) + " control " + str(j) + " have different tempos")
-                    print("This: " + str(control.tempo) + ", compare to: " + str(song.tracks[i].controls[j].tempo))
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different tempos")
+                    logging.info(msg="This: " + str(control.tempo) + ", compare to: "
+                                     + str(song.tracks[i].controls[j].tempo))
                     return False
 
                 if control.instrument != song.tracks[i].controls[j].instrument:
-                    print("tracks " + str(i) + " control " + str(j) + " have different instruments")
-                    print("This: " + str(control.instrument) + ", compare to: " + str(
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different instruments")
+                    logging.info(msg="This: " + str(control.instrument) + ", compare to: " + str(
                         song.tracks[i].controls[j].instrument))
                     return False
 
                 if control.time != song.tracks[i].controls[j].time:
-                    print("tracks " + str(i) + " control " + str(j) + " have different times")
-                    print("This: " + str(control.time) + ", compare to: " + str(song.tracks[i].controls[j].time))
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different times")
+                    logging.info(msg="This: " + str(control.time) + ", compare to: "
+                                     + str(song.tracks[i].controls[j].time))
                     return False
 
             if len(track.notes) != len(song.tracks[i].notes):
-                print("tracks " + str(i) + " have different numbers of notes")
-                print("This: " + str(len(track.notes)) + ", compare to: " + str(len(song.tracks[i].notes)))
+                logging.info(msg="tracks " + str(i) + " have different numbers of notes")
+                logging.info(msg="This: " + str(len(track.notes)) + ", compare to: " + str(len(song.tracks[i].notes)))
                 return False
 
             for j, note in enumerate(track.notes):
                 if note.pitch != song.tracks[i].notes[j].pitch:
-                    print("tracks " + str(i) + " note " + str(j) + " have different pitches")
-                    print("This: " + str(note.pitch) + ", compare to: " + str(song.tracks[i].notes[j].pitch))
+                    logging.info(msg="tracks " + str(i) + " note " + str(j) + " have different pitches")
+                    logging.info(msg="This: " + str(note.pitch) + ", compare to: " + str(song.tracks[i].notes[j].pitch))
                     return False
 
                 if note.time != song.tracks[i].notes[j].time:
-                    print("tracks " + str(i) + " note " + str(j) + " have different times")
-                    print("This: " + str(note.time) + ", compare to: " + str(song.tracks[i].notes[j].time))
+                    logging.info(msg="tracks " + str(i) + " note " + str(j) + " have different times")
+                    logging.info(msg="This: " + str(note.time) + ", compare to: " + str(song.tracks[i].notes[j].time))
                     return False
 
                 if note.duration != song.tracks[i].notes[j].duration:
-                    print("tracks " + str(i) + " note " + str(j) + " have different durations")
-                    print("This: " + str(note.duration) + ", compare to: " + str(song.tracks[i].notes[j].duration))
+                    logging.info(msg="tracks " + str(i) + " note " + str(j) + " have different durations")
+                    logging.info(msg="This: " + str(note.duration) + ", compare to: "
+                                     + str(song.tracks[i].notes[j].duration))
                     return False
 
                 if note.velocity != song.tracks[i].notes[j].velocity:
-                    print("tracks " + str(i) + " note " + str(j) + " have different velocities")
-                    print("This: " + str(note.velocity) + ", compare to: " + str(song.tracks[i].notes[j].velocity))
+                    logging.info(msg="tracks " + str(i) + " note " + str(j) + " have different velocities")
+                    logging.info(msg="This: " + str(note.velocity) + ", compare to: "
+                                     + str(song.tracks[i].notes[j].velocity))
                     return False
 
                 if note.channel != song.tracks[i].notes[j].channel:
-                    print("tracks " + str(i) + " note " + str(j) + " have different channels")
-                    print("This: " + str(note.channel) + ", compare to: " + str(song.tracks[i].notes[j].channel))
+                    logging.info(msg="tracks " + str(i) + " note " + str(j) + " have different channels")
+                    logging.info(msg="This: " + str(note.channel) + ", compare to: "
+                                     + str(song.tracks[i].notes[j].channel))
                     return False
 
         return True
@@ -562,21 +574,24 @@ class Song:
                                 #       str(track.notes[idx-1].c_indexed_pitch_class) + " ch: " + str(track.channel))
                             # if idx == len(track.notes) - 1:
                                 # print("Last note: " + str(note.c_indexed_pitch_class))
-                    message += (str(c_indexed_track_note_frequency) + ": " + str(track.tag) + " - " + track.track_name
-                                + "\n")
+                    message += (str(c_indexed_track_note_frequency) + ": " + str(track.tag) + " - " +
+                                str(track.track_name) + "\n")
                     for i in range(12):
                         c_indexed_total_note_frequency[i] += c_indexed_track_note_frequency[i]
 
             message += (str(c_indexed_total_note_frequency) + ": totals"  + "\n")
 
             max_val = 0
-            max_idx = 0
+            max_idx = -1
             for i in range(len(c_indexed_total_note_frequency)):
                 if max_val < c_indexed_total_note_frequency[i]:
                     max_val = c_indexed_total_note_frequency[i]
                     max_idx = i
 
-            confidence = str(c_indexed_total_note_frequency[max_idx] / total_found_notes)
+            if total_found_notes == 0:
+                confidence = 0
+            else:
+                confidence = str(c_indexed_total_note_frequency[max_idx] / total_found_notes)
 
             message += ("Detected key: " + KEYS[max_idx] + "\n")
             message += ("Time interval: " + str(time_interval) + "\n")
@@ -612,10 +627,8 @@ class Song:
         # This also doesn't account for diminished chords
         major = [1, 4, 5]
         minor = [2, 3, 6]
-        # Gets the current key for the song
-        key = Key(tonic=self.detect_key_and_scale()[0:1]
-                  # ,mode=self.detect_key_and_scale()[2:]
-                  ).get_c_based_index_of_key()
+        # Gets the key of the song, as an integer
+        key = self.key.get_c_based_index_of_key()
         # Iterate over every chord in every track
         for track in self.tracks:
             for chord in track.chords:

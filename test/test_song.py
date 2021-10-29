@@ -90,10 +90,10 @@ def test_change_key_for_interval():
 
     assert new_song.tracks[1].notes[0].pitch == d_scale.tracks[1].notes[0].pitch
 
+
 def test_transition_graph():
     song = Song()
     song.load(filename="test MIDI/C_major_chords.mid")
-
 
 
 def test_equals():
@@ -169,4 +169,50 @@ def test_equals():
     assert song8.equals(song1) is False
     assert song9.equals(song1) is False
     assert song10.equals(song1) is False
+
+
+def test_detect_key_by_phrase_endings():
+    d_mix = Song()
+    d_mix_track = Track()
+    d_mix_track.notes.append(Note(pitch=62, time=0, duration=100))
+    d_mix_track.notes.append(Note(pitch=64, time=100, duration=100))
+    d_mix_track.notes.append(Note(pitch=66, time=200, duration=100))
+    d_mix_track.notes.append(Note(pitch=67, time=300, duration=100))
+    d_mix_track.notes.append(Note(pitch=69, time=400, duration=100))
+    d_mix_track.notes.append(Note(pitch=71, time=500, duration=100))
+    d_mix_track.notes.append(Note(pitch=72, time=600, duration=100))
+    d_mix_track.notes.append(Note(pitch=74, time=700, duration=100))
+
+    d_mix_track.generate_tags()
+
+    d_mix.tracks.append(d_mix_track)
+
+    assert d_mix.detect_key_by_phrase_endings()[0].tonic == "D"
+    assert d_mix.detect_key_by_phrase_endings()[0].mode == "mixolydian"
+
+    song2 = Song()
+    tonic_not_in_scale = Track()
+    tonic_not_in_scale.notes.append(Note(pitch=60, time=0, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=62, time=100, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=64, time=200, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=65, time=300, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=67, time=400, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=69, time=500, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=71, time=600, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=60, time=700, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=62, time=800, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=64, time=900, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=65, time=1000, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=67, time=1100, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=69, time=1200, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=71, time=1300, duration=100))
+    tonic_not_in_scale.notes.append(Note(pitch=61, time=1400, duration=100))
+
+    tonic_not_in_scale.generate_tags()
+
+    song2.tracks.append(tonic_not_in_scale)
+
+    assert song2.detect_key_by_phrase_endings()[0].tonic == "C"
+    assert song2.detect_key_by_phrase_endings()[0].mode == "major"
+
 
