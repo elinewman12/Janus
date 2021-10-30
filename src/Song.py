@@ -5,6 +5,7 @@ from Key import Key, KEYS
 from Scale import SCALE_TYPES
 from Note import NUM_NOTES
 import FileIO as FileIO
+
 import matplotlib.pyplot as plt
 import collections
 import graphviz
