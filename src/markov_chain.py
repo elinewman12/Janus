@@ -1,12 +1,11 @@
 from __future__ import division
 from enum import Enum
 import sys
-# insert at 1, 0 is the script path (or '' in REPL)
-sys.path.insert(1, '/Users/erinlitty/Desktop/CSC492/2021FallTeam17-DeHaan/src')
 
 from Track import Track
 from Note import Note
 import numpy as py
+
 
 class MarkovChain:
 
