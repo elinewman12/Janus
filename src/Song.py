@@ -4,7 +4,7 @@ from Track import Track, TagEnum
 from Key import Key, KEYS
 from Scale import SCALE_TYPES
 from Note import NUM_NOTES
-from FileIO import FileIO
+import FileIO as FileIO
 
 import matplotlib.pyplot as plt
 import collections
@@ -17,7 +17,7 @@ DEFAULT_TICKS_PER_BEAT = 48
 # <jmleeder>
 class Song:
 
-    def __init__(self, tracks=None, ticks_per_beat=DEFAULT_TICKS_PER_BEAT):
+    def __init__(self, tracks=None, ticks_per_beat=DEFAULT_TICKS_PER_BEAT, key=None):
         """ Constructor for the Song class.
 
         Args:
@@ -35,6 +35,10 @@ class Song:
             self.ticks_per_beat = ticks_per_beat
         else:
             raise ValueError
+        if isinstance(key, Key):
+            self.key = key
+        else:
+            self.key = None
 
     def add_track(self, t):
         """ Adds a new track to the song.
@@ -74,6 +78,7 @@ class Song:
                 used for debugging purposes. Defaults to False.
         """
         FileIO.read_midi_file(self, filename=filename, print_file=print_file)
+        self.detect_key_and_scale()
         self.get_chord_names()
 
     def clear_song_data(self):
@@ -114,6 +119,18 @@ class Song:
                 for idx, val in enumerate(track_frequencies):
                     indexed_note_frequency[idx] += val
             return indexed_note_frequency
+
+    def get_tracks_by_tag(self, tag: TagEnum):
+        """
+        Returns an array of tracks in the song that have the given tag attached
+        :param tag: the tag enum that will be searched for
+        :return: An array of tracks that match the given tag enum
+        """
+        tracks = []
+        for track in self.tracks:
+            if track.tag == tag:
+                tracks.append(track)
+        return tracks
 
     def change_song_key_by_half_steps(self, num_half_steps):
         """ Shifts all notes in the song up the by num_half_steps half steps.
@@ -291,112 +308,120 @@ class Song:
         """
 
         if self.ticks_per_beat != song.ticks_per_beat:
-            print("These songs have different ticks_per_beat values")
-            print("This: " + str(self.ticks_per_beat) + ", compare to: " + str(song.ticks_per_beat))
+            logging.info(msg="These songs have different ticks_per_beat values")
+            logging.info(msg="This: " + str(self.ticks_per_beat) + ", compare to: " + str(song.ticks_per_beat))
             return False
 
         if len(self.tracks) != len(song.tracks):
-            print("These songs have a different number of tracks")
-            print("This: " + str(len(self.tracks)) + ", compare to: " + str(len(song.tracks)))
+            logging.info(msg="These songs have a different number of tracks")
+            logging.info(msg="This: " + str(len(self.tracks)) + ", compare to: " + str(len(song.tracks)))
             return False
 
         for i, track in enumerate(self.tracks):
             if track.channel != song.tracks[i].channel:
-                print("tracks " + str(i) + " have different channel values")
-                print("This: " + track.channel + ", compare to: " + song.tracks[i].channel)
+                logging.info(msg="tracks " + str(i) + " have different channel values")
+                logging.info(msg="This: " + track.channel + ", compare to: " + song.tracks[i].channel)
                 return False
 
             if track.track_name != song.tracks[i].track_name:
-                print("tracks " + str(i) + " have different track names :")
-                print("This: '" + track.track_name + "', compare to: '" + song.tracks[i].track_name + "'")
+                logging.info(msg="tracks " + str(i) + " have different track names :")
+                logging.info(msg="This: '" + track.track_name + "', compare to: '" + song.tracks[i].track_name + "'")
                 return False
 
             if track.device_name != song.tracks[i].device_name:
-                print("tracks " + str(i) + " have different device names")
-                print("This: '" + track.device_name + "', compare to: '" + song.tracks[i].device_name + "'")
+                logging.info(msg="tracks " + str(i) + " have different device names")
+                logging.info(msg="This: '" + track.device_name + "', compare to: '" + song.tracks[i].device_name + "'")
                 return False
 
             if len(track.controls) != len(song.tracks[i].controls):
-                print("tracks " + str(i) + " have different numbers of control messages")
-                print("This: " + str(len(track.controls)) + ", compare to: " + str(len(song.tracks[i].controls)))
+                logging.info(msg="tracks " + str(i) + " have different numbers of control messages")
+                logging.info(msg="This: " + str(len(track.controls)) + ", compare to: "
+                                 + str(len(song.tracks[i].controls)))
                 return False
 
             for j, control in enumerate(track.controls):
                 if control.msg_type != song.tracks[i].controls[j].msg_type:
-                    print("tracks " + str(i) + " control " + str(j) + " have different message types")
-                    print("This: '" + control.msg_type + "', compare to: '" + song.tracks[i].controls[j].msg_type + "'")
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different message types")
+                    logging.info(msg="This: '" + control.msg_type + "', compare to: '"
+                                     + song.tracks[i].controls[j].msg_type + "'")
                     return False
 
                 if control.control != song.tracks[i].controls[j].control:
-                    print("tracks " + str(i) + " control " + str(j) + " have different control numbers")
-                    print("This: " + str(control.control) + ", compare to: " + str(song.tracks[i].controls[j].control))
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different control numbers")
+                    logging.info(msg="This: " + str(control.control) + ", compare to: "
+                                     + str(song.tracks[i].controls[j].control))
                     return False
 
                 if control.value != song.tracks[i].controls[j].value:
-                    print("tracks " + str(i) + " control " + str(j) + " have different values")
-                    print("This: " + str(control.value) + ", compare to: " + str(song.tracks[i].controls[j].value))
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different values")
+                    logging.info(msg="This: " + str(control.value) + ", compare to: "
+                                     + str(song.tracks[i].controls[j].value))
                     return False
 
                 if control.tempo != song.tracks[i].controls[j].tempo:
-                    print("tracks " + str(i) + " control " + str(j) + " have different tempos")
-                    print("This: " + str(control.tempo) + ", compare to: " + str(song.tracks[i].controls[j].tempo))
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different tempos")
+                    logging.info(msg="This: " + str(control.tempo) + ", compare to: "
+                                     + str(song.tracks[i].controls[j].tempo))
                     return False
 
                 if control.instrument != song.tracks[i].controls[j].instrument:
-                    print("tracks " + str(i) + " control " + str(j) + " have different instruments")
-                    print("This: " + str(control.instrument) + ", compare to: " + str(
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different instruments")
+                    logging.info(msg="This: " + str(control.instrument) + ", compare to: " + str(
                         song.tracks[i].controls[j].instrument))
                     return False
 
                 if control.time != song.tracks[i].controls[j].time:
-                    print("tracks " + str(i) + " control " + str(j) + " have different times")
-                    print("This: " + str(control.time) + ", compare to: " + str(song.tracks[i].controls[j].time))
+                    logging.info(msg="tracks " + str(i) + " control " + str(j) + " have different times")
+                    logging.info(msg="This: " + str(control.time) + ", compare to: "
+                                     + str(song.tracks[i].controls[j].time))
                     return False
 
             if len(track.notes) != len(song.tracks[i].notes):
-                print("tracks " + str(i) + " have different numbers of notes")
-                print("This: " + str(len(track.notes)) + ", compare to: " + str(len(song.tracks[i].notes)))
+                logging.info(msg="tracks " + str(i) + " have different numbers of notes")
+                logging.info(msg="This: " + str(len(track.notes)) + ", compare to: " + str(len(song.tracks[i].notes)))
                 return False
 
             for j, note in enumerate(track.notes):
                 if note.pitch != song.tracks[i].notes[j].pitch:
-                    print("tracks " + str(i) + " note " + str(j) + " have different pitches")
-                    print("This: " + str(note.pitch) + ", compare to: " + str(song.tracks[i].notes[j].pitch))
+                    logging.info(msg="tracks " + str(i) + " note " + str(j) + " have different pitches")
+                    logging.info(msg="This: " + str(note.pitch) + ", compare to: " + str(song.tracks[i].notes[j].pitch))
                     return False
 
                 if note.time != song.tracks[i].notes[j].time:
-                    print("tracks " + str(i) + " note " + str(j) + " have different times")
-                    print("This: " + str(note.time) + ", compare to: " + str(song.tracks[i].notes[j].time))
+                    logging.info(msg="tracks " + str(i) + " note " + str(j) + " have different times")
+                    logging.info(msg="This: " + str(note.time) + ", compare to: " + str(song.tracks[i].notes[j].time))
                     return False
 
                 if note.duration != song.tracks[i].notes[j].duration:
-                    print("tracks " + str(i) + " note " + str(j) + " have different durations")
-                    print("This: " + str(note.duration) + ", compare to: " + str(song.tracks[i].notes[j].duration))
+                    logging.info(msg="tracks " + str(i) + " note " + str(j) + " have different durations")
+                    logging.info(msg="This: " + str(note.duration) + ", compare to: "
+                                     + str(song.tracks[i].notes[j].duration))
                     return False
 
                 if note.velocity != song.tracks[i].notes[j].velocity:
-                    print("tracks " + str(i) + " note " + str(j) + " have different velocities")
-                    print("This: " + str(note.velocity) + ", compare to: " + str(song.tracks[i].notes[j].velocity))
+                    logging.info(msg="tracks " + str(i) + " note " + str(j) + " have different velocities")
+                    logging.info(msg="This: " + str(note.velocity) + ", compare to: "
+                                     + str(song.tracks[i].notes[j].velocity))
                     return False
 
                 if note.channel != song.tracks[i].notes[j].channel:
-                    print("tracks " + str(i) + " note " + str(j) + " have different channels")
-                    print("This: " + str(note.channel) + ", compare to: " + str(song.tracks[i].notes[j].channel))
+                    logging.info(msg="tracks " + str(i) + " note " + str(j) + " have different channels")
+                    logging.info(msg="This: " + str(note.channel) + ", compare to: "
+                                     + str(song.tracks[i].notes[j].channel))
                     return False
 
         return True
 
-    def detect_key_and_scale(self):
-        """ Detect the key of a song using Mr. Dehaan's algorithm.  This algorithm generates the valid notes
+    def generate_possible_keys_and_scales(self):
+        """ 
+        Detect the key of a song using Mr. Dehaan's algorithm.  This algorithm generates the valid notes
         for every key and for every scale and checks the occurrences of the notes in the song against the valid
         key/scale notes.  It then finds how many errors (or misses) occurred.  It then finds the key/scale with the
         lowest number of errors (or the list of key/scale with the same minimum) and returns the result.
-
-        :param display_result: determines if you receive output to console about the algorithms findings (default False)
-        :return: A list containing the keys and scales that were detected.  ex -> ['C major', 'D minor']
+        :return: A list of Key objects that have the minimum number of errors [0], and the minimum errors [1]
         """
+
         note_frequencies = self.get_c_indexed_note_frequencies()
-        num_notes = sum(note_frequencies)
 
         key_and_scale_error_record = {}
 
@@ -446,59 +471,78 @@ class Song:
         minimum_errors = min(key_and_scale_error_record.values())
         result = [k for k, v in key_and_scale_error_record.items() if v == minimum_errors]
 
+        keys = []
+        for key in result:
+            keys.append(Key(key.split()[0], key.split()[1]))
+
+        return keys, minimum_errors
+
+    def detect_key_and_scale(self):
+        """
+        Uses the generate possible keys and scales method to get a list of potential keys, determines which is
+        the most likely based on the most common notes in the song.
+
+        :return: The detected key [0], the minimum errors [1], and the confidence level [2]
+        """
+
+        note_frequencies = self.get_c_indexed_note_frequencies()
+        num_notes = sum(note_frequencies)
+        keys, minimum_errors = self.generate_possible_keys_and_scales()
+
+
         # now we have the relative major and minors, we can use the note frequencies to differentiate
         # between the two based on the assumption that for most cases the tonic will be played more than
         # other notes.  This lets us differentiate scales with the same notes such as D major and B Minor.
 
         # get the resulting keys/scales
-        relative_major_key_scale = result[0]
-        relative_minor_key_scale = result[1]
-
-        # Create the key object to hold potential tonic
-        (key, scale) = relative_major_key_scale.split()
-        relative_major_key = Key(tonic=key, mode=scale)
-        relative_minor_key = Key(tonic=key, mode=scale)
+        relative_major_key_scale = None
+        relative_minor_key_scale = None
+        for key in keys:
+            if key.mode == "major":
+                relative_major_key_scale = key
+            elif key.mode == "minor":
+                relative_minor_key_scale = key
 
         # get the index of the key in order to find its frequency in the frequency array
-        idx_of_major_key = relative_major_key.get_c_based_index_of_key()
-        idx_of_minor_key = relative_minor_key.get_c_based_index_of_key()
+        idx_of_major_key = relative_major_key_scale.get_c_based_index_of_key()
+        idx_of_minor_key = relative_minor_key_scale.get_c_based_index_of_key()
 
         # get the frequency of each tonic
         major_frequency = note_frequencies[idx_of_major_key]
         minor_frequency = note_frequencies[idx_of_minor_key]
 
-        returnval = ''
         # compare and return the most common key scale
         if major_frequency >= minor_frequency:
-            returnval = relative_major_key_scale
+            detected_return_key = relative_major_key_scale
         else:
-            returnval = relative_minor_key_scale
-
-        # parse it into a key object for return as tuple with key object and error
-        detected_return_key = Key(returnval.split()[0], returnval.split()[1])
+            detected_return_key = relative_minor_key_scale
 
         # determine confidence based on number of 1 - number of errors/ number of notes
         confidence = 1 - minimum_errors / num_notes
 
+        # set the key of the song
+        self.key = detected_return_key
+
         # return the tuple
         return detected_return_key, minimum_errors, confidence
-
 
     def detect_key_by_phrase_endings(self):
         """
         Takes the song object and looks at the notes in the melody and bass tracks, and finds the notes with the longest
         pauses after them (likely the ends of melodic phrases). These notes are narrowed down until the set number of
         notes (as a percentage) are found.
-        :return: A tuple in the format [key: Key, message: String]. This message contains lots of diagnostic information
-        that explains what's going on behind the scenes, and shows a confidence value.
+        :return: Three objects in the format [key: Key, message: String, confidence: String]. The message contains
+        lots of diagnostic information that explains what's going on behind the scenes, and shows a confidence value.
+        Note: If the detected tonic is not a note in the detected scale,
         """
         TIME_INTERVAL_INCREASE = 20
         PERCENTAGE_TO_FIND = 0.01
 
         total_song_notes = 0
         time_interval = 0
-        detected_key = ""
+        detected_tonic = ""
         message = ""
+        confidence = ""
 
         for track in self.tracks:
             total_song_notes += len(track.notes)
@@ -506,7 +550,8 @@ class Song:
         total_found_notes = total_song_notes
         # total_found_notes = 0
 
-        while total_found_notes > PERCENTAGE_TO_FIND * total_song_notes:
+        # Until you find less than the percentage in PERCENTAGE_TO_FIND
+        while total_found_notes > PERCENTAGE_TO_FIND * total_song_notes and total_found_notes > len(self.tracks):
 
             total_found_notes = 0
             time_interval += TIME_INTERVAL_INCREASE
@@ -530,28 +575,51 @@ class Song:
                                 #       str(track.notes[idx-1].c_indexed_pitch_class) + " ch: " + str(track.channel))
                             # if idx == len(track.notes) - 1:
                                 # print("Last note: " + str(note.c_indexed_pitch_class))
-                    message += (str(c_indexed_track_note_frequency) + ": " + str(track.tag) + " - " + track.track_name
-                                + "\n")
+                    message += (str(c_indexed_track_note_frequency) + ": " + str(track.tag) + " - " +
+                                str(track.track_name) + "\n")
                     for i in range(12):
                         c_indexed_total_note_frequency[i] += c_indexed_track_note_frequency[i]
 
             message += (str(c_indexed_total_note_frequency) + ": totals"  + "\n")
 
             max_val = 0
-            max_idx = 0
+            max_idx = -1
             for i in range(len(c_indexed_total_note_frequency)):
                 if max_val < c_indexed_total_note_frequency[i]:
                     max_val = c_indexed_total_note_frequency[i]
                     max_idx = i
+
+            if total_found_notes == 0:
+                confidence = 0
+            else:
+                confidence = str(c_indexed_total_note_frequency[max_idx] / total_found_notes)
+
             message += ("Detected key: " + KEYS[max_idx] + "\n")
             message += ("Time interval: " + str(time_interval) + "\n")
             message += ("Found notes: " + str(total_found_notes) + "\n")
-            message += ("Confidence: " + str(c_indexed_total_note_frequency[max_idx]/total_found_notes) + "\n")
+            message += ("Confidence: " + confidence + "\n")
             message += ("ticks per beat: " + str(self.ticks_per_beat) + "\n\n")
 
-            detected_key = KEYS[max_idx]
+            # The detected tonic of the song (NOT a Key object yet)
+            detected_tonic = KEYS[max_idx]
 
-        return [Key(tonic=detected_key), message]
+        # Convert detected_key into a Key object with the correct scale
+        possible_keys = self.generate_possible_keys_and_scales()[0]
+        detected_key = None
+        for key in possible_keys:
+            if key.tonic == detected_tonic:
+                detected_key = key
+
+        # If the detected tonic is not in the list of possible keys, choose the major mode of the detected scale.
+        if detected_key is None:
+            for key in possible_keys:
+                if key.mode == 'major':
+                    detected_key = key
+
+        # set the key of the song
+        self.key = detected_key
+
+        return [detected_key, message, confidence]
 
     def get_chord_names(self):
         # It would be helpful for us here to have an accidental field on a key to know if its sharp or flat
@@ -560,10 +628,8 @@ class Song:
         # This also doesn't account for diminished chords
         major = [1, 4, 5]
         minor = [2, 3, 6]
-        # Gets the current key for the song
-        key = Key(tonic=self.detect_key_and_scale()[0:1]
-                  # ,mode=self.detect_key_and_scale()[2:]
-                  ).get_c_based_index_of_key()
+        # Gets the key of the song, as an integer
+        key = self.key.get_c_based_index_of_key()
         # Iterate over every chord in every track
         for track in self.tracks:
             for chord in track.chords:

@@ -98,7 +98,7 @@ class Track:
                 self.tag = TagEnum.MELODY    # If nothing else fits, this is likely a melody track
 
     def get_all_chords(self):
-        return chords
+        return self.chords
 
     def get_unique_chords(self):
         chord_set = set()

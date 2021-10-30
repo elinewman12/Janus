@@ -1,0 +1,115 @@
+Genre,Artist,Song,Detected Tonic,Detected Mode,Errors,% Confidence,Detected Tonic by Endings,Detected Mode by Endings,% Confidence
+Country,Garth Brooks,23224_Friends-in-Low-Places,A,major,71,98.56854838709678%,B,dorian,0.23728813559322035
+Country,Garth Brooks,26553_To-Make-You-Feel-My-Love,D,major,111,94.31352459016394%,D,major,0.42857142857142855
+Country,John Anderson,2601_I-Wish-I-Could-Have-Been-There (1),C,major,9,99.66923925027564%,G,mixolydian,0.26666666666666666
+Country,John Anderson,2601_I-Wish-I-Could-Have-Been-There,C,major,9,99.66923925027564%,G,mixolydian,0.26666666666666666
+Country,John Anderson,2603_Seminole-Wind,D,major,16,99.65315412963365%,E,dorian,0.391304347826087
+Country,Tim McGraw,1576_Dont-Take-the-Girl,G,major,0,100.0%,G,major,0.75
+Country,Tim McGraw,1577_I-Like-It-I-Love-It,F,major,466,92.6579486371514%,C,mixolydian,0.2839506172839506
+Country,Tim McGraw,2610_Something-Like-That,F,major,134,95.53184394798267%,F,major,0.5238095238095238
+EDM,Alan Walker,Alan Walker - Alone  (midi by Carlo Prato) (www.cprato.com),Bb,major,0,100.0%,F,mixolydian,1.0
+EDM,Alan Walker,Alan Walker - Faded (Piano Cover Tutorial - Easy) (midi by Carlo Prato) (www.cprato.com),Gb,major,0,100.0%,Db,mixolydian,0.5
+EDM,Alan Walker,Alan Walker - Sing Me To Sleep  (midi by Carlo Prato) (www.cprato.com),G,major,0,100.0%,D,mixolydian,0.5
+EDM,Deadmau5,deadmau5 - 2448  (midi by Carlo Prato) (www.cprato.com),E,minor,14,91.66666666666666%,C,lydian,0.2857142857142857
+EDM,Deadmau5,deadmau5 - Deus Ex Machina  (midi by Carlo Prato) (www.cprato.com),F,minor,0,100.0%,F,minor,0.6
+EDM,Deadmau5,deadmau5 - Hyperlandia  (midi by Carlo Prato) (www.cprato.com),G,major,0,100.0%,Gb,locrian,0.5
+EDM,Deadmau5,deadmau5 - No Problem  (midi by Carlo Prato) (www.cprato.com),B,minor,33,88.42105263157895%,D,major,0.5
+EDM,Deadmau5,deadmau5 - So There I Was  (midi by Carlo Prato) (www.cprato.com),Gb,major,0,100.0%,Gb,lydian,0.5
+EDM,Deadmau5,deadmau5 feat. Grabbitz - Let Go  (midi by Carlo Prato) (www.cprato.com),Bb,major,0,100.0%,F,mixolydian,1.0
+EDM,Marshmello,Marshmello - Alone (Original Mix) (midi by Carlo Prato) (www.cprato.com),D,major,0,100.0%,D,major,0.8181818181818182
+EDM,Marshmello,Marshmello - Ritual (Original Mix) (midi by Carlo Prato) (www.cprato.com),Bb,major,0,100.0%,D,minor,0.5
+EDM,Marshmello,Marshmello - Summer  (midi by Carlo Prato) (www.cprato.com),Ab,minor,0,100.0%,Ab,minor,0.8
+EDM,Martin Garrix,Martin Garrix & Bebe Rexha - In The Name Of Love  (midi by Carlo Prato) (www.cprato.com),G,major,0,100.0%,D,mixolydian,0.3333333333333333
+EDM,Martin Garrix,Martin Garrix & Dua Lipa - Scared To Be Lonely  (midi by Carlo Prato) (www.cprato.com),E,major,0,100.0%,Db,minor,1.0
+EDM,Martin Garrix,Martin Garrix ft. The Federal Empire - Hold On & Believe (Original Mix) (midi by Carlo Prato) (www.cprato.com),Ab,minor,0,100.0%,Ab,minor,1.0
+Gospel,John Newton,Amazing_Grace,G,major,0,100.0%,G,major,0.5
+Grunge,Nirvana,AboutAGirl,B,minor,303,92.74425287356321%,B,minor,0.5416666666666666
+Grunge,Nirvana,ComeAsYouAre,F,minor,114,91.11457521434139%,C,phrygian,0.35714285714285715
+Grunge,Nirvana,HeartShapedBox,Ab,minor,277,91.86490455212922%,Ab,minor,0.5428571428571428
+Grunge,Nirvana,InBloom,Eb,major,488,86.56387665198237%,Eb,major,0.3157894736842105
+Grunge,Nirvana,Lithium,D,minor,317,87.0928338762215%,F,major,0.52
+Grunge,Nirvana,SmellsLikeTeenSpirit,F,minor,113,97.44517295952974%,Ab,major,0.43478260869565216
+Grunge,Pearl Jam,Alive,D,major,719,93.52135519913499%,E,dorian,0.38181818181818183
+Grunge,Pearl Jam,BetterMan,D,major,149,97.30219083831251%,D,major,0.5254237288135594
+Grunge,Pearl Jam,EvenFlow,C,major,288,90.83386378103118%,C,major,0.36538461538461536
+Grunge,Pearl Jam,Jeremy,A,minor,88,98.26292933280695%,A,minor,0.6521739130434783
+Grunge,Pearl Jam,YellowLedbetter,E,major,119,97.59887005649718%,B,mixolydian,0.30612244897959184
+Grunge,Soundgarden,BlackHoleSun,Eb,minor,609,82.76740237691001%,Ab,dorian,0.43137254901960786
+Grunge,Soundgarden,SpoonMan,A,minor,24,99.40119760479041%,C,major,0.35384615384615387
+Grunge,Stone Temple Pilots,Creep,G,major,79,98.0848484848485%,B,phrygian,0.6415094339622641
+Grunge,Stone Temple Pilots,InterstateLoveSong,E,major,309,92.13740458015268%,E,major,0.35294117647058826
+Grunge,Stone Temple Pilots,Plush,G,minor,342,87.71551724137932%,G,minor,1.0
+Grunge,Stone Temple Pilots,TrippingOnAHole,B,minor,312,91.85165839644816%,G,lydian,0.26785714285714285
+Grunge,Stone Temple Pilots,Vasoline,G,minor,616,85.47169811320755%,D,phrygian,0.24324324324324326
+Hip-Hop,Chance The Rapper,Chance_the_Rapper_-_All_We_Got_for_Marching_Band,Eb,major,0,100.0%,Eb,major,0.40476190476190477
+Hip-Hop,Chance The Rapper,NO_PROBLEM,D,major,21,99.18636187524216%,D,major,0.39285714285714285
+Hip-Hop,Chance The Rapper,Sunday_Candy_G_Major_Final,A,minor,78,96.88622754491017%,G,mixolydian,0.5294117647058824
+Hip-Hop,Eminem,20455_Lose-Yourself,D,minor,65,98.30773236136423%,D,minor,0.9333333333333333
+Hip-Hop,Eminem,20501_Marshall-Mathers,E,minor,111,93.36917562724014%,E,minor,0.8125
+Hip-Hop,Eminem,23214_My-Name-Is,Bb,major,153,82.75084554678692%,Eb,lydian,0.5
+Hip-Hop,Eminem,27297_Real-Slim-Shady-The,Eb,major,78,95.54030874785592%,G,phrygian,0.3684210526315789
+Hip-Hop,Jay-Z,13235_Big-Pimpin,E,major,18,97.45762711864407%,Eb,locrian,0.3333333333333333
+Hip-Hop,Jay-Z,13238_Hard-Knock-Life,C,major,0,100.0%,C,major,0.6666666666666666
+Hip-Hop,Jay-Z,20535_03-Bonnie--Clyde,Bb,minor,9,96.39999999999999%,Db,major,0.375
+Hip-Hop,Kanye West,21530_All-Falls-Down,Eb,minor,16,93.01310043668123%,Gb,major,0.5
+Hip-Hop,Kanye West,24774_Jesus-Walks,Bb,minor,0,100.0%,Eb,minor,0.4166666666666667
+Hip-Hop,Kanye West,24851_Gold-Digger,Gb,major,30,95.50898203592814%,Ab,dorian,0.5
+Hip-Hop,Notorious B.I.G,13224_Miss-U,G,major,299,94.8287789692148%,Gb,locrian,0.5822784810126582
+Hip-Hop,Notorious B.I.G,13225_Mo-Money-Mo-Problems,E,major,54,99.11140365311832%,Ab,phrygian,0.3855421686746988
+Hip-Hop,Notorious B.I.G,13227_One-More-Chance,C,major,0,100.0%,E,phrygian,0.6363636363636364
+Hip-Hop,OutKast,20700_Hey-Ya,E,minor,4,99.93167065254526%,B,phrygian,0.2830188679245283
+Hip-Hop,OutKast,21165_Miss-Jackson,A,minor,0,100.0%,A,minor,0.9230769230769231
+Hip-Hop,OutKast,25535_Roses,E,minor,19,84.67741935483872%,E,minor,0.5
+Indie,Simon and Garfunkel,scarborough_fair,B,minor,0,100.0%,E,dorian,0.7090909090909091
+Jazz,Frank Sinatra,my_way,C,major,417,95.54439576877871%,C,major,0.24444444444444444
+Metal,Black Sabbath,Black Sabbath-Iron Man,B,minor,756,86.00259211257175%,E,dorian,0.3055555555555556
+Metal,Black Sabbath,Black Sabbath-Paranoid,E,minor,6,99.84717269485482%,E,minor,0.8064516129032258
+Metal,Black Sabbath,Black Sabbath-War pigs,E,minor,270,93.44182657274715%,E,minor,0.6923076923076923
+Metal,Judas Priest,Judas Priest - Grinder,E,minor,131,94.72624798711755%,E,minor,0.23076923076923078
+Metal,Judas Priest,Judas Priest - Living after Midnight,E,major,361,91.75234178661184%,E,major,0.43103448275862066
+Metal,Judas Priest,Judas Priest - Night Crawler,B,minor,167,96.46336298178738%,B,minor,0.5185185185185185
+Metal,Megadeth,Megadeth-Holy Wars The Punishment Due,E,minor,609,90.36849596710422%,E,minor,0.45161290322580644
+Metal,Megadeth,Megadeth-Symphony Of Destruction,A,minor,415,87.41661613098847%,E,phrygian,0.9354838709677419
+Metal,Megadeth,Megadeth-Tornado Of Souls,B,minor,195,96.0357796300061%,B,minor,0.3389830508474576
+Metal,Metallica,EnterSandman,B,minor,368,89.53356086461889%,B,minor,0.56
+Pop,Adele,Adele_-_Set_fire_to_the_rain,D,minor,0,100.0%,F,major,0.35714285714285715
+Pop,Adele,Adele_-_Skyfall,C,minor,97,94.41887226697354%,G,phrygian,0.4
+Pop,Adele,Love in the Dark,C,major,0,100.0%,C,major,0.3
+Pop,Adele,Someone_Like_You_easy_piano,A,major,0,100.0%,A,major,0.25
+Pop,Billie Eilish,Billie Eilish - All The Good Girls Go To Hell  (midi by Carlo Prato) (www.cprato.com),Ab,minor,2,99.80099502487563%,Eb,phrygian,0.5294117647058824
+Pop,Billie Eilish,Billie Eilish - Bad Guy  (midi by Carlo Prato) (www.cprato.com),G,minor,14,83.72093023255813%,C,dorian,0.3333333333333333
+Pop,Billie Eilish,Billie Eilish - No Time To Die (James Bond) (midi by Carlo Prato) (www,E,minor,11,91.85185185185185%,B,phrygian,0.4
+Pop,Billie Eilish,Billie Eilish - Therefore I Am- (midi by Carlo Prato) (www.cprato.com),D,minor,10,90.0%,A,phrygian,0.6666666666666666
+Pop,Bruno Mars,Grenade,D,minor,22,98.4%,D,minor,0.4444444444444444
+Pop,Bruno Mars,RunawayBaby,G,major,94,97.80527667522765%,E,minor,0.3404255319148936
+Pop,Bruno Mars,Thelazysong,B,major,48,98.63052781740372%,B,major,0.2857142857142857
+Pop,Ed Sheeran,Ed Sheeran - Galway Girl  (midi by Carlo Prato) (www.cprato.com),A,major,0,100.0%,Gb,minor,0.5
+Pop,Ed Sheeran,Ed Sheeran - Perfect  (midi by Carlo Prato) (www.cprato.com),Ab,major,0,100.0%,Eb,mixolydian,0.3076923076923077
+Pop,Ed Sheeran,Ed Sheeran - Shape of You  (midi by Carlo Prato) (www.cprato.com),Db,minor,0,100.0%,Db,minor,0.6363636363636364
+Pop,Imagine Dragons,Believer_-_Imagine_Dragons,Db,major,111,92.43869209809264%,Db,major,0.5
+Pop,Imagine Dragons,Demons_-_Imagine_Dragons,Eb,major,0,100.0%,G,phrygian,0.6666666666666666
+Pop,Imagine Dragons,Radioactive,A,major,4,99.81718464351006%,A,major,0.3076923076923077
+Pop,The Chainsmokers,The Chainsmokers - Paris  (midi by Carlo Prato) (www.cprato.com),D,major,0,100.0%,D,major,0.5
+Pop,The Chainsmokers,The Chainsmokers feat. XYLØ - Setting Fires  (midi by Carlo Prato) (www.cprato.com),Ab,minor,0,100.0%,E,lydian,0.4444444444444444
+Pop,The Chainsmokers,The Chainsmokers ft. Halsey - Closer  (midi by Carlo Prato) (www.cprato.com),Ab,major,0,100.0%,Bb,dorian,1.0
+Pop,The Chainsmokers,The Chainsmokers ft. Phoebe Ryan - All We Know  (midi by Carlo Prato) (www.cprato.com),C,major,0,100.0%,C,major,0.5
+Pop,The Weeknd,The Weeknd - Party Monster  (midi by Carlo Prato) (www.cprato.com),Eb,minor,0,100.0%,Eb,minor,0.3333333333333333
+Pop,The Weeknd,The Weeknd - Reminder  (midi by Carlo Prato) (www.cprato.com),Bb,major,0,100.0%,C,dorian,0.36363636363636365
+Pop,The Weeknd,The Weeknd ft. Daft Punk - I Feel It Coming  (midi by Carlo Prato) (www.cprato.com),C,minor,0,100.0%,Eb,major,0.5
+Rock,Aerosmith,ComeTogether,A,minor,145,94.45506692160612%,D,dorian,0.1891891891891892
+Rock,Aerosmith,DreamOn,F,minor,102,95.38043478260869%,F,minor,0.7083333333333334
+Rock,Aerosmith,JaniesGotAGun,B,major,104,94.98553519768564%,Ab,minor,0.35
+Rock,Eagles,HotelCalifornia,B,minor,435,94.21696357351767%,Gb,phrygian,0.3333333333333333
+Rock,Eagles,HowLong,C,major,62,98.94683200271785%,C,major,0.5694444444444444
+Rock,Eagles,TakeItEasy,G,major,87,98.64083736916108%,G,major,0.8888888888888888
+Rock,Elton John,RocketMan,Bb,major,72,96.35627530364373%,Bb,major,0.5217391304347826
+Rock,Elton John,TinyDancer,C,major,160,95.73787959509856%,A,minor,0.5161290322580645
+Rock,Elton John,YourSong,Eb,major,43,97.8005115089514%,F,dorian,0.2631578947368421
+Rock,Fall Out Boy,LightEmUp,D,minor,0,100.0%,D,minor,0.5121951219512195
+Rock,Fall Out Boy,SugarWereGoingDown(2),G,major,30,99.33569530558016%,G,major,0.3888888888888889
+Rock,Greenday,BoulevardofBrokenDreams,Ab,major,496,92.6354862657758%,G,locrian,0.23809523809523808
+Rock,Greenday,GoodRiddance(TimeOfYourLife),G,major,0,100.0%,G,major,0.4444444444444444
+Rock,Rolling Stones,PaintItBlack,B,minor,455,90.54054054054053%,D,major,0.7619047619047619
+Rock,Rolling Stones,Satisfaction,B,minor,274,93.62048894062865%,E,dorian,0.5714285714285714
+Rock,U2,IStillHavntFoundWhatImLookingFor,Db,major,1,99.96819338422391%,Db,major,0.6206896551724138
+Rock,U2,WithorWithoutYou,Eb,major,0,100.0%,Eb,major,0.5294117647058824
