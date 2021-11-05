@@ -1,33 +1,50 @@
 from Genre import Genre
 from Song import Song
 import os
+from Track import TagEnum
 from Key import Key
-
+from markov_chain import MarkovChain, Type
+from markov_library import MarkovLibrary
 
 if __name__ == '__main__':
 
-    # for artist in os.listdir(directory):
-    #     artist_directory = directory + '\\' + artist.title()
-    #     for song in os.listdir(artist_directory):
-    #         song_object = Song()
-    #         print(song)
-    #         try:
-    #             song_object.load(filename=artist_directory + '\\' + song.title())
-    #         except (IOError, AttributeError) as e:
-    #             continue
-    #
-    #         genre.add_song(song_object)
+    directory = "C:\\Users\\eliis\\OneDrive\\Documents\\GitHub\\2021FallTeam17-DeHaan\\MIDI Files\\Hip-Hop"
+    genre = Genre()
+    for artist in os.listdir(directory):
+        artist_directory = directory + '\\' + artist.title()
+        for song in os.listdir(artist_directory):
+            song_object = Song()
+            print(song)
+            try:
+                song_object.load(filename=artist_directory + '\\' + song.title())
+            except (IOError, AttributeError) as e:
+                continue
+            current_key = song_object.detect_key_and_scale()[0]
+            # print(current_key.tonic)
+            # song_object.change_song_key(current_key, Key())
+            genre.add_song(song_object)
+
+    lib = MarkovLibrary()
+    for song in genre.songs:
+        chain = MarkovChain("test chain", Type.NOTE_TONE)
+        for track in song.get_tracks_by_tag(TagEnum.MELODY):
+            chain.add_track(track)
+        lib.add_markov_chain(chain)
+
+    song2 = Song()
+    lib.generate_pattern(song=song2, num_notes=50, note_tone_chain=lib.chains["test chain"])
+    song2.save('generated_song.mid', True)
     #
     # genre.get_notes_frequency_graph()
     # genre.print_songs()
 
-    song = Song()
+    # song = Song()
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
     # song.load(filename="../test/test MIDI/C_major_chords.mid")
     # song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
-    song.load(filename="../MIDI Files/Pop/Adele/Someone_Like_You_easy_piano.mid", print_file=False)
-    song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
-    song.get_transition_graph(name="Someone Like You")
+    # song.load(filename="../MIDI Files/Pop/Adele/Someone_Like_You_easy_piano.mid", print_file=False)
+    # song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
+    # song.get_transition_graph(name="Someone Like You")
     # song.load(filename="../MIDI Files/Rock/Elton John/TinyDancer.mid", print_file=False)
     # song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
     # song.get_transition_graph(name="Tiny Dancer")
@@ -59,13 +76,11 @@ if __name__ == '__main__':
     # for track in song.tracks:
     #     print(track.track_name + " -- " + str(track.tag))
 
-    song.detect_key_by_phrase_endings()
+    # song.detect_key_by_phrase_endings()
 
-    for track in song.tracks:
-        print(track.track_name + "  " + str(track.tag))
+    # for track in song.tracks:
 
     # song.change_song_key(origin_key=Key('F#', 'major'), destination_key=Key('C', 'major'))
     # song.save(filename="music samples/Megadeth-Tornado of Souls.mid", print_file=True)
 
     # song.save(filename="music samples/Mii Channel Output.mid", print_file=True)
-
