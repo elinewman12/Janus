@@ -2,9 +2,10 @@ from __future__ import division
 from enum import Enum
 import sys
 
-from Track import Track
+from Track import Track, TagEnum
 from Note import Note, NUM_NOTES
 import numpy as py
+
 
 class DynamicMarkovChain:
 
@@ -35,7 +36,7 @@ class DynamicMarkovChain:
         # Get all notes from song in one list
         all_notes = []
         for track in song.tracks:
-            if not track.notes:
+            if not track.notes or track.tag == TagEnum.PERCUSSION:
                 continue
             all_notes += track.notes
         # Get first x notes of song
@@ -51,6 +52,7 @@ class DynamicMarkovChain:
             next_note = all_notes[i].c_indexed_pitch_class
             # Add that and the new note as a key/value entry.
             if pattern_dict.get(previous_pattern) is None:
+                # print(previous_pattern + " " + str(next_note))
                 pattern_dict[previous_pattern] = [[next_note, 1]]
             found = False
             for value in pattern_dict.values():
@@ -62,13 +64,14 @@ class DynamicMarkovChain:
                 if found:
                     break
             if not found:
+                # print(previous_pattern + " " + str(next_note))
                 pattern_dict.get(previous_pattern).append([next_note, 1])
 
             previous_pattern = str(all_notes[i - self.token_length].c_indexed_pitch_class)
             for j in range(i - self.token_length + 1, i):
                 note = all_notes[j]
                 previous_pattern += " " + str(note.c_indexed_pitch_class)
-            # print(previous_pattern + "\n")
+            print(previous_pattern)
 
         # Value would be a list of lists with note and count [(0, 1), (1, 2)]
         # If the key/value pair already exists, add one to count
@@ -150,13 +153,17 @@ class DynamicMarkovChain:
             next_note_rtn = self.generate_next_note(current_token)
             next_note_tone, current_token = next_note_rtn[0], next_note_rtn[1]
             # Create the new pattern with the new note
-            previous_pattern = current_token.split()
-            current_token = previous_pattern[1]
-            for j in range(2, self.token_length):
-                current_token += " " + previous_pattern[j]
-            current_token += " " + str(next_note_tone)
+            if self.token_length == 1:
+                current_token = str(next_note_tone)
+            else:
+                previous_pattern = current_token.split()
+                current_token = previous_pattern[1]
+                for j in range(2, self.token_length):
+                    current_token += " " + previous_pattern[j]
+                current_token += " " + str(next_note_tone)
             next_note_tone += 36  # Bump up three octave
-            t.add_note(Note(pitch=next_note_tone, time=i * eighth_note, duration=eighth_note))
+            if py.random.randint(0, 7):
+                t.add_note(Note(pitch=next_note_tone, time=i * eighth_note, duration=eighth_note))
         return song
 
 

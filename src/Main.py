@@ -9,25 +9,25 @@ from dynamic_markov_chain import DynamicMarkovChain, Type
 
 if __name__ == '__main__':
 
-    directory = "C:\\Users\\eliis\\OneDrive\\Documents\\GitHub\\2021FallTeam17-DeHaan\\MIDI Files\\Rock"
-    genre = Genre()
-    for artist in os.listdir(directory):
-        artist_directory = directory + '\\' + artist.title()
-        for song in os.listdir(artist_directory):
-            song_object = Song()
-            print(song)
-            try:
-                song_object.load(filename=artist_directory + '\\' + song.title())
-            except (IOError, AttributeError) as e:
-                continue
-            current_key = song_object.detect_key_and_scale()[0]
-    #         # print(current_key.tonic)
-    #         # song_object.change_song_key(current_key, Key())
-            genre.add_song(song_object)
+    # directory = "C:\\Users\\eliis\\OneDrive\\Documents\\GitHub\\2021FallTeam17-DeHaan\\MIDI Files\\Rock"
+    # genre = Genre()
+    # for artist in os.listdir(directory):
+    #     artist_directory = directory + '\\' + artist.title()
+    #     for song in os.listdir(artist_directory):
+    #         song_object = Song()
+    #         print(song)
+    #         try:
+    #             song_object.load(filename=artist_directory + '\\' + song.title())
+    #         except (IOError, AttributeError) as e:
+    #             continue
+    #         current_key = song_object.detect_key_and_scale()[0]
+    # #         # print(current_key.tonic)
+    # #         # song_object.change_song_key(current_key, Key())
+    #         genre.add_song(song_object)
     #
-    chain = DynamicMarkovChain("test chain", 3)
-    for song in genre.songs:
-        chain.add_song(song)
+    # chain = DynamicMarkovChain("test chain", 2)
+    # for song in genre.songs:
+    #     chain.add_song(song)
     # lib = MarkovLibrary()
     # for song in genre.songs:
     #     chain = MarkovChain("test chain", Type.NOTE_TONE)
@@ -35,14 +35,14 @@ if __name__ == '__main__':
     #         chain.add_track(track)
     #     lib.add_markov_chain(chain)
     #
-    song2 = Song()
-    chain.generate_pattern(song=song2, num_notes=50)
-    song2.save('generated_song.mid', True)
+    # song2 = Song()
+    # chain.generate_pattern(song=song2, num_notes=50)
+    # song2.save('generated_song.mid', True)
     #
     # genre.get_notes_frequency_graph()
     # genre.print_songs()
 
-    # song = Song()
+    song = Song()
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
     # song.load(filename="../test/test MIDI/C_major_chords.mid")
     # song.load(filename="../MIDI Files/Utility/C_Major_Pentatonic.mid", print_file=False)
@@ -52,15 +52,15 @@ if __name__ == '__main__':
     # song.load(filename="../MIDI Files/Rock/Elton John/TinyDancer.mid", print_file=False)
     # song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
     # song.get_transition_graph(name="Tiny Dancer")
-    # song.load(filename="../MIDI Files/Rock/Eagles/HotelCalifornia.mid", print_file=False)
+    song.load(filename="../MIDI Files/Rock/Eagles/HotelCalifornia.mid", print_file=False)
     # song.get_transition_graph(name="Skyfall")
     # song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
     # song.get_transition_graph(name="Your Song")
-    # chain = DynamicMarkovChain("test chain", 3)
-    # chain.add_song(song)
-    # song2 = Song()
-    # chain.generate_pattern(song2, 50)
-    # song2.save('hotel_california.mid', True)
+    chain = DynamicMarkovChain("test chain", 1)
+    chain.add_song(song)
+    song2 = Song()
+    chain.generate_pattern(song2, 100)
+    song2.save('hotel_california.mid', True)
     # for track in song.tracks:
     #     print("track: " + track.track_name)
     #     for chord in track.chords:
