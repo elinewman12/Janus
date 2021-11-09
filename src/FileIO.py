@@ -3,7 +3,6 @@ import sys
 import mido
 from mido import MidiFile
 
-
 from Chord import Chord
 from Control import Control
 from Track import Track
@@ -183,6 +182,8 @@ def write_midi_file(song, filename, print_file=False):
         for m in msgs:
             midi.tracks[i].append(m)
 
+        # TODO: This change is temporary for instrument change
+        # midi.tracks[i].append(mido.Message(type='program_change', channel=0, program=46, time=0))
         # Add an End of Track message. Time is 500 to allow a small buffer zone from the last note
         eot_msg = mido.MetaMessage(type='end_of_track', time=500)
         midi.tracks[i].append(eot_msg)
@@ -312,7 +313,7 @@ def handle_note(msg, notes, time, track, num_notes_per_channel, found_chord):
         found_chord (Boolean[]): Flags (for each channel) if a chord was found with the current notes
             that are playing to avoid marking duplicates. Resets when a new note starts
     """
-    
+
     # If this message is the start of a note
     if msg.type == 'note_on' and msg.velocity > 0:
         # Create a new Note object and add it to the array of currently playing notes
@@ -344,7 +345,6 @@ def handle_note(msg, notes, time, track, num_notes_per_channel, found_chord):
                 num_notes_per_channel[n.channel] -= 1
                 track.add_note(n)
                 break
-
 
 
 def handle_control(msg, track, time):

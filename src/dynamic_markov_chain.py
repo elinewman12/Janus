@@ -143,7 +143,7 @@ class DynamicMarkovChain:
         current_token_array = current_token.split()
         # Add the beginning notes
         for i in range(self.token_length):
-            t.add_note(Note(pitch=int(current_token_array[i]) + 35, time=0, duration=eighth_note))
+            t.add_note(Note(pitch=int(current_token_array[i]) + 35, time=i * eighth_note, duration=eighth_note))
         # Iterate through the rest of the song
         for i in range(self.token_length, num_notes):
             # Generate new note for song
@@ -155,7 +155,7 @@ class DynamicMarkovChain:
             for j in range(2, self.token_length):
                 current_token += " " + previous_pattern[j]
             current_token += " " + str(next_note_tone)
-            next_note_tone += 35  # Bump up three octaves
+            next_note_tone += 36  # Bump up three octave
             t.add_note(Note(pitch=next_note_tone, time=i * eighth_note, duration=eighth_note))
         return song
 
