@@ -52,26 +52,23 @@ class DynamicMarkovChain:
             next_note = all_notes[i].c_indexed_pitch_class
             # Add that and the new note as a key/value entry.
             if pattern_dict.get(previous_pattern) is None:
-                # print(previous_pattern + " " + str(next_note))
+
                 pattern_dict[previous_pattern] = [[next_note, 1]]
-            found = False
-            for value in pattern_dict.values():
-                for note in value:
+            else:
+                found = False
+                for note in pattern_dict.get(previous_pattern):
                     if note[0] == next_note:
                         note[1] = note[1] + 1
                         found = True
                         break
-                if found:
-                    break
-            if not found:
-                # print(previous_pattern + " " + str(next_note))
-                pattern_dict.get(previous_pattern).append([next_note, 1])
+                if not found:
+
+                    pattern_dict.get(previous_pattern).append([next_note, 1])
 
             previous_pattern = str(all_notes[i - self.token_length].c_indexed_pitch_class)
             for j in range(i - self.token_length + 1, i):
                 note = all_notes[j]
                 previous_pattern += " " + str(note.c_indexed_pitch_class)
-            print(previous_pattern)
 
         # Value would be a list of lists with note and count [(0, 1), (1, 2)]
         # If the key/value pair already exists, add one to count
@@ -80,7 +77,7 @@ class DynamicMarkovChain:
             for note in value:
                 total += note[1]
             for note in value:
-                note[1] = round((note[1] / total), 2)
+                note[1] = (note[1] / total)
 
         self.probabilities = pattern_dict
         print(pattern_dict)
@@ -111,6 +108,7 @@ class DynamicMarkovChain:
                 current_note_token = py.random.choice(list(self.probabilities.keys()))
         note_follow = self.probabilities.get(current_note_token)
         percentage = []
+        # print(note_follow)
         # Create a 1-D array of the percentage of a given note with this pattern token
         for i in range(NUM_NOTES):
             found = False
@@ -121,6 +119,7 @@ class DynamicMarkovChain:
             if not found:
                 percentage.append(0)
         # Pick a random new note with the percentages and return the note and new pattern
+        print(percentage)
         next_note = py.random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 1, p=percentage)
         return next_note[0], current_note_token
         # if self.type == Type.NOTE_LENGTH:
