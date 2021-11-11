@@ -9,7 +9,7 @@ import numpy as py
 
 class DynamicMarkovChain:
 
-    def __init__(self, name, token_length=1):
+    def __init__(self, name, chain_type=Type.NOTE, token_length=1):
         """Constructor for Markov Chains
 
         Args:
@@ -18,6 +18,7 @@ class DynamicMarkovChain:
         """
         self.name = name
         self.token_length = token_length
+        self.chain_type = chain_type
         self.probabilities = {}
 
     def add_song(self, song):
@@ -33,56 +34,10 @@ class DynamicMarkovChain:
             dict(string:[(int, int)]): Dictionary of note tokens as keys and lists of tuples with a note
             and percentage of occurrences
         """
-        # Get all notes from song in one list
-        all_notes = []
-        for track in song.tracks:
-            if not track.notes or track.tag == TagEnum.PERCUSSION:
-                continue
-            all_notes += track.notes
-        # Get first x notes of song
-        previous_pattern = str(all_notes[0].c_indexed_pitch_class)
-        for i in range(1, self.token_length):
-            note = all_notes[i]
-            previous_pattern += " " + str(note.c_indexed_pitch_class)
-
-        # Create dictionary
-        pattern_dict = self.probabilities
-        # for the rest of the song, look at next note
-        for i in range(self.token_length, len(all_notes)):
-            next_note = all_notes[i].c_indexed_pitch_class
-            # Add that and the new note as a key/value entry.
-            if pattern_dict.get(previous_pattern) is None:
-
-                pattern_dict[previous_pattern] = [[next_note, 1]]
-            else:
-                found = False
-                for note in pattern_dict.get(previous_pattern):
-                    if note[0] == next_note:
-                        note[1] = note[1] + 1
-                        found = True
-                        break
-                if not found:
-
-                    pattern_dict.get(previous_pattern).append([next_note, 1])
-
-            previous_pattern = str(all_notes[i - self.token_length].c_indexed_pitch_class)
-            for j in range(i - self.token_length + 1, i):
-                note = all_notes[j]
-                previous_pattern += " " + str(note.c_indexed_pitch_class)
-
-        # Value would be a list of lists with note and count [(0, 1), (1, 2)]
-        # If the key/value pair already exists, add one to count
-        for value in pattern_dict.values():
-            total = 0.0
-            for note in value:
-                total += note[1]
-            for note in value:
-                note[1] = (note[1] / total)
-
-        self.probabilities = pattern_dict
-        print(pattern_dict)
-        return pattern_dict
-        # Key is the same pattern, value is a list of all the percentages. [0, 0.5, 0.05, 0.25, ...]
+        if self.chain_type is Type.NOTE:
+            return self.add_notes(song)
+        else:
+            return self.add_chords(song)
 
     def generate_next_note(self, current_note_token):
         """Given a token of previous notes, this will randomly generate a new note given the percetanges from
@@ -165,9 +120,138 @@ class DynamicMarkovChain:
                 t.add_note(Note(pitch=next_note_tone, time=i * eighth_note, duration=eighth_note))
         return song
 
+    def add_chords(self, song):
+        """Ingests a song and adds to the total dictionary. When all note changes are added,
+        divides all elements in the dictionary by the total amount of note changes recorded and
+        stores this in self.probabilities, which will give the probability matrix.
+
+        Args:
+            song (Song): Song to ingest and generate probabilities from
+            num_tokens (int): Tells the amount of tokens for each pattern
+
+        Returns:
+            dict(string:[(int, int)]): Dictionary of note tokens as keys and lists of tuples with a note
+            and percentage of occurrences
+        """
+        # Get all notes from song in one list
+        all_chords = []
+        for track in song.tracks:
+            if not track.chords or track.tag == TagEnum.PERCUSSION:
+                continue
+            all_chords += track.chords
+        # Get first x notes of song
+        previous_pattern = all_chords[0].to_string()
+        previous_pattern += ","
+        for i in range(1, self.token_length):
+            previous_pattern += all_chords[i].to_string()
+            previous_pattern += ","
+        previous_pattern = previous_pattern[:len(previous_pattern) - 2]
+        print(previous_pattern)
+
+        # Create dictionary
+        pattern_dict = self.probabilities
+        # for the rest of the song, look at next chord
+        for i in range(self.token_length, len(all_chords)):
+            next_chord = all_chords[i].to_string()
+            # Add that and the new note as a key/value entry.
+            if pattern_dict.get(previous_pattern) is None:
+
+                pattern_dict[previous_pattern] = [[next_chord, 1]]
+            else:
+                found = False
+                for chord in pattern_dict.get(previous_pattern):
+                    if chord[0] == next_chord:
+                        chord[1] = chord[1] + 1
+                        found = True
+                        break
+                if not found:
+                    pattern_dict.get(previous_pattern).append([next_chord, 1])
+
+            previous_pattern = all_chords[i - self.token_length].to_string()
+            previous_pattern += ","
+            for j in range(i - self.token_length + 1, i):
+                previous_pattern += " " + all_chords[j].to_string()
+                previous_pattern += ","
+            previous_pattern = previous_pattern[:len(previous_pattern) - 2]
+
+        # Value would be a list of lists with note and count [(0, 1), (1, 2)]
+        # If the key/value pair already exists, add one to count
+        for value in pattern_dict.values():
+            total = 0.0
+            for chord in value:
+                total += chord[1]
+            for chord in value:
+                chord[1] = (chord[1] / total)
+
+        self.probabilities = pattern_dict
+        print(pattern_dict)
+        return pattern_dict
+        # Key is the same pattern, value is a list of all the percentages. [0, 0.5, 0.05, 0.25, ...]
+
+    def add_notes(self, song):
+        """Ingests a song and adds to the total dictionary. When all note changes are added,
+        divides all elements in the dictionary by the total amount of note changes recorded and
+        stores this in self.probabilities, which will give the probability matrix.
+
+        Args:
+            song (Song): Song to ingest and generate probabilities from
+            num_tokens (int): Tells the amount of tokens for each pattern
+
+        Returns:
+            dict(string:[(int, int)]): Dictionary of note tokens as keys and lists of tuples with a note
+            and percentage of occurrences
+        """
+        # Get all notes from song in one list
+        all_notes = []
+        for track in song.tracks:
+            if not track.notes or track.tag == TagEnum.PERCUSSION:
+                continue
+            all_notes += track.notes
+        # Get first x notes of song
+        previous_pattern = str(all_notes[0].c_indexed_pitch_class)
+        for i in range(1, self.token_length):
+            note = all_notes[i]
+            previous_pattern += " " + str(note.c_indexed_pitch_class)
+
+        # Create dictionary
+        pattern_dict = self.probabilities
+        # for the rest of the song, look at next note
+        for i in range(self.token_length, len(all_notes)):
+            next_note = all_notes[i].c_indexed_pitch_class
+            # Add that and the new note as a key/value entry.
+            if pattern_dict.get(previous_pattern) is None:
+
+                pattern_dict[previous_pattern] = [[next_note, 1]]
+            else:
+                found = False
+                for note in pattern_dict.get(previous_pattern):
+                    if note[0] == next_note:
+                        note[1] = note[1] + 1
+                        found = True
+                        break
+                if not found:
+                    pattern_dict.get(previous_pattern).append([next_note, 1])
+
+            previous_pattern = str(all_notes[i - self.token_length].c_indexed_pitch_class)
+            for j in range(i - self.token_length + 1, i):
+                note = all_notes[j]
+                previous_pattern += " " + str(note.c_indexed_pitch_class)
+
+        # Value would be a list of lists with note and count [(0, 1), (1, 2)]
+        # If the key/value pair already exists, add one to count
+        for value in pattern_dict.values():
+            total = 0.0
+            for note in value:
+                total += note[1]
+            for note in value:
+                note[1] = (note[1] / total)
+
+        self.probabilities = pattern_dict
+        print(pattern_dict)
+        return pattern_dict
+        # Key is the same pattern, value is a list of all the percentages. [0, 0.5, 0.05, 0.25, ...]
+
 
 class Type(Enum):
-    NOTE_TONE = 0
-    NOTE_LENGTH = 1
-    CHORD_TONE = 2
-    CHORD_LENGTH = 3
+    NOTE = 0
+    CHORD = 1

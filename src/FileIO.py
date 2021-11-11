@@ -331,6 +331,7 @@ def handle_note(msg, notes, time, track, num_notes_per_channel, found_chord):
                 # Add every current playing note to chord object
                 if n.channel == msg.channel:
                     chord.append(n)
+                    n.chord_note = True
             # Create new chord object and add it to the track list
             track.add_chord(Chord(notes=chord, time=time))
             found_chord[n.channel] = True

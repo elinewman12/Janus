@@ -6,7 +6,7 @@ MAX_VELOCITY = 127
 
 class Note:
 
-    def __init__(self, pitch=MIDDLE_C, time=0, duration=1, velocity=MAX_VELOCITY, channel=0):
+    def __init__(self, pitch=MIDDLE_C, time=0, duration=1, velocity=MAX_VELOCITY, channel=0, chord_note=False):
         """ Constructor for the Note class.
 
         Args:
@@ -21,6 +21,7 @@ class Note:
         self.duration = duration
         self.velocity = velocity
         self.channel = channel
+        self.chord_note = chord_note
         # The pitch class the note belongs to, stored as an int from 0-11, with
         # 0 being C. Octave information is lost in this calculation.
         self.c_indexed_pitch_class = pitch % NUM_NOTES
