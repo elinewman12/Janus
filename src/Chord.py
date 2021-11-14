@@ -22,7 +22,7 @@ class Chord:
 
     def to_string(self):
         new_string = str(self.notes[0].c_indexed_pitch_class)
-        for i in range(1, self.notes.length):
+        for i in range(1, len(self.notes)):
             new_string += " " + str(self.notes[i].c_indexed_pitch_class)
         return new_string
 

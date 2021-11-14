@@ -7,9 +7,14 @@ from Note import Note, NUM_NOTES
 import numpy as py
 
 
+class chainType(Enum):
+    NOTE = 0
+    CHORD = 1
+
+
 class DynamicMarkovChain:
 
-    def __init__(self, name, chain_type=Type.NOTE, token_length=1):
+    def __init__(self, name, chain_type=chainType.NOTE, token_length=1):
         """Constructor for Markov Chains
 
         Args:
@@ -34,7 +39,7 @@ class DynamicMarkovChain:
             dict(string:[(int, int)]): Dictionary of note tokens as keys and lists of tuples with a note
             and percentage of occurrences
         """
-        if self.chain_type is Type.NOTE:
+        if self.chain_type is chainType.NOTE:
             return self.add_notes(song)
         else:
             return self.add_chords(song)
@@ -77,8 +82,19 @@ class DynamicMarkovChain:
         print(percentage)
         next_note = py.random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 1, p=percentage)
         return next_note[0], current_note_token
-        # if self.type == Type.NOTE_LENGTH:
-        #     raise NotImplementedError
+
+    def generate_next_chord(self, current_chord_token):
+        if self.probabilities.get(current_chord_token) is None:
+            # Let's just randomly pick a new position to continue in the chain
+            current_chord_token = py.random.choice(list(self.probabilities.keys()))
+        chord_follow = self.probabilities.get(current_chord_token)
+        percentage = []
+        available_chords = []
+        for chord in chord_follow:
+            available_chords.append(chord[0])
+            percentage.append(chord[1])
+        next_chord = py.random.choice(available_chords, 1, p=percentage)
+        return next_chord[0], current_chord_token
 
     def generate_pattern(self, song, num_notes):
         """Given a new song object and the number of notes to generate, this method will load that
@@ -93,31 +109,53 @@ class DynamicMarkovChain:
         """
         # We are currently making every note an eighth note for easier testing
         eighth_note = int(song.ticks_per_beat / 2)
+        half_note = int(song.ticks_per_beat * 2)
         t = Track()
         song.add_track(t)
         # Start at a random place in the markov chain
         current_token = py.random.choice(list(self.probabilities.keys()))
-        current_token_array = current_token.split()
-        # Add the beginning notes
-        for i in range(self.token_length):
-            t.add_note(Note(pitch=int(current_token_array[i]) + 35, time=i * eighth_note, duration=eighth_note))
-        # Iterate through the rest of the song
-        for i in range(self.token_length, num_notes):
-            # Generate new note for song
-            next_note_rtn = self.generate_next_note(current_token)
-            next_note_tone, current_token = next_note_rtn[0], next_note_rtn[1]
-            # Create the new pattern with the new note
-            if self.token_length == 1:
-                current_token = str(next_note_tone)
-            else:
-                previous_pattern = current_token.split()
-                current_token = previous_pattern[1]
-                for j in range(2, self.token_length):
-                    current_token += " " + previous_pattern[j]
-                current_token += " " + str(next_note_tone)
-            next_note_tone += 36  # Bump up three octave
-            if py.random.randint(0, 7):
-                t.add_note(Note(pitch=next_note_tone, time=i * eighth_note, duration=eighth_note))
+        if self.chain_type is chainType.NOTE:
+            current_token_array = current_token.split()
+            # Add the beginning notes
+            for i in range(self.token_length):
+                t.add_note(Note(pitch=int(current_token_array[i]) + 36, time=i * eighth_note, duration=eighth_note))
+            # Iterate through the rest of the song
+            for i in range(self.token_length, num_notes):
+                # Generate new note for song
+                next_note_rtn = self.generate_next_note(current_token)
+                next_note_tone, current_token = next_note_rtn[0], next_note_rtn[1]
+                # Create the new pattern with the new note
+                if self.token_length == 1:
+                    current_token = str(next_note_tone)
+                else:
+                    previous_pattern = current_token.split()
+                    current_token = previous_pattern[1]
+                    for j in range(2, self.token_length):
+                        current_token += " " + previous_pattern[j]
+                    current_token += " " + str(next_note_tone)
+                next_note_tone += 36  # Bump up three octave
+                if py.random.randint(0, 7):
+                    t.add_note(Note(pitch=next_note_tone, time=i * eighth_note, duration=eighth_note))
+        else:
+            current_token_array = current_token.split(',')
+            for i in range(self.token_length):
+                current_chord = current_token_array[i].split()
+                for j in range(len(current_chord)):
+                    t.add_note(Note(pitch=int(current_chord[j]) + 36, time=i * half_note, duration=half_note))
+            for i in range(self.token_length, num_notes):
+                next_chord_rtn = self.generate_next_chord(current_token)
+                next_chord, current_token = next_chord_rtn[0], next_chord_rtn[1]
+                if self.token_length == 1:
+                    current_token = next_chord
+                else:
+                    current_token = current_token_array[1]
+                    for j in range(2, self.token_length):
+                        current_token += "," + current_token_array[j]
+                    current_token += "," + next_chord
+                next_chord_array = next_chord.split()
+                for j in range(len(next_chord_array)):
+                    t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=i * half_note, duration=half_note))
+
         return song
 
     def add_chords(self, song):
@@ -250,8 +288,3 @@ class DynamicMarkovChain:
         print(pattern_dict)
         return pattern_dict
         # Key is the same pattern, value is a list of all the percentages. [0, 0.5, 0.05, 0.25, ...]
-
-
-class Type(Enum):
-    NOTE = 0
-    CHORD = 1

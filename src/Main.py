@@ -5,7 +5,7 @@ from Track import TagEnum
 from Key import Key
 from markov_chain import MarkovChain, Type
 from markov_library import MarkovLibrary
-from dynamic_markov_chain import DynamicMarkovChain, Type
+from dynamic_markov_chain import DynamicMarkovChain, chainType
 
 if __name__ == '__main__':
 
@@ -52,15 +52,18 @@ if __name__ == '__main__':
     # song.load(filename="../MIDI Files/Rock/Elton John/TinyDancer.mid", print_file=False)
     # song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
     # song.get_transition_graph(name="Tiny Dancer")
-    song.load(filename="../MIDI Files/Rock/Eagles/HotelCalifornia.mid", print_file=False)
+    song.load(filename="../MIDI Files/Rock/Elton John/TinyDancer.mid", print_file=False)
     # song.get_transition_graph(name="Skyfall")
     # song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
     # song.get_transition_graph(name="Your Song")
-    chain = DynamicMarkovChain("test chain", 1)
-    chain.add_song(song)
+    chord_chain = DynamicMarkovChain("chord chain", token_length=1, chain_type=chainType.CHORD)
+    note_chain = DynamicMarkovChain("note chain", token_length=1, chain_type=chainType.NOTE)
+    chord_chain.add_song(song)
+    note_chain.add_song(song)
     song2 = Song()
-    chain.generate_pattern(song2, 100)
-    song2.save('hotel_california.mid', True)
+    chord_chain.generate_pattern(song2, 25)
+    note_chain.generate_pattern(song2, 100)
+    song2.save('generated_song.mid', True)
     # for track in song.tracks:
     #     print("track: " + track.track_name)
     #     for chord in track.chords:
