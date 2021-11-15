@@ -5,6 +5,7 @@ import sys
 from Track import Track, TagEnum
 from Note import Note, NUM_NOTES
 import numpy as py
+from Control import Control
 
 
 class chainType(Enum):
@@ -96,13 +97,14 @@ class DynamicMarkovChain:
         next_chord = py.random.choice(available_chords, 1, p=percentage)
         return next_chord[0], current_chord_token
 
-    def generate_pattern(self, song, num_notes):
+    def generate_pattern(self, song, num_notes, instrument=0):
         """Given a new song object and the number of notes to generate, this method will load that
             amount of new notes into the song using the existing markov chain.
 
             Args:
                 song (Song): A brand new Song object
                 num_notes (int): The number of notes to generate
+                instrument (int): the number you want for instrument
 
             Returns:
                 Song: The edited song object
@@ -156,6 +158,7 @@ class DynamicMarkovChain:
                 for j in range(len(next_chord_array)):
                     t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=i * half_note, duration=half_note))
 
+        song.tracks[0].controls.append(Control(msg_type='program_change', instrument=instrument, time=0))
         return song
 
     def add_chords(self, song):
@@ -177,6 +180,9 @@ class DynamicMarkovChain:
             if not track.chords or track.tag == TagEnum.PERCUSSION:
                 continue
             all_chords += track.chords
+
+        if not all_chords:
+            raise AttributeError('There are no chords in this song.')
         # Get first x notes of song
         previous_pattern = all_chords[0].to_string()
         previous_pattern += ","
@@ -244,7 +250,11 @@ class DynamicMarkovChain:
         for track in song.tracks:
             if not track.notes or track.tag == TagEnum.PERCUSSION:
                 continue
-            all_notes += track.notes
+            for note in track.notes:
+                if note.chord_note is True:
+                    continue
+                all_notes.append(note)
+        all_notes.sort(key=lambda notes: notes.time)
         # Get first x notes of song
         previous_pattern = str(all_notes[0].c_indexed_pitch_class)
         for i in range(1, self.token_length):

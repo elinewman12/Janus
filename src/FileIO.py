@@ -187,6 +187,8 @@ def write_midi_file(song, filename, print_file=False):
         # Add an End of Track message. Time is 500 to allow a small buffer zone from the last note
         eot_msg = mido.MetaMessage(type='end_of_track', time=500)
         midi.tracks[i].append(eot_msg)
+
+    # midi.tracks[0].append(mido.Message(type='program_change', channel=0, program=46, time=0))
     # Save this midi file
     midi.save(filename)
 
