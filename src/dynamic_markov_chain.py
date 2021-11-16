@@ -158,7 +158,7 @@ class DynamicMarkovChain:
                 for j in range(len(next_chord_array)):
                     t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=i * half_note, duration=half_note))
 
-        song.tracks[0].controls.append(Control(msg_type='program_change', instrument=instrument, time=0))
+        t.controls.append(Control(msg_type='program_change', instrument=instrument, time=0))
         return song
 
     def add_chords(self, song):
