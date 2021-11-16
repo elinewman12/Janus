@@ -19,3 +19,10 @@ class Chord:
         notes.sort(key=lambda x: x.pitch)
         self.name = name
         self.time = time
+
+    def to_string(self):
+        new_string = str(self.notes[0].c_indexed_pitch_class)
+        for i in range(1, len(self.notes)):
+            new_string += " " + str(self.notes[i].c_indexed_pitch_class)
+        return new_string
+
