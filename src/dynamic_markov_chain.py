@@ -5,7 +5,7 @@ import sys
 from Track import Track, TagEnum
 from Note import Note, NUM_NOTES
 import numpy as py
-from Control import Control
+from control import Control
 
 
 class chainType(Enum):
@@ -112,15 +112,17 @@ class DynamicMarkovChain:
         # We are currently making every note an eighth note for easier testing
         eighth_note = int(song.ticks_per_beat / 2)
         half_note = int(song.ticks_per_beat * 2)
+        curr_time=0
         t = Track()
-        song.add_track(t)
+        t.controls.append(Control(msg_type='program_change', instrument=instrument, time=0))
         # Start at a random place in the markov chain
         current_token = py.random.choice(list(self.probabilities.keys()))
         if self.chain_type is chainType.NOTE:
             current_token_array = current_token.split()
             # Add the beginning notes
             for i in range(self.token_length):
-                t.add_note(Note(pitch=int(current_token_array[i]) + 36, time=i * eighth_note, duration=eighth_note))
+                curr_time = curr_time + py.random.choice([1, 2, 3, 4], 1)[0]*eighth_note
+                t.add_note(Note(pitch=int(current_token_array[i]) + 48, time=curr_time, duration=eighth_note))
             # Iterate through the rest of the song
             for i in range(self.token_length, num_notes):
                 # Generate new note for song
@@ -135,15 +137,17 @@ class DynamicMarkovChain:
                     for j in range(2, self.token_length):
                         current_token += " " + previous_pattern[j]
                     current_token += " " + str(next_note_tone)
-                next_note_tone += 36  # Bump up three octave
+                next_note_tone += 48  # Bump up three octave
                 if py.random.randint(0, 7):
-                    t.add_note(Note(pitch=next_note_tone, time=i * eighth_note, duration=eighth_note))
+                    curr_time = curr_time + py.random.choice([1, 2, 3, 4], 1)[0]*eighth_note + eighth_note
+                    t.add_note(Note(pitch=next_note_tone, time=curr_time, duration=eighth_note))
         else:
             current_token_array = current_token.split(',')
             for i in range(self.token_length):
                 current_chord = current_token_array[i].split()
                 for j in range(len(current_chord)):
-                    t.add_note(Note(pitch=int(current_chord[j]) + 36, time=i * half_note, duration=half_note))
+                    note = (py.random.choice([1, 2], 1)[0]*half_note)
+                    t.add_note(Note(pitch=int(current_chord[j]) + 48, time=i * note, duration=note))
             for i in range(self.token_length, num_notes):
                 next_chord_rtn = self.generate_next_chord(current_token)
                 next_chord, current_token = next_chord_rtn[0], next_chord_rtn[1]
@@ -156,9 +160,11 @@ class DynamicMarkovChain:
                     current_token += "," + next_chord
                 next_chord_array = next_chord.split()
                 for j in range(len(next_chord_array)):
-                    t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=i * half_note, duration=half_note))
+                    note = (py.random.choice([1, 2], 1)[0]*half_note)
+                    t.add_note(Note(pitch=int(next_chord_array[j]) + 48, time=i * note, duration=note))
 
-        song.tracks[0].controls.append(Control(msg_type='program_change', instrument=instrument, time=0))
+        # song.tracks[0].controls.append(Control(msg_type='program_change', instrument=instrument, time=0))
+        song.add_track(t)
         return song
 
     def add_chords(self, song):

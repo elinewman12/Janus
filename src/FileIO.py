@@ -4,7 +4,7 @@ import mido
 from mido import MidiFile
 
 from Chord import Chord
-from Control import Control
+from control import Control
 from Track import Track
 from Note import Note
 

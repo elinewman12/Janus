@@ -9,49 +9,49 @@ from dynamic_markov_chain import DynamicMarkovChain, chainType
 
 if __name__ == '__main__':
 
-    directory = "C:\\Users\\Eli\\Documents\\GitHub\\2021FallTeam17-DeHaan\\MIDI Files\\Rock"
-    genre = Genre()
-    for artist in os.listdir(directory):
-        artist_directory = directory + '\\' + artist.title()
-        for song in os.listdir(artist_directory):
-            song_object = Song()
-            print(song)
-            try:
-                song_object.load(filename=artist_directory + '\\' + song.title())
-            except (IOError, AttributeError) as e:
-                continue
-            current_key = song_object.detect_key_and_scale()[0]
-    #         # print(current_key.tonic)
-    #         # song_object.change_song_key(current_key, Key())
-            genre.add_song(song_object)
+    # directory = "C:\\Users\\Eli\\Documents\\GitHub\\2021FallTeam17-DeHaan\\MIDI Files\\Rock"
+    # genre = Genre()
+    # for artist in os.listdir(directory):
+    #     artist_directory = directory + '\\' + artist.title()
+    #     for song in os.listdir(artist_directory):
+    #         song_object = Song()
+    #         print(song)
+    #         try:
+    #             song_object.load(filename=artist_directory + '\\' + song.title())
+    #         except (IOError, AttributeError) as e:
+    #             continue
+    #         current_key = song_object.detect_key_and_scale()[0]
+    # #         # print(current_key.tonic)
+    # #         # song_object.change_song_key(current_key, Key())
+    #         genre.add_song(song_object)
 
-    chord_chain = DynamicMarkovChain("chord chain", token_length=3, chain_type=chainType.CHORD)
-    note_chain = DynamicMarkovChain("note chain", token_length=3, chain_type=chainType.NOTE)
-    for song in genre.songs:
-        try:
-            chord_chain.add_song(song)
-        except AttributeError as e:
-            continue
-        note_chain.add_song(song)
+    # chord_chain = DynamicMarkovChain("chord chain", token_length=3, chain_type=chainType.CHORD)
+    # note_chain = DynamicMarkovChain("note chain", token_length=3, chain_type=chainType.NOTE)
+    # for song in genre.songs:
+    #     try:
+    #         chord_chain.add_song(song)
+    #     except AttributeError as e:
+    #         continue
+    #     note_chain.add_song(song)
 
-    song2 = Song()
-    chord_chain.generate_pattern(song2, 25, 46)
-    note_chain.generate_pattern(song2, 100, 25)
-    song2.save('generated_song.mid', True)
+    # song2 = Song()
+    # chord_chain.generate_pattern(song2, 25, 46)
+    # note_chain.generate_pattern(song2, 100, 25)
+    # song2.save('generated_song_3.mid', True)
     #
     # genre.get_notes_frequency_graph()
     # genre.print_songs()
 
-    # song = Song()
-    # song.load(filename="../MIDI Files/Rock/Elton John/TinyDancer.mid", print_file=False)
-    # chord_chain = DynamicMarkovChain("chord chain", token_length=3, chain_type=chainType.CHORD)
-    # note_chain = DynamicMarkovChain("note chain", token_length=3, chain_type=chainType.NOTE)
-    # chord_chain.add_song(song)
-    # note_chain.add_song(song)
-    # song2 = Song()
-    # chord_chain.generate_pattern(song2, 25, 46)
-    # note_chain.generate_pattern(song2, 100, 25)
-    # song2.save('generated_song.mid', True)
+    song = Song()
+    song.load(filename="MIDI Files/Rock/Rolling Stones/PaintItBlack.mid", print_file=False)
+    chord_chain = DynamicMarkovChain("chord chain", token_length=5, chain_type=chainType.CHORD)
+    note_chain = DynamicMarkovChain("note chain", token_length=5, chain_type=chainType.NOTE)
+    chord_chain.add_song(song)
+    note_chain.add_song(song)
+    song2 = Song()
+    chord_chain.generate_pattern(song2, 30, 58)
+    note_chain.generate_pattern(song2, 75, 60)
+    song2.save('generated_song_4.mid', True)
 
 
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
@@ -63,10 +63,6 @@ if __name__ == '__main__':
     # song.load(filename="../MIDI Files/Rock/Elton John/TinyDancer.mid", print_file=False)
     # song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
     # song.get_transition_graph(name="Tiny Dancer")
-    # song.get_transition_graph(name="Skyfall")
-    # song.change_song_key(Key(tonic=song.detect_key_and_scale()[0:1]), Key())
-    # song.get_transition_graph(name="Your Song")
-
     # for track in song.tracks:
     #     print("track: " + track.track_name)
     #     for chord in track.chords:

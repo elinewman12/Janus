@@ -6,9 +6,9 @@ from Scale import SCALE_TYPES
 from Note import NUM_NOTES
 import FileIO as FileIO
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import collections
-import graphviz
+# import graphviz
 
 DEFAULT_TICKS_PER_BEAT = 48
 
