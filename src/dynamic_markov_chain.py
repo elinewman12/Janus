@@ -98,8 +98,8 @@ class DynamicMarkovChain:
         return next_chord[0], current_chord_token
 
     def generate_pattern(self, song, num_notes, instrument=0):
-        """Given a new song object and the number of notes to generate, this method will load that
-            amount of new notes into the song using the existing markov chain.
+        """ Given a new song object and the number of notes to generate, this method will load that
+            amount of new notes into a new track using the existing markov chain.
 
             Args:
                 song (Song): A brand new Song object
@@ -107,13 +107,12 @@ class DynamicMarkovChain:
                 instrument (int): the number you want for instrument
 
             Returns:
-                Song: The edited song object
+                Track: The generated track
         """
         # We are currently making every note an eighth note for easier testing
         eighth_note = int(song.ticks_per_beat / 2)
         half_note = int(song.ticks_per_beat * 2)
         t = Track()
-        song.add_track(t)
         # Start at a random place in the markov chain
         current_token = py.random.choice(list(self.probabilities.keys()))
         if self.chain_type is chainType.NOTE:
@@ -159,7 +158,7 @@ class DynamicMarkovChain:
                     t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=i * half_note, duration=half_note))
 
         t.controls.append(Control(msg_type='program_change', instrument=instrument, time=0))
-        return song
+        return t
 
     def add_chords(self, song):
         """Ingests a song and adds to the total dictionary. When all note changes are added,

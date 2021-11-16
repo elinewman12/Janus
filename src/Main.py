@@ -35,8 +35,12 @@ if __name__ == '__main__':
         note_chain.add_song(song)
 
     song2 = Song()
-    chord_chain.generate_pattern(song2, 25, 46)
-    note_chain.generate_pattern(song2, 100, 25)
+    chord_track = chord_chain.generate_pattern(song2, 25, 46)
+    melody_track = note_chain.generate_pattern(song2, 100, 25)
+
+    song2.add_track(chord_track)
+    song2.add_track(melody_track)
+
     song2.save('generated_song.mid', True)
     #
     # genre.get_notes_frequency_graph()
