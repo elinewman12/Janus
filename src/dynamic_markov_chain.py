@@ -97,7 +97,7 @@ class DynamicMarkovChain:
         next_chord = py.random.choice(available_chords, 1, p=percentage)
         return next_chord[0], current_chord_token
 
-    def generate_pattern(self, song, num_notes, instrument=0):
+    def generate_pattern(self, song, num_notes, instrument=0, arpeggio=False):
         """ Given a new song object and the number of notes to generate, this method will load that
             amount of new notes into a new track using the existing markov chain.
 
@@ -122,9 +122,24 @@ class DynamicMarkovChain:
                 t.add_note(Note(pitch=int(current_token_array[i]) + 36, time=i * eighth_note, duration=eighth_note))
             # Iterate through the rest of the song
             for i in range(self.token_length, num_notes):
-                # Generate new note for song
-                next_note_rtn = self.generate_next_note(current_token)
-                next_note_tone, current_token = next_note_rtn[0], next_note_rtn[1]
+                # Keep generating a new note until it is not dissonant with the current notes being played
+                while True:
+                    new_note_needed = False
+                    # Generate new note for song
+                    next_note_rtn = self.generate_next_note(current_token)
+                    next_note_tone, current_token = next_note_rtn[0], next_note_rtn[1]
+                    
+                    curr_notes = song.get_notes_at_time(time=i*eighth_note)
+                    for note in curr_notes:
+                        if abs(next_note_tone - note.c_indexed_pitch_class) <= 1:
+                            # Then the note will be dissnonant
+                            new_note_needed = True
+                            if len(self.probabilities.get(current_token)) == 1:
+                                current_token = py.random.choice(list(self.probabilities.keys()))
+                                
+                    if not new_note_needed:
+                        break
+                print(next_note_tone)
                 # Create the new pattern with the new note
                 if self.token_length == 1:
                     current_token = str(next_note_tone)
@@ -144,8 +159,25 @@ class DynamicMarkovChain:
                 for j in range(len(current_chord)):
                     t.add_note(Note(pitch=int(current_chord[j]) + 36, time=i * half_note, duration=half_note))
             for i in range(self.token_length, num_notes):
-                next_chord_rtn = self.generate_next_chord(current_token)
-                next_chord, current_token = next_chord_rtn[0], next_chord_rtn[1]
+
+                while True:
+                    new_note_needed = False
+                    next_chord_rtn = self.generate_next_chord(current_token)
+                    next_chord, current_token = next_chord_rtn[0], next_chord_rtn[1]
+
+                    curr_notes = song.get_notes_at_time(time=i*eighth_note)
+                    for note in curr_notes:
+                        curr_chord = next_chord.split()
+                        for chord_note in curr_chord:
+                            if abs(chord_note - note.c_indexed_pitch_class) <= 1:
+                                # The chord is dissonant
+                                new_note_needed = True
+                                if len(self.probabilities.get(current_token_array)) == 1:
+                                    current_token_array = py.random.choice(list(self.probabilities.keys()))
+
+                    if not new_note_needed:
+                        break
+                print(next_chord)
                 if self.token_length == 1:
                     current_token = next_chord
                 else:
@@ -154,8 +186,15 @@ class DynamicMarkovChain:
                         current_token += "," + current_token_array[j]
                     current_token += "," + next_chord
                 next_chord_array = next_chord.split()
+                offset = int(eighth_note/4)
                 for j in range(len(next_chord_array)):
-                    t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=i * half_note, duration=half_note))
+                    if not arpeggio:
+                        t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=i * half_note, duration=half_note))
+                    else:
+                        t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=(i * half_note) + offset, duration=half_note))
+                        offset += int(eighth_note/4)
+
+
 
         t.controls.append(Control(msg_type='program_change', instrument=instrument, time=0))
         return t

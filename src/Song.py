@@ -597,3 +597,20 @@ class Song:
             # print(str(edge[0]), count)
             graph.edge(str(edge[0]), str(edge[1]), label=str(count))
         graph.view()
+
+    def get_notes_at_time(self, time):
+        """ Returns all the notes in a song that are playing at a given time
+
+        Args:
+            time (int): Time to check
+
+        Returns:
+            Note[]: array of notes that occur at the given time
+        """        
+        notes = []
+        for track in self.tracks:
+            for note in track.notes:
+                if note.time >= time and note.time + note.duration <= time:
+                    notes.append(note)
+
+        return notes
