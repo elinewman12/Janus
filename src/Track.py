@@ -106,6 +106,14 @@ class Track:
         return [x for x in self.chords if x not in chord_set and not chord_set.add(x)]
 
     def append_track(self, track):
+        """
+        "Glues" two tracks together. Returns a new track with the contents of the two given tracks. Does not modify
+        either track.
+
+        :param track: The track to attach to the end of this track
+        :return: A new track with the contents of the two tracks played consecutively.
+        """
+
         if track is None:
             raise AttributeError("Track must not be None")
 
@@ -139,7 +147,32 @@ class Track:
 
         return new_self
 
+    def append_tracks(self, pattern=None, sections=None):
+        """Takes a pattern as an array of ints (Ex. [0, 0, 1, 1, 2, 1, 0]) and strings together
+        tracks (supplied in sections) in the pattern given. For example, if the given pattern is [0, 1, 2, 1, 0] and
+        the given sections are in the format [a, b, c], this will return a new track with the structure (a b c b a).
+
+        Params:
+        pattern: An array of ints used to dictate the pattern of tracks to return. The highest value must be less
+            than the length of "sections"
+        sections: A list of tracks that will be glued together in this method. The order given will determine how
+            the pattern is constructed (ie. the index of each section in the list corresponds to the int value in
+            "pattern" that will be used to represent it)
+
+        Returns:
+            A new track with the given sections attached to it in the given pattern.
+        """
+        new_track = self.duplicate_track()
+        for i in range(len(pattern)):
+            new_track = new_track.append_track(sections[pattern[i]])
+
+        return new_track
+
     def duplicate_track(self):
+        """
+        Returns a new track with identical contents to the given track. Does not modify the given track.
+        :return: a new track with identical contents to the given track.
+        """
         notes = []
         controls = []
         chords = []
@@ -160,6 +193,12 @@ class Track:
                      chords=chords, channel=self.channel)
 
     def equals(self, track):
+        """
+        Returns true if these two tracks are equal. If they are not equal, prints an info log message with more details
+        and return false
+        :param track: The track to compare this track to
+        :return: True, if the contents of the track are equal. False otherwise.
+        """
         if self.channel != track.channel:
             logging.info(msg="tracks " + track.track_name + " have different channel values")
             logging.info(msg="This: " + self.channel + ", compare to: " + track.channel)

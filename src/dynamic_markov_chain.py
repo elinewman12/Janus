@@ -100,7 +100,7 @@ class DynamicMarkovChain:
         next_chord = py.random.choice(available_chords, 1, p=percentage)
         return next_chord[0], current_chord_token
 
-    def generate_pattern(self, song, num_notes, instrument=0, arpeggio=False):
+    def generate_pattern(self, song, num_notes, instrument=0, arpeggio=False, octave=3):
         """ Given a new song object and the number of notes to generate, this method will load that
             amount of new notes into a new track using the existing markov chain.
 
@@ -123,7 +123,7 @@ class DynamicMarkovChain:
             current_token_array = current_token.split()
             # Add the beginning notes
             for i in range(self.token_length):
-                t.add_note(Note(pitch=int(current_token_array[i]) + 36, time=i * eighth_note, duration=eighth_note))
+                t.add_note(Note(pitch=int(current_token_array[i]) + (octave * 12), time=i * eighth_note, duration=eighth_note))
             # Iterate through the rest of the song
             for i in range(self.token_length, num_notes):
                 # Keep generating a new note until it is not dissonant with the current notes being played
@@ -154,11 +154,13 @@ class DynamicMarkovChain:
                     for j in range(2, self.token_length):
                         current_token += " " + previous_pattern[j]
                     current_token += " " + str(next_note_tone)
-                # 36 is a way to bump the notes up 3 octaves so it sounds better
-                next_note_tone += 36  # Bump up three octave
+                # Adding the specified octave is a way to bump the notes up (default 3) octaves so it sounds better
+                next_note_tone += (octave * 12)  # Bump up three octave
+                new_note = Note(pitch=next_note_tone, time=i * eighth_note, duration=eighth_note)
                 # There is a one in seven chance that we have a rest
-                if py.random.randint(0, 7):
-                    t.add_note(Note(pitch=next_note_tone, time=i * eighth_note, duration=eighth_note))
+                if not py.random.randint(0, 7):
+                    new_note.velocity = 0
+                t.add_note(new_note)
         # Here we are doing the same thing but for chords
         else:
             # We split the token to get all the individual chords
@@ -167,7 +169,7 @@ class DynamicMarkovChain:
             for i in range(self.token_length):
                 current_chord = current_token_array[i].split()
                 for j in range(len(current_chord)):
-                    t.add_note(Note(pitch=int(current_chord[j]) + 36, time=i * half_note, duration=half_note))
+                    t.add_note(Note(pitch=int(current_chord[j]) + (octave * 12), time=i * half_note, duration=half_note))
             # Now we can iterate until we have made enough notes
             for i in range(self.token_length, num_notes):
                 # Check if there is dissonance in the new chord
@@ -203,9 +205,9 @@ class DynamicMarkovChain:
                 offset = int(eighth_note / 4)
                 for j in range(len(next_chord_array)):
                     if not arpeggio:
-                        t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=i * half_note, duration=half_note))
+                        t.add_note(Note(pitch=int(next_chord_array[j]) + (octave * 12), time=i * half_note, duration=half_note))
                     else:
-                        t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=(i * half_note) + offset,
+                        t.add_note(Note(pitch=int(next_chord_array[j]) + (octave * 12), time=(i * half_note) + offset,
                                         duration=half_note))
                         offset += int(eighth_note / 4)
 

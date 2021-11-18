@@ -230,6 +230,7 @@ def order_messages(track):
     # Sort note on and off messages so they're in chronological order
     note_on.sort(key=lambda note: note[1])
     note_off.sort(key=lambda note: note[1])
+    controls.sort(key=lambda control: control[1])
 
     # Compare the first element of the three lists. Write which ever one comes
     # first to a midi message, and remove it from its list.
@@ -257,8 +258,8 @@ def order_messages(track):
             next_control_time = None
 
         # If the next event is a control change
-        if len(controls) > 0 and ((len(note_on) > 0 and next_control_time < next_note_on_time and
-                                   next_control_time < next_note_off_time) or len(note_on) == 0):
+        if len(controls) > 0 and ((len(note_on) > 0 and next_control_time <= next_note_on_time and
+                                   next_control_time <= next_note_off_time) or len(note_on) == 0):
 
             c = next_control
             msg_time = c.time
