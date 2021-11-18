@@ -88,12 +88,15 @@ class DynamicMarkovChain:
         if self.probabilities.get(current_chord_token) is None:
             # Let's just randomly pick a new position to continue in the chain
             current_chord_token = py.random.choice(list(self.probabilities.keys()))
+        # Get all the chords that have followed our current token in a list
         chord_follow = self.probabilities.get(current_chord_token)
         percentage = []
         available_chords = []
+        # Store the total chords and the percentage chance that they occur
         for chord in chord_follow:
             available_chords.append(chord[0])
             percentage.append(chord[1])
+        # Choose a chord with the given percentages and return it
         next_chord = py.random.choice(available_chords, 1, p=percentage)
         return next_chord[0], current_chord_token
 
@@ -109,7 +112,8 @@ class DynamicMarkovChain:
             Returns:
                 Track: The generated track
         """
-        # We are currently making every note an eighth note for easier testing
+        # We are currently making every note an eighth note
+        # and every chord a half not for easier testing
         eighth_note = int(song.ticks_per_beat / 2)
         half_note = int(song.ticks_per_beat * 2)
         t = Track()
@@ -128,15 +132,15 @@ class DynamicMarkovChain:
                     # Generate new note for song
                     next_note_rtn = self.generate_next_note(current_token)
                     next_note_tone, current_token = next_note_rtn[0], next_note_rtn[1]
-                    
-                    curr_notes = song.get_notes_at_time(time=i*eighth_note)
+                    # Get all the notes that occur at this time to see if there is dissonance
+                    curr_notes = song.get_notes_at_time(time=i * eighth_note)
                     for note in curr_notes:
                         if abs(next_note_tone - note.c_indexed_pitch_class) <= 1:
-                            # Then the note will be dissnonant
+                            # Then the note will be dissonant
                             new_note_needed = True
                             if len(self.probabilities.get(current_token)) == 1:
                                 current_token = py.random.choice(list(self.probabilities.keys()))
-                                
+
                     if not new_note_needed:
                         break
                 print(next_note_tone)
@@ -144,28 +148,36 @@ class DynamicMarkovChain:
                 if self.token_length == 1:
                     current_token = str(next_note_tone)
                 else:
+                    # We need to change the pattern token by adding the new note
                     previous_pattern = current_token.split()
                     current_token = previous_pattern[1]
                     for j in range(2, self.token_length):
                         current_token += " " + previous_pattern[j]
                     current_token += " " + str(next_note_tone)
+                # 36 is a way to bump the notes up 3 octaves so it sounds better
                 next_note_tone += 36  # Bump up three octave
+                # There is a one in seven chance that we have a rest
                 if py.random.randint(0, 7):
                     t.add_note(Note(pitch=next_note_tone, time=i * eighth_note, duration=eighth_note))
+        # Here we are doing the same thing but for chords
         else:
+            # We split the token to get all the individual chords
             current_token_array = current_token.split(',')
+            # We add all the initial notes to the track before iterating
             for i in range(self.token_length):
                 current_chord = current_token_array[i].split()
                 for j in range(len(current_chord)):
                     t.add_note(Note(pitch=int(current_chord[j]) + 36, time=i * half_note, duration=half_note))
+            # Now we can iterate until we have made enough notes
             for i in range(self.token_length, num_notes):
-
+                # Check if there is dissonance in the new chord
                 while True:
+                    # Get new chord and token
                     new_note_needed = False
                     next_chord_rtn = self.generate_next_chord(current_token)
                     next_chord, current_token = next_chord_rtn[0], next_chord_rtn[1]
-
-                    curr_notes = song.get_notes_at_time(time=i*eighth_note)
+                    # Get all notes that occur at this time to see if there is dissonance
+                    curr_notes = song.get_notes_at_time(time=i * eighth_note)
                     for note in curr_notes:
                         curr_chord = next_chord.split()
                         for chord_note in curr_chord:
@@ -181,28 +193,28 @@ class DynamicMarkovChain:
                 if self.token_length == 1:
                     current_token = next_chord
                 else:
+                    # We need to change the token so it has the new chord in it
                     current_token = current_token_array[1]
                     for j in range(2, self.token_length):
                         current_token += "," + current_token_array[j]
                     current_token += "," + next_chord
                 next_chord_array = next_chord.split()
-                offset = int(eighth_note/4)
+                # If the user wants arpeggio then split the chord up by 32nd notes
+                offset = int(eighth_note / 4)
                 for j in range(len(next_chord_array)):
                     if not arpeggio:
                         t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=i * half_note, duration=half_note))
                     else:
-                        t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=(i * half_note) + offset, duration=half_note))
-                        offset += int(eighth_note/4)
-
-
+                        t.add_note(Note(pitch=int(next_chord_array[j]) + 36, time=(i * half_note) + offset,
+                                        duration=half_note))
+                        offset += int(eighth_note / 4)
 
         t.controls.append(Control(msg_type='program_change', instrument=instrument, time=0))
         return t
 
     def add_chords(self, song):
-        """Ingests a song and adds to the total dictionary. When all note changes are added,
-        divides all elements in the dictionary by the total amount of note changes recorded and
-        stores this in self.probabilities, which will give the probability matrix.
+        """Given a song object, this will add all the chords to our probability dictionary AKA
+        markov chain and create the percentages for them.
 
         Args:
             song (Song): Song to ingest and generate probabilities from
@@ -239,6 +251,7 @@ class DynamicMarkovChain:
             if pattern_dict.get(previous_pattern) is None:
 
                 pattern_dict[previous_pattern] = [[next_chord, 1]]
+            # We need to check if the pattern and chord combo exists already
             else:
                 found = False
                 for chord in pattern_dict.get(previous_pattern):
@@ -248,7 +261,7 @@ class DynamicMarkovChain:
                         break
                 if not found:
                     pattern_dict.get(previous_pattern).append([next_chord, 1])
-
+            # Finally, we create the new token to continue
             previous_pattern = all_chords[i - self.token_length].to_string()
             previous_pattern += ","
             for j in range(i - self.token_length + 1, i):
