@@ -151,44 +151,7 @@ class Song:
         self.get_chord_names()
         return self
 
-    def change_song_key(self, origin_key, destination_key):
-        """ Changes the key of an entire song from an origin key to a desintaiton key
-        TODO: Will not need origin_key param once key detection is fully implemented and tested
-
-        Args:
-            origin_key (Key): current key of the song
-            destination_key (Key): key to change the song to
-
-        Raises:
-            SyntaxError: If origin_key or destination_key is not a valid Key
-
-        Returns:
-            Song: The newly edited song
-        """
-
-        # Check to make sure params are the correct type
-        if not isinstance(origin_key, Key) or not isinstance(destination_key, Key):
-            raise SyntaxError("Parameters are not of the right type.  They must be of type 'Key'")
-
-        # Get the index of the origin key
-        origin_index = origin_key.get_c_based_index_of_key()
-
-        # Get the index of the destination key
-        destination_index = destination_key.get_c_based_index_of_key()
-
-        # discover offset (this is the number of half steps to move each note to get to the destination key)
-        offset = destination_index - origin_index
-
-        # apply the offset to each note
-        for track in self.tracks:
-            if not track.is_percussion:
-                for note in track.notes:
-                    note.pitch += offset
-
-        self.get_chord_names()
-        return self
-
-    def change_key_for_interval(self, origin_key, destination_key, interval_begin, interval_end):
+    def change_song_key(self, origin_key, destination_key, interval_begin=0, interval_end=float('inf')):
         """ Changes the key of a song for a certain time interval during it.
         TODO: this will not need origin_key once key detection is fully implemented
 
@@ -218,12 +181,37 @@ class Song:
         # discover offset (this is the number of half steps to move each note to get to the destination key)
         offset = destination_index - origin_index
 
+        origin_steps = []
+        dest_steps = []
+
+        # iterate over each scale and find the source and destination scales
+        for scale in SCALE_TYPES.items():
+            # Break the scale dict into source and destination values
+            if scale[0] == str(origin_key.mode):
+                origin_steps = scale[1]
+            if scale[0] == str(destination_key.mode):
+                dest_steps = scale[1]
+
         # apply the offset to each note within the time interval
         for track in self.tracks:
             if not track.is_percussion:
                 for note in track.notes:
                     if interval_begin <= note.time <= interval_end:
                         note.pitch += offset
+
+                        # Reset c_indexed_pitch_class
+                        note.c_indexed_pitch_class = note.pitch % 12
+
+                        # Shift each note to its corresponding location in the destination mode
+                        origin_pitch = 0
+                        dest_pitch = 0
+                        for i in range(len(origin_steps)):
+
+                            if (note.c_indexed_pitch_class - origin_key.get_c_based_index_of_key()) % 12 == origin_pitch:
+                                note.pitch += (dest_pitch - origin_pitch)
+                            # Deal with accidentals here? or leave them where they are?
+                            origin_pitch += origin_steps[i]
+                            dest_pitch += dest_steps[i]
         return self
 
     def get_note_velocity_graph(self, name):
@@ -429,7 +417,9 @@ class Song:
             detected_return_key = relative_minor_key_scale
 
         # determine confidence based on number of 1 - number of errors/ number of notes
-        confidence = 1 - minimum_errors / num_notes
+        confidence = 0
+        if num_notes != 0:
+            confidence = 1 - minimum_errors / num_notes
 
         # set the key of the song
         self.key = detected_return_key
@@ -533,6 +523,9 @@ class Song:
         return [detected_key, message, confidence]
 
     def get_chord_names(self):
+        """
+        Sets the name field inside chord based on the notes in the chord.
+        """
         # It would be helpful for us here to have an accidental field on a key to know if its sharp or flat
         # That's because then you know whether to use the keys or equivalent keys array
         # I think this should work for all natural keys though

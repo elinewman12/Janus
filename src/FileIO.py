@@ -260,9 +260,9 @@ def order_messages(track):
         # If the next event is a control change
         if len(controls) > 0 and ((len(note_on) > 0 and next_control_time <= next_note_on_time and
                                    next_control_time <= next_note_off_time) or len(note_on) == 0):
-
             c = next_control
             msg_time = c.time
+            msg_type = 'control'
 
             if c.msg_type == 'set_tempo':
                 msgs.append(mido.MetaMessage(type=c.msg_type, tempo=c.tempo,
@@ -293,6 +293,7 @@ def order_messages(track):
             note_off.remove(note_off[0])
             msgs.append(mido.Message(type=msg_type, channel=track.channel, note=n.pitch, velocity=n.velocity,
                                      time=msg_time - time))
+
         time = msg_time
 
     return msgs

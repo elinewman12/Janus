@@ -4,7 +4,7 @@ from Control import Control
 from Note import Note
 from Song import Song
 from Track import Track
-from Key import Key
+from Key import Key, Mode
 import mido
 
 
@@ -59,7 +59,7 @@ def test_change_song_key():
     d_scale = Song()
 
     orig.load(filename="test MIDI/C_major_scale.mid")
-    orig = orig.change_song_key(origin_key=Key('C'), destination_key=Key('D'))
+    orig.change_song_key(origin_key=Key('C', Mode.MAJOR), destination_key=Key('D', Mode.MAJOR))
     orig.save(filename="test MIDI/C_major_scale_Output.mid")
 
     new_song.load(filename="test MIDI/C_major_scale_Output.mid")
@@ -70,26 +70,83 @@ def test_change_song_key():
     assert new_song.tracks[1].notes[2].pitch == d_scale.tracks[1].notes[2].pitch
     assert new_song.tracks[1].notes[3].pitch == d_scale.tracks[1].notes[3].pitch
 
-
-def test_change_key_for_interval():
-    """
-        Tests the functionality of changing song key for a certain interval
-
-        Tests using a C scale changed to a D scale
-    """
-    orig = Song()
-    new_song = Song()
-    d_scale = Song()
+    orig.load(filename="test MIDI/C_major_scale.mid")
+    orig.change_song_key(origin_key=Key('C', Mode.MAJOR), destination_key=Key('C', Mode.DORIAN))
+    assert orig.tracks[1].notes[0].pitch == 48
+    assert orig.tracks[1].notes[1].pitch == 50
+    assert orig.tracks[1].notes[2].pitch == 51
+    assert orig.tracks[1].notes[3].pitch == 53
+    assert orig.tracks[1].notes[4].pitch == 55
+    assert orig.tracks[1].notes[5].pitch == 57
+    assert orig.tracks[1].notes[6].pitch == 58
+    assert orig.tracks[1].notes[7].pitch == 60
 
     orig.load(filename="test MIDI/C_major_scale.mid")
-    orig = orig.change_key_for_interval(origin_key=Key('C'), destination_key=Key('D'), interval_begin=0, interval_end=107)
-    orig.save(filename="test MIDI/C_major_scale_Output.mid")
+    orig.change_song_key(origin_key=Key('C', Mode.MAJOR), destination_key=Key('C', Mode.PHRYGIAN))
+    assert orig.tracks[1].notes[0].pitch == 48
+    assert orig.tracks[1].notes[1].pitch == 49
+    assert orig.tracks[1].notes[2].pitch == 51
+    assert orig.tracks[1].notes[3].pitch == 53
+    assert orig.tracks[1].notes[4].pitch == 55
+    assert orig.tracks[1].notes[5].pitch == 56
+    assert orig.tracks[1].notes[6].pitch == 58
+    assert orig.tracks[1].notes[7].pitch == 60
 
-    new_song.load(filename="test MIDI/C_major_scale_Output.mid")
-    d_scale.load(filename="test MIDI/D_major_scale.mid")
+    orig.load(filename="test MIDI/C_major_scale.mid")
+    orig.change_song_key(origin_key=Key('C', Mode.MAJOR), destination_key=Key('C', Mode.LYDIAN))
+    assert orig.tracks[1].notes[0].pitch == 48
+    assert orig.tracks[1].notes[1].pitch == 50
+    assert orig.tracks[1].notes[2].pitch == 52
+    assert orig.tracks[1].notes[3].pitch == 54
+    assert orig.tracks[1].notes[4].pitch == 55
+    assert orig.tracks[1].notes[5].pitch == 57
+    assert orig.tracks[1].notes[6].pitch == 59
+    assert orig.tracks[1].notes[7].pitch == 60
 
-    assert new_song.tracks[1].notes[0].pitch == d_scale.tracks[1].notes[0].pitch
+    orig.load(filename="test MIDI/C_major_scale.mid")
+    orig.change_song_key(origin_key=Key('C', Mode.MAJOR), destination_key=Key('C', Mode.MIXOLYDIAN))
+    assert orig.tracks[1].notes[0].pitch == 48
+    assert orig.tracks[1].notes[1].pitch == 50
+    assert orig.tracks[1].notes[2].pitch == 52
+    assert orig.tracks[1].notes[3].pitch == 53
+    assert orig.tracks[1].notes[4].pitch == 55
+    assert orig.tracks[1].notes[5].pitch == 57
+    assert orig.tracks[1].notes[6].pitch == 58
+    assert orig.tracks[1].notes[7].pitch == 60
 
+    orig.load(filename="test MIDI/C_major_scale.mid")
+    orig.change_song_key(origin_key=Key('C', Mode.MAJOR), destination_key=Key('C', Mode.MINOR))
+    assert orig.tracks[1].notes[0].pitch == 48
+    assert orig.tracks[1].notes[1].pitch == 50
+    assert orig.tracks[1].notes[2].pitch == 51
+    assert orig.tracks[1].notes[3].pitch == 53
+    assert orig.tracks[1].notes[4].pitch == 55
+    assert orig.tracks[1].notes[5].pitch == 56
+    assert orig.tracks[1].notes[6].pitch == 58
+    assert orig.tracks[1].notes[7].pitch == 60
+
+    orig.load(filename="test MIDI/C_major_scale.mid")
+    orig.change_song_key(origin_key=Key('C', Mode.MAJOR), destination_key=Key('C', Mode.LOCRIAN))
+    assert orig.tracks[1].notes[0].pitch == 48
+    assert orig.tracks[1].notes[1].pitch == 49
+    assert orig.tracks[1].notes[2].pitch == 51
+    assert orig.tracks[1].notes[3].pitch == 53
+    assert orig.tracks[1].notes[4].pitch == 54
+    assert orig.tracks[1].notes[5].pitch == 56
+    assert orig.tracks[1].notes[6].pitch == 58
+    assert orig.tracks[1].notes[7].pitch == 60
+
+    # This only changes the second half of the scale to phrygian
+    orig.load(filename="test MIDI/C_major_scale.mid")
+    orig.change_song_key(origin_key=Key('C', Mode.MAJOR), destination_key=Key('C', Mode.PHRYGIAN), interval_begin=300)
+    assert orig.tracks[1].notes[0].pitch == 48
+    assert orig.tracks[1].notes[1].pitch == 50
+    assert orig.tracks[1].notes[2].pitch == 52
+    assert orig.tracks[1].notes[3].pitch == 53
+    assert orig.tracks[1].notes[4].pitch == 55
+    assert orig.tracks[1].notes[5].pitch == 56
+    assert orig.tracks[1].notes[6].pitch == 58
+    assert orig.tracks[1].notes[7].pitch == 60
 
 def test_transition_graph():
     song = Song()
@@ -188,7 +245,7 @@ def test_detect_key_by_phrase_endings():
     d_mix.tracks.append(d_mix_track)
 
     assert d_mix.detect_key_by_phrase_endings()[0].tonic == "D"
-    assert d_mix.detect_key_by_phrase_endings()[0].mode == "mixolydian"
+    assert d_mix.detect_key_by_phrase_endings()[0].mode == Mode.MIXOLYDIAN
 
     song2 = Song()
     tonic_not_in_scale = Track()
@@ -213,6 +270,6 @@ def test_detect_key_by_phrase_endings():
     song2.tracks.append(tonic_not_in_scale)
 
     assert song2.detect_key_by_phrase_endings()[0].tonic == "C"
-    assert song2.detect_key_by_phrase_endings()[0].mode == "major"
+    assert song2.detect_key_by_phrase_endings()[0].mode == Mode.MAJOR
 
 

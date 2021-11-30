@@ -1,9 +1,31 @@
 import string
 
+MAJOR = "major"
+IONIAN = "ionian"
+DORIAN = "dorian"
+PHRYGIAN = "phrygian"
+LYDIAN = "lydian"
+MIXOLYDIAN = "mixolydian"
+MINOR = "minor"
+AOLIAN = "aolian"
+LOCRIAN = "locrian"
+
 KEYS = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
 EQUIVALENT_KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-MODES = ['major', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'minor', 'locrian']
-EQUIVALENT_MODES = ['ionian', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'aeolian', 'locrian']
+MODES = [MAJOR, DORIAN, PHRYGIAN, LYDIAN, MIXOLYDIAN, MINOR, LOCRIAN]
+EQUIVALENT_MODES = [IONIAN, DORIAN, PHRYGIAN, LYDIAN, MIXOLYDIAN, AOLIAN, LOCRIAN]
+
+
+class Mode:
+    MAJOR = "major"
+    IONIAN = "ionian"
+    DORIAN = "dorian"
+    PHRYGIAN = "phrygian"
+    LYDIAN = "lydian"
+    MIXOLYDIAN = "mixolydian"
+    MINOR = "minor"
+    AOLIAN = "aolian"
+    LOCRIAN = "locrian"
 
 
 class Key:
