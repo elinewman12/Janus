@@ -1,22 +1,17 @@
-from Song import Song
+from Song import Song, SongLibrary
 from Key import Key, Mode
 
 # Create an empty song object
 song = Song()
 
 # Load the MIDI file into the song object
-song.load(filename="../../MIDI Files/Gospel/John Newton/Amazing_Grace.mid")
-
-print("Current song key: " + song.key.tonic + " " + song.key.mode)
-
-detect_object = song.detect_key_by_phrase_endings()
-print("detected key by phrase endings: " + detect_object[0].tonic + " " + detect_object[0].mode)
+song.load(filename=SongLibrary.AMAZING_GRACE)
 
 # Manually enter the key to change from/to
-song.change_song_key(Key("B", Mode.MINOR), Key("B", Mode.LOCRIAN))
+song.change_song_key(Key("G", Mode.MAJOR), Key("G", Mode.MINOR))
 
 # Use the auto-detected key of the song
-# song.change_song_key(song.key, Key("G", Mode.LOCRIAN))
+# song.change_song_key(song.key, Key("G", Mode.MINOR))
 
 
-song.save(filename="../../MIDI Files/Gospel/John Newton/Amazing_Grace_locrian.mid")
+song.save(filename="../../MIDI Files/Demo Output/Amazing_Grace_Major.mid")

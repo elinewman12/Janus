@@ -1,22 +1,21 @@
-from Song import Song
+from Song import Song, SongLibrary
 
+# Create a new song object
 song = Song()
 
-# song.load(filename="../../MIDI Files/Metal/Megadeth/Megadeth-Symphony Of Destruction.mid")    # Actual Key: E
-# song.load(filename="../../MIDI Files/Rock/Aerosmith/DreamOn.mid")                             # Actual Key: F
-# song.load(filename="../../MIDI Files/Country/John Anderson/2603_Seminole-Wind.mid")           # Actual Key: E
-# song.load(filename="../../MIDI Files/Indie/Simon and Garfunkel/scarborough_fair.mid")         # Actual Key: E
-# song.load(filename="../../MIDI Files/Rock/Elton John/RocketMan.mid")                          # Actual Key: Bb
-song.load(filename="../../MIDI Files/Grunge/Nirvana/InBloom.mid", print_file=False)           # Actual Key: A
+# Load the desired song into the "song" object
+song.load(filename=SongLibrary.MEGADETH_SYMPHONY_OF_DESTRUCTION)    # Actual Key: E Phrygian
 
-detect_key_object = song.detect_key_by_phrase_endings()
+# Run the Detect Key method on the song object, capture the returned object
+key, report, confidence = song.detect_key_by_phrase_endings()
 
 # Prints the full report
-print(detect_key_object[1])
+print(report)
 
-# Prints the detected key object
-print(detect_key_object[0].tonic + " " + detect_key_object[0].mode)
+# Prints the detected key
+print(key.tonic + " " + key.mode)
 
-# Prints a list of each track and its associated tag
-# for track in song.tracks:
-#     print(track.track_name + "  " + str(track.tag))
+# Prints confidence
+print("Confidence: " + confidence)
+
+
