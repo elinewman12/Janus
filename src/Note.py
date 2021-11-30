@@ -17,6 +17,8 @@ class Note:
             channel (int, optional): The channel this note was read from. Defaults to 0.
         """        
         self.pitch = pitch
+        if time < 0:
+            raise SyntaxError("Time cannot be less than 0")
         self.time = time
         self.duration = duration
         self.velocity = velocity

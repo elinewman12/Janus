@@ -14972,7 +14972,7 @@ MidiFile(type=1, ticks_per_beat=480, tracks=[
     Message('note_off', channel=8, note=28, velocity=80, time=480),
     MetaMessage('end_of_track', time=0)]),
   MidiTrack([
-    MetaMessage('track_name', name='Trè Cool (Drums)', time=0),
+    MetaMessage('track_name', name='TrÃ¨ Cool (Drums)', time=0),
     Message('control_change', channel=9, control=100, value=0, time=0),
     Message('control_change', channel=9, control=101, value=0, time=0),
     Message('control_change', channel=9, control=6, value=12, time=0),

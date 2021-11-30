@@ -9868,7 +9868,7 @@ MidiFile(type=1, ticks_per_beat=192, tracks=[
     MetaMessage('end_of_track', time=0)]),
   MidiTrack([
     MetaMessage('midi_port', port=0, time=0),
-    MetaMessage('track_name', name='Dennis Bäcker', time=0),
+    MetaMessage('track_name', name='Dennis BÃ¤cker', time=0),
     MetaMessage('end_of_track', time=0)]),
   MidiTrack([
     MetaMessage('midi_port', port=0, time=0),

@@ -5,7 +5,8 @@ import sys
 from Track import Track, TagEnum
 from Note import Note, NUM_NOTES
 import numpy as py
-from control import Control
+from Control import Control
+from Note import MAX_VELOCITY
 
 
 class chainType(Enum):
@@ -80,7 +81,6 @@ class DynamicMarkovChain:
             if not found:
                 percentage.append(0)
         # Pick a random new note with the percentages and return the note and new pattern
-        print(percentage)
         next_note = py.random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 1, p=percentage)
         return next_note[0], current_note_token
 
@@ -97,9 +97,9 @@ class DynamicMarkovChain:
         next_chord = py.random.choice(available_chords, 1, p=percentage)
         return next_chord[0], current_chord_token
 
-    def generate_pattern(self, song, num_notes, instrument=0):
-        """Given a new song object and the number of notes to generate, this method will load that
-            amount of new notes into the song using the existing markov chain.
+    def generate_pattern(self, song, num_notes, instrument=0, arpeggio=False, channel=0, velocity=MAX_VELOCITY, octave=4):
+        """ Given a new song object and the number of notes to generate, this method will load that
+            amount of new notes into a new track using the existing markov chain.
 
             Args:
                 song (Song): A brand new Song object
@@ -113,7 +113,7 @@ class DynamicMarkovChain:
         eighth_note = int(song.ticks_per_beat / 2)
         half_note = int(song.ticks_per_beat * 2)
         curr_time=0
-        t = Track()
+        t = Track(channel=channel)
         t.controls.append(Control(msg_type='program_change', instrument=instrument, time=0))
         # Start at a random place in the markov chain
         current_token = py.random.choice(list(self.probabilities.keys()))
@@ -121,8 +121,9 @@ class DynamicMarkovChain:
             current_token_array = current_token.split()
             # Add the beginning notes
             for i in range(self.token_length):
-                curr_time = curr_time + py.random.choice([1, 2, 3, 4], 1)[0]*eighth_note
-                t.add_note(Note(pitch=int(current_token_array[i]) + 48, time=curr_time, duration=eighth_note))
+                length = py.random.choice([1, 2, 3, 4], 1)[0]*eighth_note
+                curr_time = curr_time + length
+                t.add_note(Note(pitch=int(current_token_array[i]) + (12 * octave), time=curr_time, duration=length, velocity=velocity))
             # Iterate through the rest of the song
             for i in range(self.token_length, num_notes):
                 # Generate new note for song
@@ -137,17 +138,18 @@ class DynamicMarkovChain:
                     for j in range(2, self.token_length):
                         current_token += " " + previous_pattern[j]
                     current_token += " " + str(next_note_tone)
-                next_note_tone += 48  # Bump up three octave
+                next_note_tone += 12 * octave 
                 if py.random.randint(0, 7):
-                    curr_time = curr_time + py.random.choice([1, 2, 3, 4], 1)[0]*eighth_note + eighth_note
-                    t.add_note(Note(pitch=next_note_tone, time=curr_time, duration=eighth_note))
+                    new_len = py.random.choice([1, 2, 3], 1)[0] * eighth_note
+                    curr_time = curr_time + new_len
+                    t.add_note(Note(pitch=next_note_tone, time=curr_time, duration=new_len, velocity=velocity))
         else:
             current_token_array = current_token.split(',')
             for i in range(self.token_length):
                 current_chord = current_token_array[i].split()
                 for j in range(len(current_chord)):
                     note = (py.random.choice([1, 2], 1)[0]*half_note)
-                    t.add_note(Note(pitch=int(current_chord[j]) + 48, time=i * note, duration=note))
+                    t.add_note(Note(pitch=int(current_chord[j]) + (12 * octave), time=i * note, duration=note, velocity=velocity))
             for i in range(self.token_length, num_notes):
                 next_chord_rtn = self.generate_next_chord(current_token)
                 next_chord, current_token = next_chord_rtn[0], next_chord_rtn[1]
@@ -159,13 +161,19 @@ class DynamicMarkovChain:
                         current_token += "," + current_token_array[j]
                     current_token += "," + next_chord
                 next_chord_array = next_chord.split()
+                offset = int(eighth_note/4)
+                note = (py.random.choice([1, 2], 1)[0]*half_note) * 2
                 for j in range(len(next_chord_array)):
-                    note = (py.random.choice([1, 2], 1)[0]*half_note)
-                    t.add_note(Note(pitch=int(next_chord_array[j]) + 48, time=i * note, duration=note))
+                    if not arpeggio:
+                        t.add_note(Note(pitch=int(next_chord_array[j]) + (12 * octave), time=curr_time, duration=note, velocity=velocity))
+                    else:
+                        t.add_note(Note(pitch=int(next_chord_array[j]) + (12 * octave), time=curr_time + offset, duration=note - offset, velocity=velocity))
+                        offset += int(eighth_note/4)
+                curr_time += note
 
         # song.tracks[0].controls.append(Control(msg_type='program_change', instrument=instrument, time=0))
-        song.add_track(t)
-        return song
+        # song.add_track(t)
+        return t
 
     def add_chords(self, song):
         """Ingests a song and adds to the total dictionary. When all note changes are added,
@@ -196,7 +204,7 @@ class DynamicMarkovChain:
             previous_pattern += all_chords[i].to_string()
             previous_pattern += ","
         previous_pattern = previous_pattern[:len(previous_pattern) - 2]
-        print(previous_pattern)
+        # print(previous_pattern)
 
         # Create dictionary
         pattern_dict = self.probabilities
@@ -234,7 +242,7 @@ class DynamicMarkovChain:
                 chord[1] = (chord[1] / total)
 
         self.probabilities = pattern_dict
-        print(pattern_dict)
+        # print(pattern_dict)
         return pattern_dict
         # Key is the same pattern, value is a list of all the percentages. [0, 0.5, 0.05, 0.25, ...]
 
@@ -301,6 +309,6 @@ class DynamicMarkovChain:
                 note[1] = (note[1] / total)
 
         self.probabilities = pattern_dict
-        print(pattern_dict)
+        # print(pattern_dict)
         return pattern_dict
         # Key is the same pattern, value is a list of all the percentages. [0, 0.5, 0.05, 0.25, ...]

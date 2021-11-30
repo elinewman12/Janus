@@ -1,11 +1,10 @@
-from Genre import Genre
+from Rhythm import *
 from Song import Song
-import os
 from Track import TagEnum
-from Key import Key
-from markov_chain import MarkovChain, Type
-from markov_library import MarkovLibrary
 from dynamic_markov_chain import DynamicMarkovChain, chainType
+import copy
+
+from Note import MAX_VELOCITY
 
 if __name__ == '__main__':
 
@@ -43,15 +42,24 @@ if __name__ == '__main__':
     # genre.print_songs()
 
     song = Song()
+    song2 = Song()
     song.load(filename="MIDI Files/Rock/Rolling Stones/PaintItBlack.mid", print_file=False)
     chord_chain = DynamicMarkovChain("chord chain", token_length=5, chain_type=chainType.CHORD)
-    note_chain = DynamicMarkovChain("note chain", token_length=5, chain_type=chainType.NOTE)
     chord_chain.add_song(song)
+    song2.add_track(chord_chain.generate_pattern(song2, num_notes=15, instrument=32, arpeggio=True))
+
+    note_chain = DynamicMarkovChain("note chain", token_length=5, chain_type=chainType.NOTE)
     note_chain.add_song(song)
-    song2 = Song()
-    chord_chain.generate_pattern(song2, 30, 58)
-    note_chain.generate_pattern(song2, 75, 60)
-    song2.save('generated_song_4.mid', True)
+    rhythm_1 = note_chain.generate_pattern(song2, num_notes=10, instrument=24, channel=2, velocity=int(MAX_VELOCITY/2))
+    song2.add_track(rhythm_1)
+    bridge_1 = note_chain.generate_pattern(song2, num_notes=15, instrument=24, channel=2, velocity=int(MAX_VELOCITY/2))
+    song2.append_track(1, bridge_1)
+    song2.append_track(1, rhythm_1)
+    bridge_2 = note_chain.generate_pattern(song2, num_notes=15, instrument=24, channel=2, velocity=int(MAX_VELOCITY/2))
+    song.append_track(1, bridge_2)
+    song.append_track(1, rhythm_1)
+    song.append_track(1, rhythm_1)
+    song2.save('generated_song.mid', True)
 
 
     # song.load(filename="../MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid", print_file=True)
