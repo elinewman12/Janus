@@ -258,10 +258,8 @@ def order_messages(track):
             next_control_time = None
 
         # If the next event is a control change
-        if next_control_time is not None and \
-                (next_note_off_time is None or next_control_time < next_note_off_time) and \
-                (next_note_on_time is None or next_control_time < next_note_on_time):
-
+        if len(controls) > 0 and ((len(note_on) > 0 and next_control_time <= next_note_on_time and
+                                   next_control_time <= next_note_off_time) or len(note_on) == 0):
             c = next_control
             msg_time = c.time
             msg_type = 'control'

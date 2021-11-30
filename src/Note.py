@@ -15,6 +15,7 @@ class Note:
             duration (int, optional): The duration that the note is held. Defaults to 1.
             velocity (int, optional): The intensity/loudness of the note. Defaults to MAX_VELOCITY (127).
             channel (int, optional): The channel this note was read from. Defaults to 0.
+            chord_note (bool, optional): If this note is part of a chord
         """        
         self.pitch = pitch
         self.time = time
@@ -25,5 +26,9 @@ class Note:
         # The pitch class the note belongs to, stored as an int from 0-11, with
         # 0 being C. Octave information is lost in this calculation.
         self.c_indexed_pitch_class = pitch % NUM_NOTES
+
+    def duplicate_note(self):
+        return Note(pitch=self.pitch, time=self.time, duration=self.duration, velocity=self.velocity,
+                    channel=self.channel, chord_note=self.chord_note)
 
 

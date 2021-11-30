@@ -26,3 +26,9 @@ class Chord:
             new_string += " " + str(self.notes[i].c_indexed_pitch_class)
         return new_string
 
+    def duplicate_chord(self):
+        notes = []
+        for note in self.notes:
+            notes.append(note.duplicate_note())
+        return Chord(notes=notes, name=self.name, time=self.time)
+

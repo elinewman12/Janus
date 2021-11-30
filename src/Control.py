@@ -30,3 +30,7 @@ class Control:
         self.value = value
         self.instrument = instrument
         self.time = time
+
+    def duplicate_control(self):
+        return Control(msg_type=self.msg_type, tempo=self.tempo, control=self.control, value=self.value,
+                       instrument=self.instrument, time=self.time)
