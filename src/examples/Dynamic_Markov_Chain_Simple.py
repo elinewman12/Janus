@@ -26,4 +26,4 @@ output_song.add_track(chords)
 output_song.add_track(melody)
 
 # Save the new written song
-output_song.save(filename='../../MIDI Files/Generated/Basic_Markov.mid')
+output_song.save(filename='../../MIDI Files/Demo Output/Basic_Markov.mid')

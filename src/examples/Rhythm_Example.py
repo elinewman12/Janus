@@ -18,4 +18,4 @@ apply_rhythm_pattern(song=song, track=song.tracks[1], pattern_array=pattern)
 humanify_rhythm(song=song, track=song.tracks[1], humanify_percent=0.1)
 
 #save to midi file
-song.save('rhythm.mid')
+song.save('../../MIDI Files/Demo Output/rhythm.mid')
