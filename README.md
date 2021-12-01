@@ -6,6 +6,7 @@ This project was created for the Senior Design Class CSC492 at North Carolina St
 - [Python](https://www.python.org/)
 - [Mido](https://mido.readthedocs.io/en/latest/)
 - [Graphviz](https://graphviz.readthedocs.io/en/stable/manual.html)
+- [Matplotlib](https://matplotlib.org/)
 
 ## Features
 - Markov Chain:
