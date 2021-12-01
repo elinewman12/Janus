@@ -18,8 +18,8 @@ note_chain.add_song(training_song)
 output_song = Song()
 
 # Create a chord and melody track
-chords = chord_chain.generate_pattern(output_song, 16, 46, octave=4)
-melody = note_chain.generate_pattern(output_song, 64, 72, octave=5)
+chords = chord_chain.generate_pattern(output_song, num_notes=16, instrument=46, octave=4)
+melody = note_chain.generate_pattern(output_song, num_notes=64, instrument=72, octave=5)
 
 # Add the generated tracks to a new song
 output_song.add_track(chords)
