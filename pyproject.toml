@@ -1,0 +1,7 @@
+[build-system]
+requires = [
+    "mido",
+    "matplotlib",
+    "graphviz",
+]
+build-backend = "setuptools.build_meta"

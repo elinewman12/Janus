@@ -1,0 +1,125 @@
+.coverage
+.coveragerc
+.gitignore
+LICENSE
+README.md
+pyproject.toml
+setup.cfg
+MIDI Files/Sea_Shanty_2.mid
+MIDI Files/Country/Garth Brooks/26553_To-Make-You-Feel-My-Love.mid
+MIDI Files/Country/John Anderson/2601_I-Wish-I-Could-Have-Been-There.mid
+MIDI Files/Country/Tim McGraw/2610_Something-Like-That.mid
+MIDI Files/Generated/Amazing_Grace_Minor.mid
+MIDI Files/Generated/Satisfaction major.mid
+MIDI Files/Generated/Sound Of Silence minor to major.mid
+MIDI Files/Generated/Sounds Of Silence (Karaoke) major.mid
+MIDI Files/Generated/scarborough_fair_major.mid
+MIDI Files/Gospel/John Newton/Amazing_Grace.mid
+MIDI Files/Gospel/John Newton/Amazing_Grace_locrian.mid
+MIDI Files/Grunge/Nirvana/Lithium.mid
+MIDI Files/Grunge/Pearl Jam/BetterMan.mid
+MIDI Files/Grunge/Soundgarden/BlackHoleSun.mid
+MIDI Files/Grunge/Stone Temple Pilots/Creep.mid
+MIDI Files/Hip-Hop/Chance The Rapper/Chance_the_Rapper_-_All_We_Got_for_Marching_Band.mid
+MIDI Files/Hip-Hop/Chance The Rapper/NO_PROBLEM.mid
+MIDI Files/Hip-Hop/Chance The Rapper/Sunday_Candy_G_Major_Final.mid
+MIDI Files/Hip-Hop/Eminem/20455_Lose-Yourself.mid
+MIDI Files/Hip-Hop/Eminem/20501_Marshall-Mathers.mid
+MIDI Files/Hip-Hop/Eminem/20501_Marshall-Mathers.mid.txt
+MIDI Files/Hip-Hop/Eminem/23214_My-Name-Is.mid
+MIDI Files/Hip-Hop/Eminem/23214_My-Name-Is.mid.txt
+MIDI Files/Hip-Hop/Eminem/27297_Real-Slim-Shady-The.mid
+MIDI Files/Hip-Hop/Eminem/27297_Real-Slim-Shady-The.mid.txt
+MIDI Files/Hip-Hop/Jay-Z/13235_Big-Pimpin.mid
+MIDI Files/Hip-Hop/Jay-Z/13235_Big-Pimpin.mid.txt
+MIDI Files/Hip-Hop/Jay-Z/13238_Hard-Knock-Life.mid
+MIDI Files/Hip-Hop/Jay-Z/13238_Hard-Knock-Life.mid.txt
+MIDI Files/Hip-Hop/Jay-Z/20535_03-Bonnie--Clyde.mid
+MIDI Files/Hip-Hop/Kanye West/21530_All-Falls-Down.mid
+MIDI Files/Hip-Hop/Kanye West/21530_All-Falls-Down.mid.txt
+MIDI Files/Hip-Hop/Kanye West/24774_Jesus-Walks.mid
+MIDI Files/Hip-Hop/Kanye West/24774_Jesus-Walks.mid.txt
+MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid
+MIDI Files/Hip-Hop/Kanye West/24851_Gold-Digger.mid.txt
+MIDI Files/Hip-Hop/Notorious B.I.G/13224_Miss-U.mid
+MIDI Files/Hip-Hop/Notorious B.I.G/13224_Miss-U.mid.txt
+MIDI Files/Hip-Hop/Notorious B.I.G/13225_Mo-Money-Mo-Problems.mid
+MIDI Files/Hip-Hop/Notorious B.I.G/13225_Mo-Money-Mo-Problems.mid.txt
+MIDI Files/Hip-Hop/Notorious B.I.G/13227_One-More-Chance.mid
+MIDI Files/Hip-Hop/Notorious B.I.G/13227_One-More-Chance.mid.txt
+MIDI Files/Hip-Hop/OutKast/20700_Hey-Ya.mid
+MIDI Files/Hip-Hop/OutKast/21165_Miss-Jackson.mid
+MIDI Files/Hip-Hop/OutKast/25535_Roses.mid
+MIDI Files/Indie/Simon and Garfunkel/Sound Of Silence.mid
+MIDI Files/Indie/Simon and Garfunkel/scarborough_fair.mid
+MIDI Files/Jazz/Frank Sinatra/my_way.mid
+MIDI Files/Metal/Black Sabbath/Black Sabbath-Iron Man.mid
+MIDI Files/Metal/Judas Priest/Judas Priest - Night Crawler.mid
+MIDI Files/Metal/Megadeth/Megadeth-Symphony Of Destruction.mid
+MIDI Files/Metal/Metallica/EnterSandman.mid
+MIDI Files/Pop/Adele/Adele_-_Skyfall.mid
+MIDI Files/Pop/Billie Eilish/Billie Eilish - No Time To Die (James Bond) (midi by Carlo Prato) (www.mid
+MIDI Files/Pop/Bruno Mars/Thelazysong.mid
+MIDI Files/Pop/Ed Sheeran/Ed Sheeran - Shape of You  (midi by Carlo Prato) (www.cprato.com).mid
+MIDI Files/Pop/Imagine Dragons/Radioactive.mid
+MIDI Files/Pop/The Chainsmokers/The Chainsmokers ft. Halsey - Closer  (midi by Carlo Prato) (www.cprato.com).mid
+MIDI Files/Pop/The Weeknd/The Weeknd - Party Monster  (midi by Carlo Prato) (www.cprato.com).mid
+MIDI Files/Rock/Aerosmith/DreamOn.mid
+MIDI Files/Rock/Eagles/HotelCalifornia.mid
+MIDI Files/Rock/Elton John/RocketMan.mid
+MIDI Files/Rock/Fall Out Boy/LightEmUp.mid
+MIDI Files/Rock/Greenday/BoulevardofBrokenDreams.mid
+MIDI Files/Rock/Rolling Stones/Satisfaction.mid
+images/edm_frequency_notes.png
+images/gold_digger_frequency_notes.png
+images/gold_digger_velocity.png
+images/rock_note_frequency.png
+src/BatchReporting.py
+src/Chord.py
+src/Control.py
+src/FileIO.py
+src/Genre.py
+src/Key.py
+src/Main.py
+src/Note.py
+src/Rhythm.py
+src/Scale.py
+src/Song.py
+src/Track.py
+src/__init__.py
+src/dynamic_markov_chain.py
+src/markov_chain.py
+src/markov_library.py
+src/digraph/Digraph.gv
+src/digraph/Digraph.gv.pdf
+src/examples/Detect_Key_By_Phrase_Ending_Example.py
+src/examples/Detect_Key_Example.py
+src/examples/Dynamic_Markov_Chain_Simple.py
+src/examples/Key_Change_Example.py
+src/examples/Key_Detection_Report_Example.py
+src/examples/Rhythm_Example.py
+src/examples/Transition_Graph_Example.py
+src/examples/Write_Song_Example.py
+src/examples/dynamic_markov_chain_example.py
+src/examples/reports/key_detection_report.csv
+src/janusmusic.egg-info/PKG-INFO
+src/janusmusic.egg-info/SOURCES.txt
+src/janusmusic.egg-info/dependency_links.txt
+src/janusmusic.egg-info/top_level.txt
+src/reports/key_detection_report.csv
+test/test_chord.py
+test/test_file_io.py
+test/test_song.py
+test/test_track.py
+test/Resources/GoodRiddance(TimeOfYourLife).mid
+test/Resources/GoodRiddance(TimeOfYourLife)_Output.mid
+test/Resources/GoodRiddance(TimeOfYourLife)_Output.mid.txt
+test/Resources/My-Name-Is.mid
+test/Resources/My-Name-Is_Output.mid
+test/Resources/My-Name-Is_Output.mid.txt
+test/test MIDI/C_major_D_minor_chord.mid
+test/test MIDI/C_major_chord_single.mid
+test/test MIDI/C_major_chords.mid
+test/test MIDI/C_major_scale.mid
+test/test MIDI/C_major_scale_Output.mid
+test/test MIDI/D_major_scale.mid
