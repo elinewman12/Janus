@@ -17,6 +17,9 @@ EQUIVALENT_MODES = [IONIAN, DORIAN, PHRYGIAN, LYDIAN, MIXOLYDIAN, AOLIAN, LOCRIA
 
 
 class Mode:
+    """
+    Constants that represent the 7 modes (major=ionian and minor=aolean)
+    """
     MAJOR = "major"
     IONIAN = "ionian"
     DORIAN = "dorian"

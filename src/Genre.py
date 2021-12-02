@@ -52,6 +52,9 @@ class Genre:
         plt.show()
 
     def get_chord_frequency_graph(self):
+        """ Creates and displays the visualization of the frequency of each chord within
+        Songs of this genre.
+        """
         all_chords = []
         for song in self.songs:
             for track in song.tracks:

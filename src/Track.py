@@ -99,9 +99,17 @@ class Track:
                 self.tag = TagEnum.MELODY    # If nothing else fits, this is likely a melody track
 
     def get_all_chords(self):
+        """
+        Returns:
+            All of the chords in this track
+        """
         return self.chords
 
     def get_unique_chords(self):
+        """
+        Returns:
+            A set of the unique chords in this track
+        """
         chord_set = set()
         return [x for x in self.chords if x not in chord_set and not chord_set.add(x)]
 

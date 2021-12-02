@@ -78,6 +78,14 @@ class MarkovChain:
             return "Not yet implemented"
 
     def generate_next_note(self, current_note):
+        """
+        Generates the next note based on the current note and the probabilities in the markov chain
+        Args:
+            current_note: The note currently being written
+
+        Returns: A new note based on the probabilities in the markov chain
+
+        """
         if self.type == Type.NOTE_TONE:
             next_note = py.random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 1, p=self.probabilities[current_note])
             return next_note[0]

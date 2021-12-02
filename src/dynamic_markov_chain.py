@@ -108,6 +108,8 @@ class DynamicMarkovChain:
                 song (Song): A brand new Song object
                 num_notes (int): The number of notes to generate
                 instrument (int): the number you want for instrument
+                arpeggio (bool): If these notes should be arpeggiated (used in chord tracks to offset the start time of each note)
+                octave (int): The octave this pattern will be generated in. 3-6 is where most songs will be. Max value is 10
 
             Returns:
                 Track: The generated track
