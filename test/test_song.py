@@ -11,7 +11,7 @@ import mido
 def test_song_constructor():
     """
         Tests the constructor of Song
-    """    
+    """
     tracks = [Track()]
 
     song = Song()
@@ -148,24 +148,78 @@ def test_change_song_key():
     assert orig.tracks[1].notes[6].pitch == 58
     assert orig.tracks[1].notes[7].pitch == 60
 
+
 def test_transition_graph():
+    """
+        Tests the functionality of creating a transition
+        graph for a given song
+
+        Tests using a C Major chord to D Minor chord and
+        testing that the graph shows a transition
+    """
     song = Song()
     song.load(filename="test MIDI/C_major_chords.mid")
+    song.get_transition_graph(name="C Major")
+    # Here we must manually assert that this is the proper chord graph
+
+
+def test_frequency_graph():
+    """
+        Tests the functionality of creating a frequency
+        graph for a given song
+
+        Tests using a C Major scale and testing that the
+        graph shows the proper notes
+    """
+    song = Song()
+    song.load(filename="test MIDI/C_major_scale.mid")
+    song.get_note_frequency_graph(name="C Major Scale")
+    # Here we also need to manually assert that this is the proper note graph
+
+
+def test_velocity_graph():
+    """
+        Tests the functionality of creating a velocity
+        graph for a given song
+
+        Tests using a C Major scale and testing that
+        the graph shows one velocity
+    """
+    song = Song()
+    song.load(filename="test MIDI/C_major_scale.mid")
+    song.get_note_velocity_graph(name="C Major Scale")
+    # Here we also need to manually assert that this is the proper note graph
+
+
+def test_get_notes_at_time():
+    """
+        Tests the functionality of finding the notes
+        played at a given time in a song.
+
+        Tests using a C Major chord MIDI file and checking
+        that the first notes are all correct.
+    """
+    song = Song()
+    song.load(filename="test MIDI/C_major_chords.mid")
+    zero_notes = song.get_notes_at_time(15)
+    assert zero_notes[0].pitch == 55
+    assert zero_notes[1].pitch == 52
+    assert zero_notes[2].pitch == 48
 
 
 def test_equals():
     """
     Tests the equals method in Song that compares two song objects
     """
-    song1 = Song(ticks_per_beat=100)   # Standard song
-    song2 = Song(ticks_per_beat=100)   # Same as 1
-    song3 = Song(ticks_per_beat=100)   # Different notes
-    song4 = Song(ticks_per_beat=100)   # Different number of notes
-    song5 = Song(ticks_per_beat=100)   # Different Control messages
-    song6 = Song(ticks_per_beat=100)   # Different number of control messages
-    song7 = Song(ticks_per_beat=100)   # Different track name
-    song8 = Song(ticks_per_beat=100)   # Different track device
-    song9 = Song(ticks_per_beat=100)   # Different number of tracks
+    song1 = Song(ticks_per_beat=100)  # Standard song
+    song2 = Song(ticks_per_beat=100)  # Same as 1
+    song3 = Song(ticks_per_beat=100)  # Different notes
+    song4 = Song(ticks_per_beat=100)  # Different number of notes
+    song5 = Song(ticks_per_beat=100)  # Different Control messages
+    song6 = Song(ticks_per_beat=100)  # Different number of control messages
+    song7 = Song(ticks_per_beat=100)  # Different track name
+    song8 = Song(ticks_per_beat=100)  # Different track device
+    song9 = Song(ticks_per_beat=100)  # Different number of tracks
     song10 = Song(ticks_per_beat=200)  # Different ticks_per_beat
 
     notes1 = []  # Standard set of notes
@@ -271,5 +325,3 @@ def test_detect_key_by_phrase_endings():
 
     assert song2.detect_key_by_phrase_endings()[0].tonic == "C"
     assert song2.detect_key_by_phrase_endings()[0].mode == Mode.MAJOR
-
-

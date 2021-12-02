@@ -23,7 +23,7 @@ class SongLibrary:
     SOUNDGARDEN_BLACK_HOLE_SUN = "../../MIDI Files/Grunge/Soundgarden/BlackHoleSun.mid"
     STONE_TEMPLE_PILOTS_CREEP = "../../MIDI Files/Grunge/Stone Temple Pilots/Creep.mid"
     SIMON_AND_GARFUNKEL_SCARBOROUGH_FAIR = "../../MIDI Files/Indie/Simon and Garfunkel/scarborough_fair.mid"
-    SIMON_AND_GARFUNKEL_SOUND_OF_SILENCE = "../../MIDI Files/Indie/Simon and Garfunkel/Sound_Of_Silence.mid"
+    SIMON_AND_GARFUNKEL_SOUND_OF_SILENCE = "../../MIDI Files/Indie/Simon and Garfunkel/Sound Of Silence.mid"
     FRANK_SINATRA_MY_WAY = "../../MIDI Files/Jazz/Frank Sinatra/my_way.mid"
     BLACK_SABBATH_IRON_MAN = "../../MIDI Files/Metal/Black Sabbath/Black Sabbath-Iron Man.mid"
     JUDAS_PRIEST_NIGHT_CRAWLER = "../../MIDI Files/Metal/Judas Priest/Judas Priest - Night Crawler.mid"
@@ -613,7 +613,6 @@ class Song:
                 graph.node(curr.name)
                 chord_set.add(curr.name)
             edges.append([prev_chord.name, curr.name])
-            print(prev_chord.name + " -> " + curr.name)
             prev_chord = curr
 
         counter = collections.Counter(tuple(edge) for edge in edges)
@@ -634,7 +633,7 @@ class Song:
         notes = []
         for track in self.tracks:
             for note in track.notes:
-                if note.time >= time and note.time + note.duration <= time:
+                if note.time <= time and note.time + note.duration >= time:
                     notes.append(note)
 
         return notes
