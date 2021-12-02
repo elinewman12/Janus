@@ -50,9 +50,22 @@ def test_track():
     track.generate_tags()
     assert track.tag == TagEnum.MELODY
 
-    track_actual = track.append_track(track=track2)
+    track_actual_append_1 = track.append_track(track=track2)
 
-    assert track_actual.equals(track_expected)
+    assert track_actual_append_1.equals(track_expected)
+
+    track_actual_append_2 = Track(track_name="test_track_1", device_name="test_device_1")
+    track_actual_append_2 = track_actual_append_2.append_tracks([1, 0], [track, track2])
+
+    assert track_actual_append_2.equals(track_expected)
+
+    duplicate_track = track.duplicate_track()
+
+    assert duplicate_track.equals(track)
+
+    assert track.equals(track2) is False
+
+
 
 
 

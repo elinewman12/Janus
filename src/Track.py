@@ -180,6 +180,7 @@ class Track:
     def duplicate_track(self):
         """
         Returns a new track with identical contents to the given track. Does not modify the given track.
+
         :return: a new track with identical contents to the given track.
         """
         notes = []
@@ -205,6 +206,7 @@ class Track:
         """
         Returns true if these two tracks are equal. If they are not equal, prints an info log message with more details
         and return false
+
         :param track: The track to compare this track to
         :return: True, if the contents of the track are equal. False otherwise.
         """
