@@ -20,7 +20,8 @@ class DynamicMarkovChain:
 
         Args:
             name (String): Name of the chain
-            type (String): Type of chain (TODO: to be replaced with an enumeration)
+            token_length (int): The number of notes/chords this chain will use to learn from
+            chain_type (chainType): Type of chain, currently consists of note or chord types
         """
         self.name = name
         self.token_length = token_length

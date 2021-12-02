@@ -22,6 +22,7 @@ class Song:
             tracks (Track[], optional): List of Tracks that make up the song. Defaults to None.
             ticks_per_beat (int, optional): The amount of ticks that pass within one beat in the 
                 song. Defaults to DEFAULT_TICKS_PER_BEAT (48).
+            key (Key): The key of the song
 
         Raises:
             ValueError: For a negative ticks_per_beat value

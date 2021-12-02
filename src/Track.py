@@ -21,6 +21,7 @@ class Track:
             controls (Control[], optional): List of Control messages within this track. Defaults to None.
             track_name (String, optional): Name of this track. Defaults to None.
             device_name (String, optional): Instrument used on this track. Defaults to None.
+            chords (Chord[], optional): A list of chord objects present in this track
             channel (int, optional): Channel of this track. Defaults to 0.
         """        
         if notes is None:
