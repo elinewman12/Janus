@@ -9,7 +9,7 @@ from Song import Song, SongLibrary
 song = Song()
 
 # Load the MIDI file into the song object
-song.load(filename=SongLibrary.SIMON_AND_GARFUNKEL_SCARBOROUGH_FAIR)
+song.load(filename=SongLibrary.SIMON_AND_GARFUNKEL_SOUND_OF_SILENCE)
 
 # Run the key detection algorithm which returns a key object, the number of errors, and percent confidence as a tuple
 detected_key, number_of_errors, percent_confidence = song.detect_key_and_scale()

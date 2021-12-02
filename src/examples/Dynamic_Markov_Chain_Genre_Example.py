@@ -1,18 +1,19 @@
 from Song import Song, SongLibrary
 from Track import Track
 from dynamic_markov_chain import DynamicMarkovChain, chainType
+from Genre import Genre
 
-# Create a new song object and read in the desired training song
-training_song = Song()
-training_song.load(filename=SongLibrary.NIRVANA_LITHIUM)
+# Create a Genre object
+genre = Genre(type="Rock")
 
 # Create a chord and note markov chain with the given attributes
 chord_chain = DynamicMarkovChain("chord chain", token_length=3, chain_type=chainType.CHORD)
 note_chain = DynamicMarkovChain("note chain", token_length=4, chain_type=chainType.NOTE)
 
-# Train the new markov chains with the desired song
-chord_chain.add_song(training_song)
-note_chain.add_song(training_song)
+# Train the new markov chains with the desired genre
+for training_song in genre.songs:
+    chord_chain.add_song(training_song)
+    note_chain.add_song(training_song)
 
 # Create a new song to write to
 output_song = Song()
