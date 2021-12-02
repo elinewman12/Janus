@@ -34,7 +34,7 @@ class Genre:
 
         Args:
             song (Song): The song to add to the Genre
-        """        
+        """
         assert isinstance(song, Song)
         self.songs.append(song)
 
@@ -59,21 +59,3 @@ class Genre:
         bar = song.get_bar_graph(title="Frequency of Notes in " + self.type,
                                  x_label="Note", y_label="Frequency", items=all_notes)
         plt.show()
-
-    def get_chord_frequency_graph(self):
-        all_chords = []
-        for song in self.songs:
-            for track in song.tracks:
-                # TODO: Change this to track.chords once we implement chords
-                all_chords.append(track.chords)
-
-        bar = song.get_bar_graph(title="Frequency of Notes in " + self.type,
-                                 x_label="Note", y_label="Frequency", items=all_chords)
-        plt.show(bar)
-
-    # def get_octave_frequency_graph(self):
-    #     all_octaves = []
-    #     for song in self.songs:
-    #         for track in song.tracks:
-    #             for note in track.notes:
-    #                 all_octaves.append(note.pitch / 12)
