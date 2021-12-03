@@ -23,10 +23,10 @@ This project was created for the Senior Design Class CSC492 at North Carolina St
 Show what the library does as concisely as possible, developers should be able to figure out **how** your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
 
 ## Installation
-Above your python script, type <code>import janusmusic</code>. This will allow you to access all of our public methods.
+Above your python script, import any of the Janus files. This will allow you to access all of our public methods.
 
 ## How to use?
-First, import the project using <code>import janusmusic</code>.
+First, import the project as described above.
 Then, you may use any of the below features within your program:
 
 - Markov Chain:
