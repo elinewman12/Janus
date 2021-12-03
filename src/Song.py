@@ -13,6 +13,39 @@ import graphviz
 DEFAULT_TICKS_PER_BEAT = 48
 
 
+class SongLibrary:
+    GARTH_BROOKS_TO_MAKE_YOU_FEEL_MY_LOVE = "../../MIDI Files/Country/Garth Brooks/26553_To-Make-You-Feel-My-Love.mid"
+    JOHN_ANDERSON_I_WISH_I_COULD_HAVE_BEEN_THERE = "../../MIDI Files/Country/John Anderson/2601_I-Wish-I-Could-Have-Been-There.mid"
+    TIM_MCGRAW_SOMETHING_LIKE_THAT = "../../MIDI Files/Country/Tim McGraw/2610_Something-Like-That.mid"
+    AMAZING_GRACE = "../../MIDI Files/Gospel/John Newton/Amazing_Grace.mid"
+    NIRVANA_LITHIUM = "../../MIDI Files/Grunge/Nirvana/Lithium.mid"
+    PEARL_JAM_BETTER_MAN = "../../MIDI Files/Grunge/Pearl Jam/BetterMan.mid"
+    SOUNDGARDEN_BLACK_HOLE_SUN = "../../MIDI Files/Grunge/Soundgarden/BlackHoleSun.mid"
+    STONE_TEMPLE_PILOTS_CREEP = "../../MIDI Files/Grunge/Stone Temple Pilots/Creep.mid"
+    SIMON_AND_GARFUNKEL_SCARBOROUGH_FAIR = "../../MIDI Files/Indie/Simon and Garfunkel/scarborough_fair.mid"
+    SIMON_AND_GARFUNKEL_SOUND_OF_SILENCE = "../../MIDI Files/Indie/Simon and Garfunkel/Sound Of Silence.mid"
+    FRANK_SINATRA_MY_WAY = "../../MIDI Files/Jazz/Frank Sinatra/my_way.mid"
+    BLACK_SABBATH_IRON_MAN = "../../MIDI Files/Metal/Black Sabbath/Black Sabbath-Iron Man.mid"
+    JUDAS_PRIEST_NIGHT_CRAWLER = "../../MIDI Files/Metal/Judas Priest/Judas Priest - Night Crawler.mid"
+    MEGADETH_SYMPHONY_OF_DESTRUCTION = "../../MIDI Files/Metal/Megadeth/Megadeth-Symphony Of Destruction.mid"
+    METALLICA_ENTER_SANDMAN = "../../MIDI Files/Metal/Metallica/EnterSandman.mid"
+    ADELE_SKYFALL = "../../MIDI Files/Pop/Adele/Adele_-_Skyfall.mid"
+    BILLIE_EILISH_NO_TIME_TO_DIE = "../../MIDI Files/Pop/Billie Eilish/Billie Eilish - No Time To Die (James Bond) (midi by Carlo Prato) (www.mid"
+    BRUNO_MARS_THE_LAZY_SONG = "../../MIDI Files/Pop/Bruno Mars/Thelazysong.mid"
+    ED_SHEERAN_SHAPE_OF_YOU = "../../MIDI Files/Pop/Ed Sheeran/Ed Sheeran - Shape of You  (midi by Carlo Prato) (www.cprato.com).mid"
+    IMAGINE_DRAGONS_RADIOACTIVE = "../../MIDI Files/Pop/Imagine Dragons/Radioactive.mid"
+    THE_CHAINSMOKERS_FT_HALSEY_CLOSER = "../../MIDI Files/Pop/The Chainsmokers/The Chainsmokers ft. Halsey - Closer  (midi by Carlo Prato) (www.cprato.com).mid"
+    THE_WEEKND_PARTY_MONSTER = "../../MIDI Files/Pop/The Weeknd/The Weeknd - Party Monster  (midi by Carlo Prato) (www.cprato.com).mid"
+    AEROSMITH_DREAM_ON = "../../MIDI Files/Rock/Aerosmith/DreamOn.mid"
+    EAGLES_HOTEL_CALIFORNIA = "../../MIDI Files/Rock/Eagles/HotelCalifornia.mid"
+    ELTON_JOHN_ROCKET_MAN = "../../MIDI Files/Rock/Elton John/RocketMan.mid"
+    FALL_OUT_BOY_LIGHT_EM_UP = "../../MIDI Files/Rock/Fall Out Boy/LightEmUp.mid"
+    GREENDAY_BOULEVARD_OF_BROKEN_DREAMS = "../../MIDI Files/Rock/Greenday/BoulevardofBrokenDreams.mid"
+    ROLLING_STONES_SATISFACTION = "../../MIDI Files/Rock/Rolling Stones/Satisfaction.mid"
+
+
+# Stores metadata about a song, and the tracks included in the song
+# <jmleeder>
 class Song:
 
     def __init__(self, tracks=None, ticks_per_beat=DEFAULT_TICKS_PER_BEAT, key=None):
@@ -595,7 +628,6 @@ class Song:
                 graph.node(curr.name)
                 chord_set.add(curr.name)
             edges.append([prev_chord.name, curr.name])
-            print(prev_chord.name + " -> " + curr.name)
             prev_chord = curr
 
         counter = collections.Counter(tuple(edge) for edge in edges)
@@ -616,7 +648,7 @@ class Song:
         notes = []
         for track in self.tracks:
             for note in track.notes:
-                if note.time >= time and note.time + note.duration <= time:
+                if note.time <= time and note.time + note.duration >= time:
                     notes.append(note)
 
         return notes

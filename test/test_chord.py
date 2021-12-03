@@ -30,3 +30,19 @@ def test_chord_names():
     assert orig.tracks[1].chords[1].name == "C Major Seventh"
     assert orig.tracks[1].chords[2].name == "D Minor"
     assert orig.tracks[1].chords[3].name == "D Minor Seventh"
+
+def test_to_string():
+    orig = Song()
+
+    orig.load(filename="test MIDI/C_major_chord_single.mid")
+    test_string = orig.tracks[1].chords[0].to_string()
+    assert test_string == "0 4 7"
+
+
+def test_duplicate_chord():
+    orig = Song()
+    orig.load(filename="test MIDI/C_major_chord_single.mid")
+    duplicate = orig.tracks[1].chords[0].duplicate_chord()
+    assert duplicate.notes[0].pitch == orig.tracks[1].chords[0].notes[0].pitch
+    assert duplicate.notes[1].pitch == orig.tracks[1].chords[0].notes[1].pitch
+    assert duplicate.notes[2].pitch == orig.tracks[1].chords[0].notes[2].pitch
