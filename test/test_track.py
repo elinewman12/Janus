@@ -66,6 +66,27 @@ def test_track():
     assert track.equals(track2) is False
 
 
+def test_track_equals():
+    notes_1 = [Note(pitch=60, time=100, duration=100, velocity=100, channel=0, chord_note=False),
+               Note(pitch=61, time=200, duration=100, velocity=100, channel=0, chord_note=False),]
 
+    notes_2 = [Note(pitch=65, time=100, duration=100, velocity=100, channel=0, chord_note=False),
+               Note(pitch=61, time=200, duration=100, velocity=100, channel=0, chord_note=False),]
 
+    notes_3 = [Note(pitch=65, time=100, duration=105, velocity=100, channel=0, chord_note=False),
+               Note(pitch=61, time=200, duration=100, velocity=100, channel=0, chord_note=False), ]
 
+    controls_1 = [Control(msg_type='control_change', control=3, value=10, time=100),
+                  Control(msg_type='program_change', instrument=20, time=200)]
+
+    controls_2 = [Control(msg_type='control_change', control=4, value=10, time=100),
+                  Control(msg_type='program_change', instrument=20, time=200)]
+
+    track1 = Track(notes=notes_1, controls=controls_1)
+    track2 = Track(notes=notes_1, controls=controls_2)
+    track3 = Track(notes=notes_2, controls=controls_1)
+    track4 = Track(notes=notes_3, controls=controls_1)
+
+    assert track1.equals(track2) is False
+    assert track1.equals(track3) is False
+    assert track3.equals(track4) is False

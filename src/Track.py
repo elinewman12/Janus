@@ -13,7 +13,7 @@ CHORD_PERCENTAGE = 0.15
 
 class Track:
 
-    def __init__(self, notes=None, controls=None, track_name=None, device_name=None, chords=None, channel=0):
+    def __init__(self, notes=None, controls=None, track_name="", device_name="", chords=None, channel=0):
         """ Constructor for the Track object
 
         Args:
