@@ -6,12 +6,24 @@ from Note import Note
 class MarkovLibrary:
 
     def __init__(self):
+        """
+        Constructor, sets the "chains" field to an empty set
+        """
         self.chains = {}
     
     def add_markov_chain(self, chain):
+        """
+        Adds a markov chain to the markov library
+        Args:
+            chain: The chain to be added to the library
+
+        Returns:
+            None
+        """
         self.chains[chain.name] = chain
 
     def generate_pattern(self, song, num_notes, note_tone_chain=None, note_length_chain=None):
+
         t = Track()
         song.add_track(t)
         current_note = py.random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 1)[0]

@@ -13,7 +13,7 @@ CHORD_PERCENTAGE = 0.15
 
 class Track:
 
-    def __init__(self, notes=None, controls=None, track_name=None, device_name=None, chords=None, channel=0):
+    def __init__(self, notes=None, controls=None, track_name="", device_name="", chords=None, channel=0):
         """ Constructor for the Track object
 
         Args:
@@ -21,6 +21,7 @@ class Track:
             controls (Control[], optional): List of Control messages within this track. Defaults to None.
             track_name (String, optional): Name of this track. Defaults to None.
             device_name (String, optional): Instrument used on this track. Defaults to None.
+            chords (Chord[], optional): A list of chord objects present in this track
             channel (int, optional): Channel of this track. Defaults to 0.
         """        
         if notes is None:
@@ -99,9 +100,17 @@ class Track:
                 self.tag = TagEnum.MELODY    # If nothing else fits, this is likely a melody track
 
     def get_all_chords(self):
+        """
+        Returns:
+            All of the chords in this track
+        """
         return self.chords
 
     def get_unique_chords(self):
+        """
+        Returns:
+            A set of the unique chords in this track
+        """
         chord_set = set()
         return [x for x in self.chords if x not in chord_set and not chord_set.add(x)]
 
@@ -171,6 +180,7 @@ class Track:
     def duplicate_track(self):
         """
         Returns a new track with identical contents to the given track. Does not modify the given track.
+
         :return: a new track with identical contents to the given track.
         """
         notes = []
@@ -196,6 +206,7 @@ class Track:
         """
         Returns true if these two tracks are equal. If they are not equal, prints an info log message with more details
         and return false
+
         :param track: The track to compare this track to
         :return: True, if the contents of the track are equal. False otherwise.
         """

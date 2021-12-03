@@ -32,5 +32,11 @@ class Control:
         self.time = time
 
     def duplicate_control(self):
+        """
+            Creates a new duplicate control object with the same fields as this control object
+            
+        Returns:
+            A new Control object with the same fields as this control object
+        """
         return Control(msg_type=self.msg_type, tempo=self.tempo, control=self.control, value=self.value,
                        instrument=self.instrument, time=self.time)

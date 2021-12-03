@@ -28,6 +28,14 @@ THIRTY_SECOND_REST = -THIRTY_SECOND
 
 
 def apply_rhythm_pattern(song=None, track=None, pattern_array=None):
+    """
+    Applies the given rhythm pattern to the provided track.
+
+    :param song: The song this track will be used in (used to set the "ticks per beat" feild
+    :param track: The track to be modified. This timing and duration of the notes in this field will be modified in place
+    :param pattern_array: The pattern to be applied to the track
+    :return: None
+    """
     current_abs_time = track.notes[0].time
     whole_length = floor(song.ticks_per_beat * 4)
     j = 0
@@ -63,11 +71,18 @@ def apply_rhythm_pattern(song=None, track=None, pattern_array=None):
                 note.time = floor(current_abs_time)
 
 
-
-
-
 def humanify_rhythm(song=None, track=None, humanify_percent=0.5):
+    """
+    Offsets the start times of the notes in this track slightly to make it feel more human
 
+    Args:
+        song: The song this track will be used in. This is needed for its "ticks per beat" field
+        track: The track that will be modified
+        humanify_percent: The amount of time the notes should be shifted by
+
+    Returns:
+        None, the track is modified in place
+    """
     max_error = 0.12
     if song is None or track is None or humanify_percent > 1 or humanify_percent < 0:
         raise SyntaxError("Song and track must not be None. and humanify_percent needs to be"
