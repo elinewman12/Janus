@@ -55,6 +55,7 @@ class Song:
             tracks (Track[], optional): List of Tracks that make up the song. Defaults to None.
             ticks_per_beat (int, optional): The amount of ticks that pass within one beat in the 
                 song. Defaults to DEFAULT_TICKS_PER_BEAT (48).
+            key (Key): The key of the song
 
         Raises:
             ValueError: For a negative ticks_per_beat value
@@ -248,6 +249,9 @@ class Song:
     def get_note_velocity_graph(self, name):
         """ Shows a graph of the velocity (intensity/loudness) of all the notes in this song.
         TODO: make this return rather than 'print'
+
+        Args:
+            name: The name to be displayed on this graph
         """
         all_velocity = []
         all_time = []
@@ -264,6 +268,17 @@ class Song:
         plt.show()
 
     def get_bar_graph(self, title, x_label, y_label, items):
+        """
+        Creates a bar graph
+        Args:
+            title: The title of the graph
+            x_label: The x axis label
+            y_label: The Y axis label
+            items: The items to show in the graph
+
+        Returns:
+            A new graph
+        """
         counter = collections.Counter(items)
         counter = dict(sorted(counter.items(), key=lambda item: item[1], reverse=True))
         bar = plt.bar(x=counter.keys(), height=counter.values())
@@ -291,12 +306,12 @@ class Song:
         Song metadata       \n
         Track1 metadata     \n
         notes               \n
-        ...V...             \n
+        ...  ...             \n
         control messages    \n
-        ...V...             \n
+        ...  ...             \n
         Track 2 metadata    \n
         notes               \n
-        ...V...             \n
+        ...  ...             \n
         etc
 
         Note: The notes and control messages are listed separately, they are not sorted together by time.

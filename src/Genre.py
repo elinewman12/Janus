@@ -59,3 +59,4 @@ class Genre:
         bar = song.get_bar_graph(title="Frequency of Notes in " + self.type,
                                  x_label="Note", y_label="Frequency", items=all_notes)
         plt.show()
+

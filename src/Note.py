@@ -28,6 +28,12 @@ class Note:
         self.c_indexed_pitch_class = pitch % NUM_NOTES
 
     def duplicate_note(self):
+        """
+            Creates a new duplicate Note object with the same fields as this note object
+
+        Returns:
+            A new Note object with the same fields as this note object
+        """
         return Note(pitch=self.pitch, time=self.time, duration=self.duration, velocity=self.velocity,
                     channel=self.channel, chord_note=self.chord_note)
 
