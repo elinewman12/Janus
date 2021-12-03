@@ -194,7 +194,7 @@ class DynamicMarkovChain:
 
                     if not new_note_needed:
                         break
-                print(next_chord)
+                #print(next_chord)
                 if self.token_length == 1:
                     current_token = next_chord
                 else:
@@ -244,7 +244,7 @@ class DynamicMarkovChain:
         for i in range(1, self.token_length):
             previous_pattern += all_chords[i].to_string()
             previous_pattern += ","
-        previous_pattern = previous_pattern[:len(previous_pattern) - 2]
+        previous_pattern = previous_pattern[:len(previous_pattern) - 1]
         print(previous_pattern)
 
         # Create dictionary
@@ -272,7 +272,7 @@ class DynamicMarkovChain:
             for j in range(i - self.token_length + 1, i):
                 previous_pattern += " " + all_chords[j].to_string()
                 previous_pattern += ","
-            previous_pattern = previous_pattern[:len(previous_pattern) - 2]
+            previous_pattern = previous_pattern[:len(previous_pattern) - 1]
 
         # Value would be a list of lists with note and count [(0, 1), (1, 2)]
         # If the key/value pair already exists, add one to count
@@ -284,7 +284,7 @@ class DynamicMarkovChain:
                 chord[1] = (chord[1] / total)
 
         self.probabilities = pattern_dict
-        print(pattern_dict)
+        #print(pattern_dict)
         return pattern_dict
         # Key is the same pattern, value is a list of all the percentages. [0, 0.5, 0.05, 0.25, ...]
 
