@@ -17,7 +17,7 @@ class Genre:
         """
         self.songs = []
         self.type = type
-        directory = 'C:\\Users\\Eli\\Documents\\GitHub\\2021FallTeam17-DeHaan\\MIDI Files\\' + type
+        directory = '..\\..\\MIDI Files\\' + type
         for artist in os.listdir(directory):
             artist_directory = directory + '\\' + artist.title()
             for song in os.listdir(artist_directory):
